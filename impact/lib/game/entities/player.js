@@ -7,6 +7,7 @@ ig.module(
 		animSheet: new ig.AnimationSheet('media/playerSprite.png',32,32),
 		size: {x:32,y:32},
 		name: 'John Doe',
+		slot: undefined,
 		init: function(x,y,settings){
 			this.parent(x,y,settings);
 			this.addAnim('idle',1,[0]);

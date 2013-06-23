@@ -17,6 +17,10 @@ CartTest = ig.Game.extend({
 	init: function() {
 		// Initialize your game here; bind keys etc.
 		this.initInput();
+		initializeSpawns();
+		spawnPlayer('Julian', {});
+		spawnPlayer('Julian0', {});
+		spawnPlayer('Julian1', {});
 	}, 
 	initInput: function() {
 		ig.input.bind(ig.KEY.MOUSE1,'shoot');
@@ -29,10 +33,11 @@ CartTest = ig.Game.extend({
 		if (ig.input.pressed('shoot') && this.shotTimer.delta() >= 0) {
 			this.shotTimer.reset();
 			fireShot('Julian', 5);
+			killPlayer('Julian0');
 		}
 		if (ig.input.pressed('cart')) {
 			createCart(ig.input.mouse.x, ig.input.mouse.y, 'right',50, 5,1);
-			spawnPlayer('Julian', {});
+			spawnPlayer('Mike', {});
 		}
 	},
 	
