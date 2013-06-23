@@ -1,0 +1,3 @@
+[submodule "impact"]
+	path = impact
+	url = git@elendil.hawksites.com:collab/impact.git
