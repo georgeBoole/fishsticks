@@ -1,14 +1,16 @@
 var app = require('http').createServer(handler);
 var io = require('socket.io').listen(app);
 var fs = require('fs');
+var log = require('winston');
 
 var SERVER_PORT = 8080;
-app.listen(SERVER_PORT);
-
 var CART_SIZE = {x: 48, y: 32};
 
+var cart_id = 0;
 var playerlist = [];
+var carts = [];
 var socket;
+app.listen(SERVER_PORT);
 
 function handler(request, response) {
 	fs.readFile(__dirname + '/index.html',
@@ -26,15 +28,26 @@ function isHit(sx, sy, cx, cy) {
 	return (sx >= cx && sx <= cx + CART_SIZE.x) && (sy >= cy && sy <= cy + CART_SIZE.y);
 }
 
+function spawnCarts() {
+	
+}
+
 io.sockets.on('connection', function(socket) {
 
-	socket.on('attemptShot', function(player_id, x, y) {
+	socket.on('attemptShot', function(name, x, y) {
+		var hit = false;
 		for (var i=0; i < carts.length; i++) {
-			if isHit(x, y, carts[i].x, carts[i].y) {
-				socket.broadcast.emit('hit', carts[i].id);
-				carts.erase(carts[i]);
+			if (isHit(x, y, carts[i].x, carts[i].y)) {
+				hit = true;
 				break;
 			}
+		}
+		if (hit) {
+			socket.broadcast.emit('hit', carts[i].id);
+			carts.erase(carts[i]);
+		}
+		else {
+			io.sockets.emit('message', name + ' missed his shot');
 		}
 	});
 	socket.on('initializePlayer', function(name) {
@@ -50,7 +63,7 @@ io.sockets.on('connection', function(socket) {
 			}
 		}
 		socket.broadcast.emit('message', socket.clientname + ' has disconnected');
-		socket.broadcast.emit('playerLeave', record[socket.clientname]);
+		socket.broadcast.emit('playerLeave', socket.clientname);
 	});
 
 });
