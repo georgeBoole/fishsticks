@@ -18,6 +18,7 @@ CartTest = ig.Game.extend({
 		// Initialize your game here; bind keys etc.
 		this.initInput();
 		initializeSpawns();
+		//Julian should be changed to the players inputed name
 		initializeLocalPlayer('Julian');
 	}, 
 	initInput: function() {
