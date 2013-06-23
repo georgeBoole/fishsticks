@@ -11,7 +11,7 @@ var cart_id = 0;
 var playerlist = [];
 var carts = [];
 var CART_BATCH_SIZE = 3;
-var CART_SPAWN_DELAY = 1000; //ms
+var CART_SPAWN_DELAY = 10000; //ms
 var MIN_CART_SPACING = 8;
 /* 
 	cart = {
@@ -88,7 +88,8 @@ io.sockets.on('connection', function(socket) {
 	socket.on('initializePlayer', function(name) {
 		socket.clientname = name;
 		playerlist.push(name);
-		socket.broadcast.emit('updatePlayers', name,playerlist, {});
+		socket.broadcast.emit('updatePlayers', playerlist);
+		//io.sockets.emit('updatePlayers',playerlist);
 	});
 	socket.on('disconnect', function() {
 		delete playerlist[socket.clientname];

@@ -11,11 +11,10 @@ ig.module(
 	var HOST = 'http://192.168.1.12:8080';
 	var socket = io.connect(HOST);
 
-	socket.on('updatePlayers', function(name,players) {
-
+	socket.on('updatePlayers', function(players) {
 		var oldPlayers = ig.game.getEntitiesByType(EntityPlayer);
 		for(var i = 0; i < oldPlayers.length;i++) {
-			
+			console.log("DERP");
 		}
 
 	});
