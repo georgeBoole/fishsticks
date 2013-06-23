@@ -86,7 +86,6 @@ io.sockets.on('connection', function(socket) {
 	socket.on('initializePlayer', function(name) {
 		socket.clientname = name;
 		playerlist.push(name);
-		console.log("INITIALIZING PLAYER ON THE SERVER");
 		socket.broadcast.emit('updatePlayers', name,playerlist, {});
 	});
 	socket.on('disconnect', function() {

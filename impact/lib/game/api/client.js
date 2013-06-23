@@ -35,7 +35,7 @@ ig.module(
 	};
 	initializeLocalPlayer = function(player_name) {
 		console.log('Initializing local player:' + player_name);
-		setLocalPlayer(player_name);
+		//setLocalPlayer(player_name);
 		socket.emit('initializePlayer',player_name);
 	};
 
