@@ -60,7 +60,7 @@ ig.module(
 		var c = cart_lookup[cart_id];
 		if (p == undefined || c == undefined) {
 			console.log("CANNOT FIRE: Undefined player name or cart id");
-		} else if(true) {
+		} else if(local_player == playerName) {
 			console.log("INVALID SHOOTER: ONLY THE LOCAL PLAYER CAN FIRE");
 		}else {
 			var angle = p.angleTo(c);
@@ -72,22 +72,18 @@ ig.module(
 			 settings);
 		}
 	};
-	spawnPlayer = function(playerName,settings) {
-		//Used to create the local player and add
-		//them to the game's player_lookup.
-		//The new player_lookup must be transmitted
-		//to all the other players right after?
-		if(spawn_locs.length == 0){
-			console.log("CANNOT SPAWN ANOTHER PLAYER: NO MORE OPEN SPAWN POINTS");
-		} else {
-			var xPos = spawn_locs.shift();
-			console.log('XPOS:' + xPos);
-			var player = ig.game.spawnEntity(EntityPlayer,xPos,first_player_loc.y,{'name':playerName});
-			local_player = playerName;
-			player_lookup[playerName] = player;
+	setLocalPlayer = function(playerName){
+		local_player = playerName;
+	};
+	drawPlayers = function(playerNames) {
+		//Mutates the player_lookup to match server data
+		//Creates player entities at the right spots
+		for(var i in playerNames) {
+			var name = playerNames[i];
+			var xSpawnCord = spawn_locs[i];
+			var player = ig.game.spawnEntity(EntityPlayer,xSpawnCord, first_player_loc.y, {});
+			player_lookup[name] = player;
 		}
-		console.log('LOCAL PLAYER:'+local_player);
-		return local_player.name;
 	};
 	killPlayer = function(playerName) {
 		//Kills a player with the specified name and

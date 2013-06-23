@@ -11,7 +11,7 @@ var cart_id = 0;
 var playerlist = [];
 var carts = [];
 var CART_BATCH_SIZE = 3;
-var CART_SPAWN_DELAY = 750; # //ms
+var CART_SPAWN_DELAY = 750; //ms
 /* 
 	cart = {
 		id,
@@ -20,7 +20,7 @@ var CART_SPAWN_DELAY = 750; # //ms
 		value
 	}
 */
-var socket;
+//var socket;
 app.listen(SERVER_PORT);
 
 function choose(list) {
@@ -33,13 +33,13 @@ function create_cart() {
 		id:cart_id++,
 		x: Math.random() >= .5 ? 0 : 320 - CART_SIZE.x,
 		y: choose(ROW_Y_VALUES),
-		vx: choose(CART_SPEEDS),
-		vy: 0,
+		direction: choose(['left','right']),
+		speed: choose(CART_SPEEDS),
 		birth: new Date().getTime(),
 		value: Math.round(Math.random() * 2 + 1)
 	};
 	carts.push(c);
-	socket.broadcast.emit('spawnCart', c.x, c.y, direction, speed, value, uuid)
+	socket.broadcast.emit('spawnCart', c.x, c.y, c.direction, c.speed, c.value, c.id)
 }
 
 function handler(request, response) {
@@ -85,7 +85,8 @@ io.sockets.on('connection', function(socket) {
 	socket.on('initializePlayer', function(name) {
 		socket.clientname = name;
 		playerlist.push(name);
-		io.sockets.emit('playerJoin', name, getID(name), {});
+		console.log("INITIALIZING PLAYER ON THE SERVER");
+		socket.broadcast.emit('updatePlayers', name,playerlist, {});
 	});
 	socket.on('disconnect', function() {
 		delete playerlist[socket.clientname];
