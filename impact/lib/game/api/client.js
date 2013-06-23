@@ -1,7 +1,8 @@
 // message.js
 // this script wraps server/client communication using socket.io
 ig.module(
-	'game.api.client'
+	'game.api.client',
+	'game.api.factory'
 )
 .requires(
 )
@@ -24,11 +25,17 @@ ig.module(
 	});
 	socket.on('hitCart', function(player_name, cart_id) {
 		console.log(player_name + ' hit cart #' + cart_id);
+		fireShot(player_name,cart_id);
+		killCart(cart_id);
 	});
 
 
 	requestShot = function(player_name, x, y) {
 		socket.emit('attemptShot', player_name, x, y);
+	};
+	initializeLocalPlayer = function(player_name) {
+		console.log('Initializing local player:' + player_name);
+		socket.emit('initalizePlayer',player_name);
 	};
 
 });

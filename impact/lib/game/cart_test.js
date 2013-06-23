@@ -18,10 +18,6 @@ CartTest = ig.Game.extend({
 		// Initialize your game here; bind keys etc.
 		this.initInput();
 		initializeSpawns();
-		spawnPlayer('Julian', {});
-		spawnPlayer('Julian0', {});
-		spawnPlayer('Julian1', {});
-		spawnPlayer('Mike', {});
 	}, 
 	initInput: function() {
 		ig.input.bind(ig.KEY.MOUSE1,'shoot');

@@ -87,6 +87,7 @@ ig.module(
 			player_lookup[playerName] = player;
 		}
 		console.log('LOCAL PLAYER:'+local_player);
+		return local_player.name;
 	};
 	killPlayer = function(playerName) {
 		//Kills a player with the specified name and
