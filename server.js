@@ -5,7 +5,7 @@ var log = require('winston');
 
 var SERVER_PORT = 8080;
 var CART_SIZE = {x: 48, y: 32};
-var ROW_Y_VALUES = [40, 80, 120];
+var ROW_Y_VALUES = [40, 120, 200];
 var CART_SPEEDS = [40, 50, 60];
 var cart_id = 0;
 var playerlist = [];
@@ -25,7 +25,7 @@ var MIN_CART_SPACING = 8;
 app.listen(SERVER_PORT);
 
 function choose(list) {
-	return list[Math.round(Math.random() * list.length)];
+	return list[Math.round(Math.random() * (list.length-1))];
 }
 
 function create_cart() {
@@ -78,7 +78,7 @@ io.sockets.on('connection', function(socket) {
 			}
 		}
 		if (hit) {
-			socket.broadcast.emit('hitCart', carts[i].id);
+			socket.broadcast.emit('hitCart', carts[i].uuid);
 			delete carts[i];
 		}
 		else {
