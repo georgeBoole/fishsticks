@@ -8,20 +8,6 @@ ig.module(
 )
 .defines(function(){
 
-// wrap the builtins, eventually move this out
-
-var pressed = ig.input.pressed;
-var mouse = ig.input.mouse;
-var mmap = {'left_click':'mouse1', 'right_click':'mouse2'};
-
-var bind = function(action, event) {
-	ig.input.bind(key(action), event);
-};
-var key = function(k) {
-	x = k in mmap ? mmap[k] : k;
-	return eval('ig.KEY.' + x.toUpperCase());
-};
-
 AngryMiner = ig.Game.extend({
 	font: new ig.Font( 'media/04b03.font.png' ),
 	init: function() {
@@ -29,8 +15,7 @@ AngryMiner = ig.Game.extend({
 		this.initInput();
 	},
 	initInput: function() {
-		bind('left_click', 'shoot');
-		bind('space', 'cart');
+		ig.input.bind(ig.KEY.MOUSE1, 'shoot');
 		ig.input.initMouse();
 	},
 	initPlayer: function() {
@@ -39,8 +24,8 @@ AngryMiner = ig.Game.extend({
 	},
 	update: function() {
 		this.parent();
-		if (pressed('shoot')) {
-			requestShot(this.local_player, mouse.x, mouse.y);
+		if (ig.input.pressed('shoot')) {
+			requestShot(this.local_player, ig.input.mouse.x, ig.input.mouse.y);
 		}
 	}
 });
