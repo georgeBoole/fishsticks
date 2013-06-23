@@ -4,7 +4,7 @@ ig.module(
 .requires(
 	'impact.game',
 	'impact.font',
-	'game.utils.factory'
+	'game.api.factory'
 )
 .defines(function(){
 
@@ -30,7 +30,7 @@ CartTest = ig.Game.extend({
 			createShot(ig.input.mouse.x, ig.input.mouse.y, {});
 		}
 		if (ig.input.pressed('cart')) {
-			createCart(ig.input.mouse.x, ig.input.mouse.y, {direction: 1});
+			createCart(ig.input.mouse.x, ig.input.mouse.y, 'left',20, 5);
 		}
 		// Add your own, additional update code here
 	},

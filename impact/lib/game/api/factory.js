@@ -9,12 +9,16 @@ ig.module(
 	'game.entities.shot'
 )
 .defines(function() {
-	createCart = function(x, y, direction, speed) {
+	var id_lookup = {};
+	createCart = function(x, y, direction, speed,uuid) {
 		console.log('creating cart');
-		settings = {'direction':direction,'speed':speed};
+		settings = {'direction':direction,'speed':speed,'uuid':uuid};
 		ig.game.spawnEntity(EntityCart, x, y, settings);
 	};
 	spawnCarts = function(cartData){
+
+	};
+	killCart = function(uuid) {
 
 	};
 	createShot = function(x, y, settings) {
