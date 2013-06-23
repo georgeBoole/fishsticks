@@ -7,9 +7,6 @@ ig.module(
 )
 .defines(function(){
 
-
-
-
 MyGame = ig.Game.extend({
 	
 	// Load a font
