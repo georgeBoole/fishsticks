@@ -4,7 +4,7 @@ ig.module(
 .requires(
 	'impact.game',
 	'impact.font',
-	'game.utils.factory'
+	'game.api.factory'
 )
 .defines(function(){
 
@@ -27,10 +27,11 @@ CartTest = ig.Game.extend({
 		// Update all entities and backgroundMaps
 		this.parent();
 		if (ig.input.pressed('shoot')) {
-			createShot(ig.input.mouse.x, ig.input.mouse.y, {});
+			fireShot('Julian', 5);
 		}
 		if (ig.input.pressed('cart')) {
-			createCart(ig.input.mouse.x, ig.input.mouse.y, {direction: 1});
+			createCart(ig.input.mouse.x, ig.input.mouse.y, 'right',20, 5);
+			spawnPlayer('Julian', {});
 		}
 		// Add your own, additional update code here
 	},
