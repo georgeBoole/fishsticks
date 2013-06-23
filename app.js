@@ -29,7 +29,7 @@ function isHit(sx, sy, cx, cy) {
 }
 
 function spawnCarts() {
-	
+
 }
 
 io.sockets.on('connection', function(socket) {
@@ -43,7 +43,7 @@ io.sockets.on('connection', function(socket) {
 			}
 		}
 		if (hit) {
-			socket.broadcast.emit('hit', carts[i].id);
+			socket.broadcast.emit('hitCart', carts[i].id);
 			carts.erase(carts[i]);
 		}
 		else {
