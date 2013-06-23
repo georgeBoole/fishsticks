@@ -14,7 +14,10 @@ ig.module(
 	socket.on('updatePlayers', function(name,players) {
 		// name is the name of the player who just joined or left
 		// players is a list of all the players including my local player
-		drawPlayers(players);
+		ig.game.players.forEach(function(p) {
+			p.kill();
+		})
+		
 
 	});
 	socket.on('message', function(msg) {

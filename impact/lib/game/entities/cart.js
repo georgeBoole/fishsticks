@@ -10,7 +10,6 @@ ig.module(
 		init: function(x,y,settings) {
 			this.parent(x,y,settings);
 			this.addAnim('idle',1,[0]);
-			this.vel = {x: this.dirs[this.direction]*this.speed, y:0};
 			if (this.uuid == undefined) {
 				// something is really wrong, assign null
 				// should never get here

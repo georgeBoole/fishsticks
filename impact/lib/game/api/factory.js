@@ -64,14 +64,10 @@ ig.module(
 	setLocalPlayer = function(playerName){
 		local_player = playerName;
 	};
-	drawPlayers = function(playerNames) {
-		//Mutates the player_lookup to match server data
-		//Creates player entities at the right spots
-		for(var i in playerNames) {
+	updatePlayerLookUp = function(playerNames){
+		for(var i in playerNames){
 			var name = playerNames[i];
-			var xSpawnCord = spawn_locs[i];
-			var player = ig.game.spawnEntity(EntityPlayer,xSpawnCord, first_player_loc.y, {});
-			player_lookup[name] = player;
+			console.log('NAME:'+name);
 		}
 	};
 	killPlayer = function(playerName) {
