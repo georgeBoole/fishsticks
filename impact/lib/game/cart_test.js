@@ -17,7 +17,7 @@ CartTest = ig.Game.extend({
 	init: function() {
 		// Initialize your game here; bind keys etc.
 		this.initInput();
-	},
+	}, 
 	initInput: function() {
 		ig.input.bind(ig.KEY.MOUSE1,'shoot');
 		ig.input.bind(ig.KEY.SPACE,'cart');
@@ -30,7 +30,7 @@ CartTest = ig.Game.extend({
 			createShot(ig.input.mouse.x, ig.input.mouse.y, {});
 		}
 		if (ig.input.pressed('cart')) {
-			createCart(ig.input.mouse.x, ig.input.mouse.y, {});
+			createCart(ig.input.mouse.x, ig.input.mouse.y, {direction: 1});
 		}
 		// Add your own, additional update code here
 	},
