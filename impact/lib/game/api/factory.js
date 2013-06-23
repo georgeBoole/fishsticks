@@ -11,7 +11,10 @@ ig.module(
 .defines(function() {
 	createCart = function(x, y, settings) {
 		console.log('creating cart');
-		//ig.game.spawnEntity(EntityCart, x, y, settings);
+		ig.game.spawnEntity(EntityCart, x, y, settings);
+	};
+	spawnCarts = function(cartData){
+
 	};
 	createShot = function(x, y, settings) {
 		console.log('creating shot');
