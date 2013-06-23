@@ -12,7 +12,7 @@ CartTest = ig.Game.extend({
 	
 	// Load a font
 	font: new ig.Font( 'media/04b03.font.png' ),
-	
+	shotTimer: new ig.Timer(0.50),
 	
 	init: function() {
 		// Initialize your game here; bind keys etc.
@@ -26,25 +26,22 @@ CartTest = ig.Game.extend({
 	update: function() {
 		// Update all entities and backgroundMaps
 		this.parent();
-		if (ig.input.pressed('shoot')) {
+		if (ig.input.pressed('shoot') && this.shotTimer.delta() >= 0) {
+			this.shotTimer.reset();
 			fireShot('Julian', 5);
 		}
 		if (ig.input.pressed('cart')) {
-			createCart(ig.input.mouse.x, ig.input.mouse.y, 'right',20, 5);
+			createCart(ig.input.mouse.x, ig.input.mouse.y, 'right',50, 5,1);
 			spawnPlayer('Julian', {});
 		}
-		// Add your own, additional update code here
 	},
 	
 	draw: function() {
 		// Draw all entities and backgroundMaps
 		this.parent();
-		
-		
 		// Add your own drawing code here
 		var x = ig.system.width/2,
 			y = ig.system.height/2;
-		
 		this.font.draw( 'It Works!', x, y, ig.Font.ALIGN.CENTER );
 	}
 });

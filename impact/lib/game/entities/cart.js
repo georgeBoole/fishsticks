@@ -26,6 +26,11 @@ ig.module(
 		},
 		update: function() {
 			this.parent();
+			//kills cart if it goes off screen
+			if((this.vel.x < 0 && this.pos.x < -this.size.x) || (this.vel.x > 0 && this.pos.x > ig.system.width + this.size.x)) {
+				console.log("DESTROYING CART");
+				this.kill();
+			}
 		}
 	});
 });

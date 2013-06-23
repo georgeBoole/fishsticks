@@ -13,11 +13,12 @@ ig.module(
 .defines(function() {
 	var cart_lookup = {};
 	var player_lookup = {};
+	var local_player = undefined;
 	var first_player_loc = {x:10,y:200};
 	var player_spacing = 64;
-	createCart = function(x, y, direction, speed,uuid) {
+	createCart = function(x, y, direction, speed,uuid,value) {
 		console.log('creating cart');
-		settings = {'direction':direction,'speed':speed,'uuid':uuid};
+		settings = {'direction':direction,'speed':speed,'uuid':uuid, 'value':value};
 		var cart = ig.game.spawnEntity(EntityCart, x, y, settings);
 		cart_lookup[uuid] = cart;
 	};
@@ -33,23 +34,27 @@ ig.module(
 			cart.kill();
 			delete cart_lookup[uuid];
 		}
-		
 	};
 	fireShot = function(playerName,cart_id) {
 		var p = player_lookup[playerName];
 		var c = cart_lookup[cart_id];
-		var angle = p.angleTo(c);
-		var settings = {'angle':angle,'target':c.pos}
-		console.log('SHOT FROM PLAYER:' + playerName + ' TO CART:' + cart_id + ' AT ANGLE:' + angle);
-		ig.game.spawnEntity(EntityShot,
-		 p.pos.x + (p.size.x/2),
-		 p.pos.y + (p.size.y/2),
-		 settings);
+		if (p == undefined || c == undefined) {
+			console.log("CANNOT FIRE: Undefined player name or cart id");
+		} else {
+			var angle = p.angleTo(c);
+			var settings = {'angle':angle,'target':c.pos}
+			console.log('SHOT FROM PLAYER:' + playerName + ' TO CART:' + cart_id + ' AT ANGLE:' + angle);
+			ig.game.spawnEntity(EntityShot,
+			 p.pos.x + (p.size.x/2),
+			 p.pos.y + (p.size.y/2),
+			 settings);
+		}
 	};
 	spawnPlayer = function(playerName,settings) {
 		console.log("Spawning player: " + playerName);
 		var xPos = first_player_loc.x + Object.keys(player_lookup).length*player_spacing;
 		var player = ig.game.spawnEntity(EntityPlayer,xPos,first_player_loc.y,settings);
+		local_player = player;
 		player_lookup[playerName] = player;
 	};
 	killPlayer = function(playerName) {

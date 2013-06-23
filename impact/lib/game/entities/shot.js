@@ -6,7 +6,7 @@ ig.module(
 	EntityShot = ig.Entity.extend({
 		animSheet: new ig.AnimationSheet('media/shot.png', 4, 8),
 		size: {x: 4,y: 8},
-		speed: 800,
+		speed: 1000,
 		maxVel: {x:1000,y:1000},
 		close_enough: 20,
 		OB: 50,
@@ -29,6 +29,7 @@ ig.module(
 				this.kill();
 				console.log("BULLET HIT TARGET");
 			} else if(this.pos.x < -this.OB || this.pos.x > ig.system.width + this.OB || this.pos.y < -this.OB || this.pos.y > ig.system.height + this.OB) {
+				console.log("BULLET WENT OUT OF BOUNDS");
 				this.kill();
 			}
 		}
