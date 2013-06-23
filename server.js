@@ -9,9 +9,9 @@ var ROW_Y_VALUES = [60, 120, 180];
 var CART_SPEEDS = [40, 50, 60];
 var cart_id = 0;
 var playerlist = [];
-var carts = [];
+var carts = {};
 var CART_BATCH_SIZE = 3;
-var CART_SPAWN_DELAY = 1000; //ms
+var CART_SPAWN_DELAY = 10000; //ms
 var MIN_CART_SPACING = 8;
 /* 
 	cart = {
@@ -39,7 +39,7 @@ function create_cart() {
 		birth: new Date().getTime(),
 		value: Math.round(Math.random() * 2 + 1)
 	};
-	carts.push(c);
+	carts[c.id] = c;
 	io.sockets.emit('spawnCart', c.x, c.y, c.direction, c.speed, c.value, c.id)
 }
 
@@ -79,7 +79,7 @@ io.sockets.on('connection', function(socket) {
 		}
 		if (hit) {
 			socket.broadcast.emit('hitCart', carts[i].id);
-			carts.erase(carts[i]);
+			delete carts[i];
 		}
 		else {
 			io.sockets.emit('message', name + ' missed his shot');
@@ -87,8 +87,12 @@ io.sockets.on('connection', function(socket) {
 	});
 	socket.on('initializePlayer', function(name) {
 		socket.clientname = name;
+		if (playerlist && playerlist.length > 0) {
+			socket.emit('registered', name, playerlist);
+		}
+		socket.emit('registered', name, playerlist && playerlist.length > 0 ? playerlist : []);
 		playerlist.push(name);
-		socket.broadcast.emit('updatePlayers', name,playerlist, {});
+		socket.broadcast.emit('join', name);
 	});
 	socket.on('disconnect', function() {
 		delete playerlist[socket.clientname];
@@ -98,7 +102,7 @@ io.sockets.on('connection', function(socket) {
 			}
 		}
 		socket.broadcast.emit('message', socket.clientname + ' has disconnected');
-		socket.broadcast.emit('playerLeave', socket.clientname);
+		socket.broadcast.emit('leave', socket.clientname);
 	});
 });
 

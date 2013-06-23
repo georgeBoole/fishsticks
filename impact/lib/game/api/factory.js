@@ -61,18 +61,24 @@ ig.module(
 		}
 		//console.log('killing cart entity with ' + cart_id);
 	};
-	setLocalPlayer = function(playerName){
-		local_player = playerName;
+	addLocalPlayer = function(name) {
+		local_player = name;
+		addPlayer(name);
 	};
-	updatePlayerLookUp = function(playerNames){
-		for(var i in playerNames){
-			var name = playerNames[i];
-			var player = ig.game.spawnEntity(EntityPlayer,spawn_locs[i],first_player_loc.y,{});
-			//console.log("PLAYERLOOK:"+player_lookup);
-			player_lookup[name] = player;
-			//console.log("PLAYERLOOK:"+player_lookup);
-			//console.log('NAME:'+name);
+	addPlayer = function(name) {
+		var existing_players = ig.game.getEntitiesByType(EntityPlayer);
+		for (var i =0; i < existing_players.length; i++) {
+			if (existing_players[i].name == name) {
+				console.log('player with that name already logged in');
+				return;
+			}
 		}
+		var ox = first_player_loc.x, oy = first_player_loc.y;
+		var px = ox + ((existing_players.length + 1) * player_spacing);
+		var py = oy;
+		var p = ig.game.spawnEntity(EntityPlayer, px, py, {'name':name});
+		console.log('just spawned a new player');
+		console.log(p);
 	};
 	killPlayer = function(playerName) {
 		//Kills a player with the specified name and
@@ -87,6 +93,14 @@ ig.module(
 			//console.log("kill key length1:" + Object.size(player_lookup));
 			delete player_lookup[playerName];
 			//console.log("kill key length2:" + Object.size(player_lookup));
+=======
+		var players = ig.game.getEntitiesByType(EntityPlayer);
+		for (var i in players) {
+			if (players[i] && players[i].name == playerName) {
+				console.log('killing ' + playerName);
+				players[i].kill();
+			}
+>>>>>>> 0a0f1e422ae0f7dfa0f7600e0e02744eb6c633be
 		}
 	};
 	displayMessage = function(msg) {
