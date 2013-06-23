@@ -11,21 +11,13 @@ ig.module(
 	'game.entities.shot'
 )
 .defines(function() {
+	var PLAYER_MARGIN = 0.075;
 	var cart_lookup = {};
 	var player_lookup = {};
 	var local_player = undefined;
-	var first_player_loc = {x:50,y:200};
+	var first_player_loc = {x:(640 * PLAYER_MARGIN),y:420};
 	var max_players = 4;
-	var player_spacing = 64;
-	var spawn_locs = [];
-	initializeSpawns = function() {
-		//creates the points where players sit
-		for(var i = 0; i < max_players; i++) {
-			console.log('i=' + i);
-			spawn_locs.push(first_player_loc.x + player_spacing * i);
-		}
-		console.log('spawnLocs:' + spawn_locs);
-	};
+	var player_spacing = (640 * (1 - (2 * PLAYER_MARGIN))) / max_players;
 	
 	Object.size = function(obj) { var size = 0, key; for (key in obj) { if (obj.hasOwnProperty(key)) size++; } return size; };
 	
@@ -74,7 +66,7 @@ ig.module(
 			}
 		}
 		var ox = first_player_loc.x, oy = first_player_loc.y;
-		var px = ox + ((existing_players.length + 1) * player_spacing);
+		var px = ox + ((existing_players.length) * player_spacing);
 		var py = oy;
 		var p = ig.game.spawnEntity(EntityPlayer, px, py, {'name':name});
 		console.log('just spawned a new player');
@@ -88,19 +80,17 @@ ig.module(
 			//console.log("Can't find player with the name: " + playerName);
 		} else {
 			//console.log("Killing player: " + playerName);
-			spawn_locs.push(player.pos.x);
 			player.kill();
 			//console.log("kill key length1:" + Object.size(player_lookup));
 			delete player_lookup[playerName];
 			//console.log("kill key length2:" + Object.size(player_lookup));
-=======
+		}
 		var players = ig.game.getEntitiesByType(EntityPlayer);
 		for (var i in players) {
 			if (players[i] && players[i].name == playerName) {
 				console.log('killing ' + playerName);
 				players[i].kill();
 			}
->>>>>>> 0a0f1e422ae0f7dfa0f7600e0e02744eb6c633be
 		}
 	};
 	displayMessage = function(msg) {
@@ -108,4 +98,4 @@ ig.module(
 		//We're doing something else with this later?
 		console.log(msg);
 	};
-})
+});

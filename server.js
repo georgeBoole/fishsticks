@@ -5,13 +5,13 @@ var log = require('winston');
 
 var SERVER_PORT = 8080;
 var CART_SIZE = {x: 48, y: 32};
-var ROW_Y_VALUES = [60, 120, 180];
+var ROW_Y_VALUES = [40, 80, 120];
 var CART_SPEEDS = [40, 50, 60];
 var cart_id = 0;
 var playerlist = [];
 var carts = {};
 var CART_BATCH_SIZE = 3;
-var CART_SPAWN_DELAY = 10000; //ms
+var CART_SPAWN_DELAY = 8000; //ms
 var MIN_CART_SPACING = 8;
 /* 
 	cart = {
