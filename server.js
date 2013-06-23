@@ -12,6 +12,7 @@ var playerlist = [];
 var carts = [];
 var CART_BATCH_SIZE = 3;
 var CART_SPAWN_DELAY = 1000; //ms
+var MIN_CART_SPACING = 8;
 /* 
 	cart = {
 		id,
@@ -62,7 +63,7 @@ function spawnCarts() {
 	for (var i = 0; i < CART_BATCH_SIZE; i++) {
 		create_cart();
 	}
-	
+
 }
 
 io.sockets.on('connection', function(socket) {
