@@ -12,12 +12,11 @@ ig.module(
 	var socket = io.connect(HOST);
 
 	socket.on('updatePlayers', function(name,players) {
+
 		var oldPlayers = ig.game.getEntitiesByType(EntityPlayer);
 		for(var i = 0; i < oldPlayers.length;i++) {
 			
 		}
-
-		
 
 	});
 	socket.on('message', function(msg) {

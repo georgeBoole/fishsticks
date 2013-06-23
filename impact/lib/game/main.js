@@ -10,6 +10,7 @@ ig.module(
 
 AngryMiner = ig.Game.extend({
 	font: new ig.Font( 'media/04b03.font.png' ),
+	players: [],
 	init: function() {
 		this.initPlayer();
 		this.initInput();
