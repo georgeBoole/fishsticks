@@ -51,7 +51,7 @@ ig.module(
 	makeCart = function(x, y, direction, speed, value, id) {
 		var dmap = {'left':-1, 'right':1};
 		cart_lookup[id] = ig.game.spawnEntity(EntityCart, x, y, {'vel':{'x':dmap[direction] * speed, 'y':0}, 'id':id, 'uuid':id,'value':value});
-		console.log('making a cart entity');
+		//console.log('making a cart entity');
 	};
 	killCart = function(cart_id) {
 		if (cart_id in cart_lookup) {
@@ -67,6 +67,10 @@ ig.module(
 	updatePlayerLookUp = function(playerNames){
 		for(var i in playerNames){
 			var name = playerNames[i];
+			var player = ig.game.spawnEntity(EntityPlayer,spawn_locs[i],first_player_loc.y,{});
+			console.log("PLAYERLOOK:"+player_lookup);
+			player_lookup[name] = player;
+			console.log("PLAYERLOOK:"+player_lookup);
 			console.log('NAME:'+name);
 		}
 	};

@@ -59,10 +59,11 @@ function isHit(sx, sy, cx, cy) {
 }
 
 function spawnCarts() {
-	for (var i = 0; i < CART_BATCH_SIZE; i++) {
-		create_cart();
+	if (playerlist && playerlist.length >= 1) {
+		for (var i = 0; i < CART_BATCH_SIZE; i++) {
+			create_cart();
+		}
 	}
-	
 }
 
 io.sockets.on('connection', function(socket) {

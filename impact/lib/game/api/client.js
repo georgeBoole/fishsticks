@@ -12,11 +12,11 @@ ig.module(
 	var socket = io.connect(HOST);
 
 	socket.on('updatePlayers', function(name,players) {
-		// name is the name of the player who just joined or left
-		// players is a list of all the players including my local player
-		ig.game.players.forEach(function(p) {
-			p.kill();
-		})
+		var oldPlayers = ig.game.getEntitiesByType(EntityPlayer);
+		for(var i = 0; i < oldPlayers.length;i++) {
+			
+		}
+
 		
 
 	});
@@ -24,7 +24,12 @@ ig.module(
 		console.log('SERVER MESSAGE: ' + msg);
 	});
 	socket.on('spawnCart', function(x, y, direction, speed, value, uuid) {
-		makeCart(x, y, direction, speed, value, uuid);
+		if (ig.game) {
+			makeCart(x, y, direction, speed, value, uuid);
+		}
+		else {
+			console.log('cannot spawn cart until game object is initialized');
+		}
 	});
 	socket.on('hitCart', function(player_name, cart_id) {
 		console.log(player_name + ' hit cart #' + cart_id);
@@ -38,7 +43,7 @@ ig.module(
 	};
 	initializeLocalPlayer = function(player_name) {
 		console.log('Initializing local player:' + player_name);
-		//setLocalPlayer(player_name);
+		setLocalPlayer(player_name);
 		socket.emit('initializePlayer',player_name);
 	};
 
