@@ -9,8 +9,9 @@ ig.module(
 	'game.entities.shot'
 )
 .defines(function() {
-	createCart = function(x, y, settings) {
+	createCart = function(x, y, direction, speed) {
 		console.log('creating cart');
+		settings = {'direction':direction,'speed':speed};
 		ig.game.spawnEntity(EntityCart, x, y, settings);
 	};
 	spawnCarts = function(cartData){

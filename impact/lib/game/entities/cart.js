@@ -9,7 +9,7 @@ ig.module(
 		speed: 20,
 		init: function(x,y,settings) {
 			this.addAnim('idle',1,[0]);
-			direction = settings.direction;
+			dir = settings.direction;
 			this.vel = {x:direction*x, y:0};
 			this.parent(x,y,settings);
 		},
