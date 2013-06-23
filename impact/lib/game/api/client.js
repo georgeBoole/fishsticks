@@ -11,11 +11,8 @@ ig.module(
 	var HOST = 'http://192.168.1.12:8080';
 	var socket = io.connect(HOST);
 
-	socket.on('playerJoin', function(name, uuid, settings) {
-
-	});
-	socket.on('playerLeave', function(player_id) {
-
+	socket.on('updatePlayers', function(players) {
+		// players is a list of all the players including my local player
 	});
 	socket.on('message', function(msg) {
 		console.log('SERVER MESSAGE: ' + msg);
