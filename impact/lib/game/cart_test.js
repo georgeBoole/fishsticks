@@ -27,11 +27,11 @@ CartTest = ig.Game.extend({
 		// Update all entities and backgroundMaps
 		this.parent();
 		if (ig.input.pressed('shoot')) {
-			createShot(ig.input.mouse.x, ig.input.mouse.y, {});
-			killCart(5);
+			fireShot('Julian', 5);
 		}
 		if (ig.input.pressed('cart')) {
-			createCart(ig.input.mouse.x, ig.input.mouse.y, 'left',20, 5);
+			createCart(ig.input.mouse.x, ig.input.mouse.y, 'right',20, 5);
+			spawnPlayer('Julian', {});
 		}
 		// Add your own, additional update code here
 	},
