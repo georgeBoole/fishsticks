@@ -9,15 +9,15 @@ ig.module(
 .defines(function(){
 
 // wrap the builtins, eventually move this out
-igi = ig.input;
-pressed = igi.pressed;
-mouse = igi.mouse;
-mmap = {'left_click':'mouse1', 'right_click':'mouse2'};
 
-bind = function(action, event) {
+var pressed = ig.input.pressed;
+var mouse = ig.input.mouse;
+var mmap = {'left_click':'mouse1', 'right_click':'mouse2'};
+
+var bind = function(action, event) {
 	ig.input.bind(key(action), event);
 };
-key = function(k) {
+var key = function(k) {
 	x = k in mmap ? mmap[k] : k;
 	return eval('ig.KEY.' + x.toUpperCase());
 };
