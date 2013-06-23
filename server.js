@@ -39,7 +39,7 @@ function create_cart() {
 		value: Math.round(Math.random() * 2 + 1)
 	};
 	carts.push(c);
-	socket.broadcast.emit('spawnCart', c.x, c.y, c.direction, c.speed, c.value, c.id)
+	io.sockets.emit('spawnCart', c.x, c.y, c.direction, c.speed, c.value, c.id)
 }
 
 function handler(request, response) {
@@ -99,9 +99,6 @@ io.sockets.on('connection', function(socket) {
 		socket.broadcast.emit('message', socket.clientname + ' has disconnected');
 		socket.broadcast.emit('playerLeave', socket.clientname);
 	});
-	socket.on('cartRequest', function() {
-		new_c
-	})
 });
 
 setInterval(spawnCarts, CART_SPAWN_DELAY);
