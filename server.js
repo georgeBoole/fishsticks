@@ -10,6 +10,8 @@ var CART_SPEEDS = [40, 50, 60];
 var cart_id = 0;
 var playerlist = [];
 var carts = [];
+var CART_BATCH_SIZE = 3;
+var CART_SPAWN_DELAY = 750; # //ms
 /* 
 	cart = {
 		id,
@@ -26,6 +28,7 @@ function choose(list) {
 }
 
 function create_cart() {
+
 	var c = {
 		id:cart_id++,
 		x: Math.random() >= .5 ? 0 : 320 - CART_SIZE.x,
@@ -36,6 +39,7 @@ function create_cart() {
 		value: Math.round(Math.random() * 2 + 1)
 	};
 	carts.push(c);
+	socket.broadcast.emit('spawnCart', c.x, c.y, direction, speed, value, uuid)
 }
 
 function handler(request, response) {
@@ -55,7 +59,9 @@ function isHit(sx, sy, cx, cy) {
 }
 
 function spawnCarts() {
-
+	for (var i = 0; i < CART_BATCH_SIZE; i++) {
+		create_cart();
+	}
 }
 
 io.sockets.on('connection', function(socket) {
@@ -96,3 +102,4 @@ io.sockets.on('connection', function(socket) {
 	})
 });
 
+setInterval(spawnCarts, CART_SPAWN_DELAY);
