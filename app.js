@@ -8,7 +8,7 @@ app.listen(SERVER_PORT);
 var CART_SIZE = {x: 48, y: 32};
 
 var playerlist = [];
-var carts = [];
+var socket;
 
 function handler(request, response) {
 	fs.readFile(__dirname + '/index.html',
@@ -27,7 +27,8 @@ function isHit(sx, sy, cx, cy) {
 }
 
 io.sockets.on('connection', function(socket) {
-	socket.on('request_shot', function(x, y, player_id) {
+
+	socket.on('attemptShot', function(player_id, x, y) {
 		for (var i=0; i < carts.length; i++) {
 			if isHit(x, y, carts[i].x, carts[i].y) {
 				socket.broadcast.emit('hit', carts[i].id);
@@ -36,10 +37,10 @@ io.sockets.on('connection', function(socket) {
 			}
 		}
 	});
-	socket.on('playerjoin', function(name) {
+	socket.on('initializePlayer', function(name) {
 		socket.clientname = name;
 		playerlist.push(name);
-		io.sockets.emit('addplayer', playerlist, name);
+		io.sockets.emit('playerJoin', name, getID(name), {});
 	});
 	socket.on('disconnect', function() {
 		delete playerlist[socket.clientname];
@@ -48,8 +49,9 @@ io.sockets.on('connection', function(socket) {
 				playerlist.splice(i, 1);
 			}
 		}
-		socket.broadcast.emit('message', socket.clientname);
-		socket.broadcast.emit('players', playerlist);
+		socket.broadcast.emit('message', socket.clientname + ' has disconnected');
+		socket.broadcast.emit('playerLeave', record[socket.clientname]);
 	});
 
 });
+

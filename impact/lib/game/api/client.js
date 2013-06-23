@@ -10,47 +10,27 @@ ig.module(
 	var HOST = 'http://192.168.1.12:8080';
 	var socket = io.connect('http://localhost:3700');
 
-		/*	    
-			var messages = [];
-		    
-		    var field = document.getElementById("field");
-		    var sendButton = document.getElementById("send");
-		    var content = document.getElementById("content");
-		 
-		    socket.on('message', function (data) {
-		        if(data.message) {
-		            messages.push(data.message);
-		            var html = '';
-		            for(var i=0; i<messages.length; i++) {
-		                html += messages[i] + '<br />';
-		            }
-		            content.innerHTML = html;
-		        } else {
-		            console.log("There is a problem:", data);
-		        }
-		    });
-		 
-		    sendButton.onclick = function() {
-		        var text = field.value;
-		        socket.emit('send', { message: text });
-		    };
-	    */
-
 	var socket = io.connect(HOST);
-	socket.on('hit', function(data) {
+
+	socket.on('playerJoin', function(name, uuid, settings) {
 
 	});
-	socket.on('addplayer', function(data) {
+	socket.on('playerLeave', function(player_id) {
 
 	});
-	socket.on('message', function(data) {
+	socket.on('message', function(msg) {
 
 	});
-	socket.on('players', function(data) {
+	socket.on('spawnCart', function(x, y, direction, speed, value, uuid) {
 
 	});
+	socket.on('hitCart', function(player_id, cart_id) {
+
+	});
+
 
 	requestShot = function(x, y, player_id) {
-		socket.emit('request_shot', x, y, player_id)
+		socket.emit('attemptShot', player_id, x, y);
 	};
+
 });
