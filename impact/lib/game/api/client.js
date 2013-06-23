@@ -19,12 +19,16 @@ ig.module(
 
 	// });
 	socket.on('join', function(player_name) {
+		console.log(player_name + ' has joined!');
 		addPlayer(player_name);
 	});
 	socket.on('leave', function(player_name) {
+		console.log(player_name + ' has left...');
 		killPlayer(player_name);
 	});
 	socket.on('registered', function(name, existing_players) {
+		console.log('registered');
+		console.log(existing_players);
 		if (existing_players && existing_players.length > 0) {
 			existing_players.forEach(function(ep) {
 				addPlayer(ep);
@@ -33,7 +37,7 @@ ig.module(
 		addLocalPlayer(name);
 	});
 	socket.on('message', function(msg) {
-		console.log('SERVER MESSAGE: ' + msg);
+		//console.log('SERVER MESSAGE: ' + msg);
 	});
 	socket.on('spawnCart', function(x, y, direction, speed, value, uuid) {
 		if (ig.game) {
