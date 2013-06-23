@@ -26,33 +26,9 @@ ig.module(
 		}
 		console.log('spawnLocs:' + spawn_locs);
 	};
-	//A function to get the number of key value pairs in a hash
+	
 	Object.size = function(obj) { var size = 0, key; for (key in obj) { if (obj.hasOwnProperty(key)) size++; } return size; };
-	createCart = function(x, y, direction, speed,uuid,value) {
-		//Creates a single cart entity at {x,y} 
-		//Going to the 'left' or 'right' with a speed
-		//While possesing an unique identifier (uuid)
-		//And being worth some poing value
-		console.log('creating cart');
-		settings = {'direction':direction,'speed':speed,'uuid':uuid, 'value':value};
-		var cart = ig.game.spawnEntity(EntityCart, x, y, settings);
-		cart_lookup[uuid] = cart;
-	};
-	spawnCarts = function(cartData){
-		//Makes multiple, appropriately spaced carts
-	};
-	killCart = function(uuid) {
-		//Kills a cart entity with the specified
-		//uuid if able and removes the cart from the cart_lookup
-		var cart = cart_lookup[uuid];
-		if(cart == undefined) {
-			console.log("Can't find cart with uuid: " + uuid);
-		} else {
-			console.log('killing cart');
-			cart.kill();
-			delete cart_lookup[uuid];
-		}
-	};
+	
 	fireShot = function(playerName,cart_id) {
 		//Creates a shot entity from the specified player
 		//To the specified cart
@@ -71,6 +47,19 @@ ig.module(
 			 p.pos.y + (p.size.y/2),
 			 settings);
 		}
+	};
+	makeCart = function(x, y, direction, speed, value, id) {
+		var dmap = {'left':-1, 'right':1};
+		cart_lookup[id] = ig.game.spawnEntity(EntityCart, x, y, {'vel':{'x':dmap[direction] * speed, 'y':0}, 'id':id, 'value':value});
+		console.log('making a cart entity');
+	};
+	killCart = function(cart_id) {
+		if (cart_id in cart_lookup) {
+			var cart = cart_lookup[cart_id];
+			cart.kill();
+			delete cart_lookup[cart_id];
+		}
+		console.log('killing cart entity with ' + cart_id);
 	};
 	setLocalPlayer = function(playerName){
 		local_player = playerName;
