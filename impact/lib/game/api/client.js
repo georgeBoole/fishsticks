@@ -12,13 +12,23 @@ ig.module(
 	var socket = io.connect(HOST);
 
 	socket.on('updatePlayers', function(name,players) {
-		ig.game.players = players;
+
+		var oldPlayers = ig.game.getEntitiesByType(EntityPlayer);
+		for(var i = 0; i < oldPlayers.length;i++) {
+			
+		}
+
 	});
 	socket.on('message', function(msg) {
 		console.log('SERVER MESSAGE: ' + msg);
 	});
 	socket.on('spawnCart', function(x, y, direction, speed, value, uuid) {
-		makeCart(x, y, direction, speed, value, uuid);
+		if (ig.game) {
+			makeCart(x, y, direction, speed, value, uuid);
+		}
+		else {
+			console.log('cannot spawn cart until game object is initialized');
+		}
 	});
 	socket.on('hitCart', function(player_name, cart_id) {
 		console.log(player_name + ' hit cart #' + cart_id);

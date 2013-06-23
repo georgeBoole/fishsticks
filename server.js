@@ -60,10 +60,11 @@ function isHit(sx, sy, cx, cy) {
 }
 
 function spawnCarts() {
-	for (var i = 0; i < CART_BATCH_SIZE; i++) {
-		create_cart();
+	if (playerlist && playerlist.length >= 1) {
+		for (var i = 0; i < CART_BATCH_SIZE; i++) {
+			create_cart();
+		}
 	}
-
 }
 
 io.sockets.on('connection', function(socket) {
@@ -87,7 +88,6 @@ io.sockets.on('connection', function(socket) {
 	socket.on('initializePlayer', function(name) {
 		socket.clientname = name;
 		playerlist.push(name);
-		console.log("INITIALIZING PLAYER ON THE SERVER");
 		socket.broadcast.emit('updatePlayers', name,playerlist, {});
 	});
 	socket.on('disconnect', function() {

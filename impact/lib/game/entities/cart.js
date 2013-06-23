@@ -10,7 +10,6 @@ ig.module(
 		init: function(x,y,settings) {
 			this.parent(x,y,settings);
 			this.addAnim('idle',1,[0]);
-			this.vel = {x: this.dirs[this.direction]*this.speed, y:0};
 			if (this.uuid == undefined) {
 				// something is really wrong, assign null
 				// should never get here
@@ -28,7 +27,7 @@ ig.module(
 			this.parent();
 			//kills cart if it goes off screen
 			if((this.vel.x < 0 && this.pos.x < -this.size.x) || (this.vel.x > 0 && this.pos.x > ig.system.width + this.size.x)) {
-				console.log("DESTROYING CART");
+				//console.log("DESTROYING CART");
 				this.kill();
 			}
 		}
