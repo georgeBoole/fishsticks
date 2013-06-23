@@ -11,7 +11,7 @@ var cart_id = 0;
 var playerlist = [];
 var carts = [];
 var CART_BATCH_SIZE = 3;
-var CART_SPAWN_DELAY = 750; //ms
+var CART_SPAWN_DELAY = 1000; //ms
 /* 
 	cart = {
 		id,
