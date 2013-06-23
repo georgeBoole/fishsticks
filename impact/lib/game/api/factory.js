@@ -35,13 +35,13 @@ ig.module(
 		var p = player_lookup[playerName];
 		var c = cart_lookup[cart_id];
 		if (p == undefined || c == undefined) {
-			console.log("CANNOT FIRE: Undefined player name or cart id");
+			//console.log("CANNOT FIRE: Undefined player name or cart id");
 		} else if(local_player == playerName) {
-			console.log("INVALID SHOOTER: ONLY THE LOCAL PLAYER CAN FIRE");
+			//console.log("INVALID SHOOTER: ONLY THE LOCAL PLAYER CAN FIRE");
 		}else {
 			var angle = p.angleTo(c);
 			var settings = {'angle':angle,'target':c.pos}
-			console.log('SHOT FROM PLAYER:' + playerName + ' TO CART:' + cart_id + ' AT ANGLE:' + angle);
+			//console.log('SHOT FROM PLAYER:' + playerName + ' TO CART:' + cart_id + ' AT ANGLE:' + angle);
 			ig.game.spawnEntity(EntityShot,
 			 p.pos.x + (p.size.x/2),
 			 p.pos.y + (p.size.y/2),
@@ -59,7 +59,7 @@ ig.module(
 			cart.kill();
 			delete cart_lookup[cart_id];
 		}
-		console.log('killing cart entity with ' + cart_id);
+		//console.log('killing cart entity with ' + cart_id);
 	};
 	setLocalPlayer = function(playerName){
 		local_player = playerName;
@@ -68,10 +68,10 @@ ig.module(
 		for(var i in playerNames){
 			var name = playerNames[i];
 			var player = ig.game.spawnEntity(EntityPlayer,spawn_locs[i],first_player_loc.y,{});
-			console.log("PLAYERLOOK:"+player_lookup);
+			//console.log("PLAYERLOOK:"+player_lookup);
 			player_lookup[name] = player;
-			console.log("PLAYERLOOK:"+player_lookup);
-			console.log('NAME:'+name);
+			//console.log("PLAYERLOOK:"+player_lookup);
+			//console.log('NAME:'+name);
 		}
 	};
 	killPlayer = function(playerName) {
@@ -79,14 +79,14 @@ ig.module(
 		//removes them from the player_lookup.
 		var player = player_lookup[playerName];
 		if(player == undefined) {
-			console.log("Can't find player with the name: " + playerName);
+			//console.log("Can't find player with the name: " + playerName);
 		} else {
-			console.log("Killing player: " + playerName);
+			//console.log("Killing player: " + playerName);
 			spawn_locs.push(player.pos.x);
 			player.kill();
-			console.log("kill key length1:" + Object.size(player_lookup));
+			//console.log("kill key length1:" + Object.size(player_lookup));
 			delete player_lookup[playerName];
-			console.log("kill key length2:" + Object.size(player_lookup));
+			//console.log("kill key length2:" + Object.size(player_lookup));
 		}
 	};
 	displayMessage = function(msg) {

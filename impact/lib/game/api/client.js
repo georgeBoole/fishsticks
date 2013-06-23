@@ -12,7 +12,8 @@ ig.module(
 	var socket = io.connect(HOST);
 
 	socket.on('updatePlayers', function(name,players) {
-
+		console.log('updating players');
+		console.log(players);
 		var oldPlayers = ig.game.getEntitiesByType(EntityPlayer);
 		for(var i = 0; i < oldPlayers.length;i++) {
 			
