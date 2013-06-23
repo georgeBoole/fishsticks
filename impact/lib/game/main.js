@@ -7,6 +7,9 @@ ig.module(
 )
 .defines(function(){
 
+var messages = [];
+var HOST = 'http://192.168.1.12:8080'
+var socket = io.connect(HOST);
 MyGame = ig.Game.extend({
 	
 	// Load a font

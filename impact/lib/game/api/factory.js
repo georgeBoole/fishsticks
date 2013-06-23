@@ -2,7 +2,7 @@
 // this script defines instantation functions for all the
 // different entities
 ig.module(
-	'game.utils.factory'
+	'game.api.factory'
 )
 .requires(
 	'game.entities.cart',

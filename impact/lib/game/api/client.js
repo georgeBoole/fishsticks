@@ -1,12 +1,10 @@
 // message.js
 // this script wraps server/client communication using socket.io
 ig.module(
-	'game.utils.message'
+	'game.api.client'
 )
 .requires(
 )
 .defines(function() {
-	sendMessage = function(message, data) {
-
-	};
+	
 })
