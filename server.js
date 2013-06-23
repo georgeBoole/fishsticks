@@ -62,6 +62,7 @@ function spawnCarts() {
 	for (var i = 0; i < CART_BATCH_SIZE; i++) {
 		create_cart();
 	}
+	
 }
 
 io.sockets.on('connection', function(socket) {

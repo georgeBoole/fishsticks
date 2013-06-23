@@ -3,46 +3,45 @@ ig.module(
 )
 .requires(
 	'impact.game',
-	'impact.font'
+	'impact.font',
+	'game.api.client'
 )
 .defines(function(){
 
 // wrap the builtins, eventually move this out
-bind = ig.input.bind;
+igi = ig.input;
+pressed = igi.pressed;
+mouse = igi.mouse;
+mmap = {'left_click':'mouse1', 'right_click':'mouse2'};
+
+bind = function(action, event) {
+	ig.input.bind(key(action), event);
+};
 key = function(k) {
-	return eval('ig.KEY.' + k.toUpperCase());
-}
+	x = k in mmap ? mmap[k] : k;
+	return eval('ig.KEY.' + x.toUpperCase());
+};
 
 AngryMiner = ig.Game.extend({
-
 	font: new ig.Font( 'media/04b03.font.png' ),
-	
 	init: function() {
-		var name = prompt('Enter your name:');
+		this.initPlayer();
 		this.initInput();
 	},
 	initInput: function() {
-		bind(key('mouse1'), 'shoot');
-		bind(key('space'), 'cart');
+		bind('left_click', 'shoot');
+		bind('space', 'cart');
 		ig.input.initMouse();
 	},
-	update: function() {
-		// Update all entities and backgroundMaps
-		this.parent();
-		
-		// Add your own, additional update code here
+	initPlayer: function() {
+		this.local_player = prompt('Enter your name:');
+		initializeLocalPlayer(this.local_player);
 	},
-	
-	draw: function() {
-		// Draw all entities and backgroundMaps
+	update: function() {
 		this.parent();
-		
-		
-		// Add your own drawing code here
-		var x = ig.system.width/2,
-			y = ig.system.height/2;
-		
-		this.font.draw( 'It Works!', x, y, ig.Font.ALIGN.CENTER );
+		if (pressed('shoot')) {
+			requestShot(this.local_player, mouse.x, mouse.y);
+		}
 	}
 });
 
