@@ -21,7 +21,7 @@ ig.module(
 		console.log('SERVER MESSAGE: ' + msg);
 	});
 	socket.on('spawnCart', function(x, y, direction, speed, value, uuid) {
-
+		makeCart(x, y, direction, speed, value, uuid);
 	});
 	socket.on('hitCart', function(player_name, cart_id) {
 		console.log(player_name + ' hit cart #' + cart_id);
