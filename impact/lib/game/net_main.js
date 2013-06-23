@@ -19,7 +19,7 @@ NetGame = ig.Game.extend({
 	init: function() {
 		// Initialize your game here; bind keys etc.
 		socket = io.connect("http://localhost", {port: 8000, transports: ["websocket"]});
-		
+		this.sock = socket;
 	},
 	
 	update: function() {

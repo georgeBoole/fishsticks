@@ -1,0 +1,11 @@
+#!/bin/sh
+
+echo "building nodejs"
+git clone https://github.com/joyent/node.git
+cd node
+chmod a+x ./configure
+./configure
+make
+make install
+
+
