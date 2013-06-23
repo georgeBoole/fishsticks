@@ -11,12 +11,26 @@ ig.module(
 	var HOST = 'http://192.168.1.12:8080';
 	var socket = io.connect(HOST);
 
-	socket.on('updatePlayers', function(players) {
-		var oldPlayers = ig.game.getEntitiesByType(EntityPlayer);
-		for(var i = 0; i < oldPlayers.length;i++) {
-			console.log("DERP");
-		}
+	// socket.on('updatePlayers', function(players) {
+	// 	var oldPlayers = ig.game.getEntitiesByType(EntityPlayer);
+	// 	for(var i = 0; i < oldPlayers.length;i++) {
+	// 		console.log("DERP");
+	// 	}
 
+	// });
+	socket.on('join', function(player_name) {
+		addPlayer(player_name);
+	});
+	socket.on('leave', function(player_name) {
+		killPlayer(player_name);
+	});
+	socket.on('registered', function(name, existing_players) {
+		if (existing_players && existing_players.length > 0) {
+			existing_players.forEach(function(ep) {
+				addPlayer(ep);
+			});
+		}
+		addLocalPlayer(name);
 	});
 	socket.on('message', function(msg) {
 		console.log('SERVER MESSAGE: ' + msg);
@@ -40,8 +54,6 @@ ig.module(
 		socket.emit('attemptShot', player_name, x, y);
 	};
 	initializeLocalPlayer = function(player_name) {
-		console.log('Initializing local player:' + player_name);
-		setLocalPlayer(player_name);
 		socket.emit('initializePlayer',player_name);
 	};
 
