@@ -28,6 +28,7 @@ CartTest = ig.Game.extend({
 		this.parent();
 		if (ig.input.pressed('shoot')) {
 			createShot(ig.input.mouse.x, ig.input.mouse.y, {});
+			killCart(5);
 		}
 		if (ig.input.pressed('cart')) {
 			createCart(ig.input.mouse.x, ig.input.mouse.y, 'left',20, 5);

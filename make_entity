@@ -1,0 +1,38 @@
+#!/usr/bin/python
+
+import os, sys
+
+template = """ig.module(
+	'game.entities.%(name)s'
+).requires(
+	'impact.entity'
+).defines(function() {
+	Entity%(proper_name)s = ig.Entity.extend({
+		animSheet: new ig.AnimationSheet('media/%(name)s.png', %(width)d, %(height)d),
+		size: {x: %(width)d,y: %(height)d},
+		init: function(x,y,settings) {
+			this.parent(x,y,settings);
+		},
+		kill: function() {
+			this.parent();
+		},
+		draw: function() {
+			this.parent();
+		},
+		update: function() {
+			this.parent();
+		}
+	});
+});\n"""
+
+def main(entityName):
+	if not entityName:
+		sys.exit(1)
+	name = entityName.lower()
+	with open(os.path.join(os.getcwd(), 'impact', 'lib','game', 'entities', '%s.js' % name), 'w+') as newEntityFile:
+		newEntityFile.write(template % {'name':name,'proper_name':name.title(),'width':32, 'height':32})
+	print('done creating %s' % name.title())
+
+
+if __name__ == '__main__':
+	main(sys.argv[1])
