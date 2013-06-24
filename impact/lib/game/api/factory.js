@@ -42,6 +42,7 @@ ig.module(
 	killCart = function(cart_id) {
 		if (cart_id in cart_lookup) {
 			var cart = cart_lookup[cart_id];
+			console.log("CARTKILL:"+cart_id);
 			cart.kill();
 			delete cart_lookup[cart_id];
 		}

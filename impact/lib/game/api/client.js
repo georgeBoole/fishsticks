@@ -8,7 +8,7 @@ ig.module(
 )
 .defines(function() {
 	var messages = [];
-	var HOST = 'http://192.168.1.12:8080';
+	var HOST = 'http://192.168.1.9:8080';
 	var socket = io.connect(HOST);
 
 	socket.on('join', function(player_name) {
