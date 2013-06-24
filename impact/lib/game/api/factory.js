@@ -45,6 +45,8 @@ ig.module(
 	};
 	synchronize_carts = function(cart_dicts) {
 		var carts = ig.game.getEntitiesByType(EntityCart);
+		// console.log("SERVER CARTS.COUNT:"+cart_dicts.length);
+		// console.log("CLIENT CARTS.COUNT:"+carts.length);
 		
 	};
 	addLocalPlayer = function(name) {
