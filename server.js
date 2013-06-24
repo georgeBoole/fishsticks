@@ -8,13 +8,15 @@ log.remove(log.transports.Console);
 
 var SERVER_PORT = 8080;
 var CART_SIZE = {x: 48, y: 32};
-var ROW_Y_VALUES = [40, 120, 200];
+var ROW_Y_VALUES = [40, 100, 160, 220];
+var ROW_DIRECTIONS = ROW_Y_VALUES.map(function(r) { return Math.random() >= .5 ? 1 : -1; });
 var CART_SPEEDS = [40, 50, 60];
 var cart_id = 0;
 var playerlist = [];
 var carts = {};
 var CART_BATCH_SIZE = 3;
 var CART_SPAWN_DELAY = 8000; //ms
+var CART_UPDATE_DELAY = 1000; //ms
 var MIN_CART_SPACING = 8;
 /* 
 	cart = {
@@ -26,6 +28,7 @@ var MIN_CART_SPACING = 8;
 */
 //var socket;
 app.listen(SERVER_PORT);
+
 
 function choose(list) {
 	return list[Math.round(Math.random() * (list.length-1))];
@@ -72,6 +75,21 @@ function spawnCarts() {
 	}
 }
 
+function updateCarts() {
+	if (carts && playerlist && playerlist.length > 0) {
+		// update all the existing cards
+		var dt = CART_UPDATE_DELAY / 1000;
+		for (cid in carts) {
+			var ct = carts[cid];
+			ct.x += ct.vx * dt;
+			ct.y += ct.vy * dt;
+		}
+	}
+
+	// now need to send this all to the player
+	io.sockets.emit('updateCarts', carts);
+}
+
 io.sockets.on('connection', function(socket) {
 
 	socket.on('attemptShot', function(name, x, y) {
@@ -99,9 +117,6 @@ io.sockets.on('connection', function(socket) {
 	});
 	socket.on('initializePlayer', function(name) {
 		socket.clientname = name;
-		if (playerlist && playerlist.length > 0) {
-			socket.emit('registered', name, playerlist);
-		}
 		socket.emit('registered', name, playerlist && playerlist.length > 0 ? playerlist : []);
 		playerlist.push(name);
 		socket.broadcast.emit('join', name);
@@ -119,3 +134,4 @@ io.sockets.on('connection', function(socket) {
 });
 
 setInterval(spawnCarts, CART_SPAWN_DELAY);
+setInterval(updateCarts, CART_UPDATE_DELAY);

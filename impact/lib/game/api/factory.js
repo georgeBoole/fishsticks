@@ -22,28 +22,19 @@ ig.module(
 	Object.size = function(obj) { var size = 0, key; for (key in obj) { if (obj.hasOwnProperty(key)) size++; } return size; };
 	
 	fireShot = function(playerName,cart_id) {
-		//Creates a shot entity from the specified player
-		//To the specified cart
-		console.log("IN FIRE");
 		var p = player_lookup[playerName];
 		var c = cart_lookup[cart_id];
-		console.log("P:"+p+"C:"+c);
-		if (p == undefined || c == undefined) {
-			console.log("CANNOT FIRE: Undefined player name or cart id");
-		} else {
-			var angle = p.angleTo(c);
-			var settings = {'angle':angle,'target':c.pos}
-			console.log('SHOT FROM PLAYER:' + playerName + ' TO CART:' + cart_id + ' AT ANGLE:' + angle);
-			ig.game.spawnEntity(EntityShot,
-			 p.pos.x + (p.size.x/2),
-			 p.pos.y + (p.size.y/2),
-			 settings);
-		}
+		var angle = p.angleTo(c);
+		var settings = {'angle':angle,'target':c.pos}
+		console.log('SHOT FROM PLAYER:' + playerName + ' TO CART:' + cart_id + ' AT ANGLE:' + angle);
+		ig.game.spawnEntity(EntityShot,
+		 p.pos.x + (p.size.x/2),
+		 p.pos.y + (p.size.y/2),
+		 settings);
 	};
 	makeCart = function(x, y, direction, speed, value, id) {
 		var dmap = {'left':-1, 'right':1};
 		cart_lookup[id] = ig.game.spawnEntity(EntityCart, x, y, {'vel':{'x':dmap[direction] * speed, 'y':0}, 'uuid':id,'value':value});
-		//console.log('making a cart entity');
 	};
 	killCart = function(cart_id) {
 		if (cart_id in cart_lookup) {
@@ -51,7 +42,10 @@ ig.module(
 			cart.kill();
 			delete cart_lookup[cart_id];
 		}
-		console.log('killing cart entity with ' + cart_id);
+	};
+	synchronize_carts = function(cart_dicts) {
+		var carts = ig.game.getEntitiesByType(EntityCart);
+		
 	};
 	addLocalPlayer = function(name) {
 		local_player = name;
