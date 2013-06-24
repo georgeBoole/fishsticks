@@ -27,7 +27,7 @@ var playerlist = [];
 var carts = {};
 var CART_BATCH_SIZE = 3;
 var CART_SPAWN_DELAY = 8000; //ms
-var CART_UPDATE_DELAY = 1000; //ms
+var CART_UPDATE_DELAY = 17; //ms
 var MIN_CART_SPACING = 8;
 
 log.info('Starting game server, listening on port ' + SERVER_PORT);
@@ -65,8 +65,8 @@ function handler(request, response) {
 		});
 }
 function isHit(sx, sy, cx, cy) {
-	//return (sx >= cx && sx <= cx + CART_SIZE.x) && (sy >= cy && sy <= cy + CART_SIZE.y);
-	return(Math.abs(sx - cx) < CART_SIZE*5 && Math.abs(sy-cy) < CART_SIZE*5);
+	return (sx >= cx && sx <= cx + CART_SIZE.x) && (sy >= cy && sy <= cy + CART_SIZE.y);
+	//return(Math.abs(sx - cx) < CART_SIZE*5 && Math.abs(sy-cy) < CART_SIZE*5);
 }
 function spawnCarts() {
 	if (playerlist && playerlist.length >= 1) {
@@ -75,15 +75,19 @@ function spawnCarts() {
 		}
 	}
 }
+var last_update = null;
 function updateCarts() {
 	if (carts && playerlist && playerlist.length > 0) {
-		// update all the existing cards
-		var dt = CART_UPDATE_DELAY / 1000;
-		for (cid in carts) {
-			var ct = carts[cid];
+		var now = Date.now() / 1000;
+		var dt = last_update ? now - last_update : 0;
+		//log.debug('dt: ' + dt);
+		for (var k in carts) {
+			var ct = carts[k];
 			ct.x += ct.vx * dt;
 			ct.y += ct.vy * dt;
 		}
+		
+		last_update = now;
 	}
 	io.sockets.emit('updateCarts', carts);
 }
@@ -97,12 +101,11 @@ io.sockets.on('connection', function(socket) {
 		var ct;
 		for (var i in carts) {
 			ct = carts[i];
-			var age = (new Date().getTime() - ct.birth) / 1000;
-			log.debug('age is ' + age);
-			log.debug(ct);
-			cx = ct.x + (ct.vx * age);
-			log.debug('calculating cart to be at (' + cx + ', ' + ct.y + ')');
-			if (isHit(x, y, cx, ct.y)) {
+			//var age = (new Date().getTime() - ct.birth) / 1000;
+			//log.debug('age is ' + age);
+			//log.debug(ct);
+			//log.debug('calculating cart to be at (' + cx + ', ' + ct.y + ')');
+			if (isHit(x, y, ct.x, ct.y)) {
 				io.sockets.emit('message',name);
 				hit = true;
 				break;
@@ -113,7 +116,7 @@ io.sockets.on('connection', function(socket) {
 			delete ct;
 		}
 		else {
-			io.sockets.emit('message', name + ' missed his shot');
+			io.sockets.emit('message', (name != undefined ? name.toString() : 'some player') + ' missed his shot');
 		}
 	});
 	socket.on('initializePlayer', function(name) {

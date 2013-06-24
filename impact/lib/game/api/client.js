@@ -41,7 +41,6 @@ ig.module(
 		}
 	});
 	socket.on('updateCarts', function(real_carts) {
-		console.log('preparing to update carts');
 		synchronize_carts(real_carts);
 	});
 	socket.on('hitCart', function(player_name, cart_id) {
@@ -55,7 +54,7 @@ ig.module(
 		socket.emit('initializePlayer',player_name);
 	};
 	debug = function(msg) {
-		socket.emit('log', msg);
+		//socket.emit('log', msg);
 	};
 
 });
