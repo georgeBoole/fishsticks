@@ -34,7 +34,7 @@ function choose(list) {
 function create_cart() {
 
 	var c = {
-		id:cart_id++,
+		uuid:cart_id++,
 		x: Math.random() >= .5 ? 0 : 320 - CART_SIZE.x,
 		y: choose(ROW_Y_VALUES),
 		direction: choose(['left','right']),
@@ -45,7 +45,7 @@ function create_cart() {
 	c['vx'] = c.direction == 'left' ? c.speed * -1 : c.speed;
 	c['vy'] = 0;
 	carts[c.id] = c;
-	io.sockets.emit('spawnCart', c.x, c.y, c.direction, c.speed, c.value, c.id)
+	io.sockets.emit('spawnCart', c.x, c.y, c.direction, c.speed, c.value, c.uuid);
 }
 
 function handler(request, response) {
@@ -89,7 +89,7 @@ io.sockets.on('connection', function(socket) {
 			}
 		}
 		if (hit) {
-			socket.broadcast.emit('hitCart', carts[i].uuid);
+			io.sockets.emit('hitCart', socket.clientname ,carts[i].uuid);
 			delete carts[i];
 		}
 		else {
