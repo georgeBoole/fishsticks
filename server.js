@@ -102,6 +102,7 @@ io.sockets.on('connection', function(socket) {
 			log.debug(ct);
 			cx = ct.x + (ct.vx * age);
 			log.debug('calculating cart to be at (' + cx + ', ' + ct.y + ')');
+			log.debug('mouse coords are:'+x+"Y:"+y)
 			if (isHit(x, y, cx, ct.y)) {
 				io.sockets.emit('message',name);
 				hit = true;

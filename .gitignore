@@ -1,3 +1,4 @@
 .DS_Store
 cartshot.*
 node_modules
+*.log
