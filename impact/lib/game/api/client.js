@@ -47,6 +47,9 @@ ig.module(
 		fireShot(player_name,cart_id);
 		killCart(cart_id);
 	});
+	socket.on('deadCart', function(cart_id) {
+		killCart(cart_id);
+	});
 	requestShot = function(player_name, x, y) {
 		socket.emit('attemptShot', player_name, x, y);
 	};

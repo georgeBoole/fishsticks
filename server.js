@@ -78,22 +78,19 @@ function spawnCarts() {
 var last_update = null;
 function updateCarts() {
 	if (carts && playerlist && playerlist.length > 0) {
-//<<<<<<< HEAD
 		var now = Date.now() / 1000;
 		var dt = last_update ? now - last_update : 0;
-		//log.debug('dt: ' + dt);
 		for (var k in carts) {
 			var ct = carts[k];
-// =======
-// 		// update all the existing cards
-// 		var dt = CART_UPDATE_DELAY / 10000;
-// 		for (cid in carts) {
-// 			var ct = carts[cid];
-// >>>>>>> d238f95f3ab3d0db893c48a135ea6fbd4344eacb
+			// if (ct.x > 640 || ct.x < -48 || ct.y > 480 || ct.y < -32) {
+			// 	log.debug('cart out of bounds, killing it');
+			// 	io.sockets.emit('deadCart', ct.uuid);
+			// }
+			// else {
 			ct.x += ct.vx * dt;
 			ct.y += ct.vy * dt;
+			// }
 		}
-		
 		last_update = now;
 	}
 	io.sockets.emit('updateCarts', carts);
@@ -108,10 +105,6 @@ io.sockets.on('connection', function(socket) {
 		var ct;
 		for (var i in carts) {
 			ct = carts[i];
-			//var age = (new Date().getTime() - ct.birth) / 1000;
-			//log.debug('age is ' + age);
-			//log.debug(ct);
-			//log.debug('calculating cart to be at (' + cx + ', ' + ct.y + ')');
 			if (isHit(x, y, ct.x, ct.y)) {
 				io.sockets.emit('message',name);
 				hit = true;

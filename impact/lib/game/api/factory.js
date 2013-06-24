@@ -24,6 +24,9 @@ ig.module(
 	fireShot = function(playerName,cart_id) {
 		var p = player_lookup[playerName];
 		var c = cart_lookup[cart_id];
+		if (!p || !c) {
+			return;
+		}
 		var angle = p.angleTo(c);
 		var settings = {'angle':angle,'target':c.pos}
 		console.log('SHOT FROM PLAYER:' + playerName + ' TO CART:' + cart_id + ' AT ANGLE:' + angle);
@@ -34,7 +37,9 @@ ig.module(
 	};
 	makeCart = function(x, y, direction, speed, value, id) {
 		var dmap = {'left':-1, 'right':1};
-		return ig.game.spawnEntity(EntityCart, x, y, {'vel':{'x':dmap[direction] * speed, 'y':0}, 'uuid':id,'value':value});
+		var c = ig.game.spawnEntity(EntityCart, x, y, {'vel':{'x':dmap[direction] * speed, 'y':0}, 'uuid':id,'value':value});
+		cart_lookup[id] = c;
+		return c;
 	};
 	killCart = function(cart_id) {
 		if (cart_id in cart_lookup) {
@@ -44,8 +49,8 @@ ig.module(
 		}
 	};
 	synchronize_carts = function(cart_dicts) {
+		if (!ig.game) { return; }
 		var carts = ig.game.getEntitiesByType(EntityCart) ? ig.game.getEntitiesByType(EntityCart) : [];
-		//var carts = player_lookup;
 		debug('synchronizing carts');
 		debug('cart entities');
 		for (var i=0; i<carts.length; i++) {
