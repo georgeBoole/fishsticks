@@ -78,11 +78,18 @@ function spawnCarts() {
 var last_update = null;
 function updateCarts() {
 	if (carts && playerlist && playerlist.length > 0) {
+//<<<<<<< HEAD
 		var now = Date.now() / 1000;
 		var dt = last_update ? now - last_update : 0;
 		//log.debug('dt: ' + dt);
 		for (var k in carts) {
 			var ct = carts[k];
+// =======
+// 		// update all the existing cards
+// 		var dt = CART_UPDATE_DELAY / 10000;
+// 		for (cid in carts) {
+// 			var ct = carts[cid];
+// >>>>>>> d238f95f3ab3d0db893c48a135ea6fbd4344eacb
 			ct.x += ct.vx * dt;
 			ct.y += ct.vy * dt;
 		}

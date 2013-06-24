@@ -34,7 +34,7 @@ ig.module(
 	};
 	makeCart = function(x, y, direction, speed, value, id) {
 		var dmap = {'left':-1, 'right':1};
-		cart_lookup[id] = ig.game.spawnEntity(EntityCart, x, y, {'vel':{'x':dmap[direction] * speed, 'y':0}, 'uuid':id,'value':value});
+		return ig.game.spawnEntity(EntityCart, x, y, {'vel':{'x':dmap[direction] * speed, 'y':0}, 'uuid':id,'value':value});
 	};
 	killCart = function(cart_id) {
 		if (cart_id in cart_lookup) {
@@ -44,7 +44,34 @@ ig.module(
 		}
 	};
 	synchronize_carts = function(cart_dicts) {
-		var carts = ig.game.getEntitiesByType(EntityCart);
+		var carts = ig.game.getEntitiesByType(EntityCart) ? ig.game.getEntitiesByType(EntityCart) : [];
+		//var carts = player_lookup;
+		debug('synchronizing carts');
+		debug('cart entities');
+		for (var i=0; i<carts.length; i++) {
+			debug(carts[i]);
+		}
+		debug('cart models');
+		for(var k in cart_dicts) {
+			var srv_cart = cart_dicts[k];
+			if (!srv_cart) {
+				continue;
+			}
+			else {
+				var ent_cart = k in carts ? carts[k] : makeCart(srv_cart.x, srv_cart.y, srv_cart.direction, srv_cart.speed, srv_cart.value, srv_cart.uuid);
+				if (!ent_cart) {
+					continue;
+				}
+				var sc = srv_cart, ec = ent_cart;
+				// entityCarts.pos.x = serverCarts.x;
+				// entityCarts.pos.y = serverCarts.y;
+				debug('differences');
+				debug('server');
+				debug(sc);
+				debug('entity');
+				debug(ec);
+			}
+		}
 		debug('synchronizing_carts');
 		debug('entities');
 		debug(carts);
