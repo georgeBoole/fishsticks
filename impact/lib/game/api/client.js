@@ -40,8 +40,11 @@ ig.module(
 			console.log('cannot spawn cart until game object is initialized');
 		}
 	});
+	socket.on('updateCarts', function(real_carts) {
+		console.log('preparing to update carts');
+		synchronize_carts(real_carts);
+	});
 	socket.on('hitCart', function(player_name, cart_id) {
-		console.log(player_name + ' hit cart #' + cart_id);
 		fireShot(player_name,cart_id);
 		killCart(cart_id);
 	});
