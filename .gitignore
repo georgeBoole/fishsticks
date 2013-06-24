@@ -4,3 +4,5 @@ node_modules
 *.log
 manager.py
 fab_env
+*.pyc
+game.min.js
