@@ -15,6 +15,7 @@ AngryMiner = ig.Game.extend({
 	init: function() {
 		this.initPlayer();
 		this.initInput();
+		makePlayerNames();
 	},
 	initInput: function() {
 		ig.input.bind(ig.KEY.MOUSE1, 'shoot');

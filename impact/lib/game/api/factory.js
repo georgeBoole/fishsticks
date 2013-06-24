@@ -135,4 +135,12 @@ ig.module(
 	renderText = function(x,y,message) {
 		font.draw(message, x, y, ig.Font.ALIGN.RIGHT);
 	};
+	makePlayerNames = function() {
+		for(var i = 0; i < player_lookup.length; i++) {
+			var p = player_lookup[i];
+			var px = p.pos.x;
+			var py = p.pos.y;
+			renderText(px,py,p.name);
+		}
+	};
 });
