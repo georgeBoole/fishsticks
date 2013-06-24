@@ -89,8 +89,7 @@ function updateCarts() {
 io.sockets.on('connection', function(socket) {
 
 	socket.on('attemptShot', function(name, x, y) {
-		log.info('attempting to shoot cart');
-		var hit = true;
+		var hit = false;
 		var ct;
 		for (var i in carts) {
 			ct = carts[i];
