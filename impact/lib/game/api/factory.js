@@ -24,6 +24,9 @@ ig.module(
 	fireShot = function(playerName,cart_id) {
 		var p = player_lookup[playerName];
 		var c = cart_lookup[cart_id];
+		if (!p || !c) {
+			return;
+		}
 		var angle = p.angleTo(c);
 		var settings = {'angle':angle,'target':c.pos}
 		console.log('SHOT FROM PLAYER:' + playerName + ' TO CART:' + cart_id + ' AT ANGLE:' + angle);
@@ -34,26 +37,46 @@ ig.module(
 	};
 	makeCart = function(x, y, direction, speed, value, id) {
 		var dmap = {'left':-1, 'right':1};
-		cart_lookup[id] = ig.game.spawnEntity(EntityCart, x, y, {'vel':{'x':dmap[direction] * speed, 'y':0}, 'uuid':id,'value':value});
+		var c = ig.game.spawnEntity(EntityCart, x, y, {'vel':{'x':dmap[direction] * speed, 'y':0}, 'uuid':id,'value':value});
+		cart_lookup[id] = c;
+		return c;
 	};
 	killCart = function(cart_id) {
 		if (cart_id in cart_lookup) {
 			var cart = cart_lookup[cart_id];
+			console.log("CARTKILL:"+cart_id);
 			cart.kill();
 			delete cart_lookup[cart_id];
 		}
 	};
 	synchronize_carts = function(cart_dicts) {
-		//var carts = ig.game.getEntitiesByType(EntityCart);
-		var carts = player_lookup;
-		for(var uuid in carts) {
-			debug('uuid:'+uuid);
-			var entityCarts = carts[uuid];
-			var serverCarts = cart_dicts[uuid];
-			debug("ENTITYCART:"+entityCarts);
-			debug("SERVER CARTS:"+serverCarts);
-			entityCarts.pos.x = serverCarts.x;
-			entityCarts.pos.y = serverCarts.y;
+		if (!ig.game) { return; }
+		var carts = ig.game.getEntitiesByType(EntityCart) ? ig.game.getEntitiesByType(EntityCart) : [];
+		debug('synchronizing carts');
+		debug('cart entities');
+		for (var i=0; i<carts.length; i++) {
+			debug(carts[i]);
+		}
+		debug('cart models');
+		for(var k in cart_dicts) {
+			var srv_cart = cart_dicts[k];
+			if (!srv_cart) {
+				continue;
+			}
+			else {
+				var ent_cart = k in carts ? carts[k] : makeCart(srv_cart.x, srv_cart.y, srv_cart.direction, srv_cart.speed, srv_cart.value, srv_cart.uuid);
+				if (!ent_cart) {
+					continue;
+				}
+				var sc = srv_cart, ec = ent_cart;
+				// entityCarts.pos.x = serverCarts.x;
+				// entityCarts.pos.y = serverCarts.y;
+				debug('differences');
+				debug('server');
+				debug(sc);
+				debug('entity');
+				debug(ec);
+			}
 		}
 		debug('synchronizing_carts');
 		debug('entities');
