@@ -28,9 +28,13 @@ ig.module(
 		if (!p || !c) {
 			return;
 		}
+		if (p.kills) {
+			p.kills += 1;
+		}
 		var angle = p.angleTo(c);
 		var settings = {'angle':angle,'target':c};
 		var shot = ig.game.spawnEntity(EntityShot, p.pos.x + (p.size.x/2), p.pos.y + (p.size.y/2), settings);
+		
 		console.log('shot');
 		console.log(shot);
 	};

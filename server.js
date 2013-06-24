@@ -8,7 +8,7 @@ var log = bunyan.createLogger({
 	streams: [
 		{
 			level: 'info',
-			stream: process.stdout,
+			path: '/var/log/angry_miner.log',
 		},
 		{
 			level: 'debug',
