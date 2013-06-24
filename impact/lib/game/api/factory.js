@@ -24,16 +24,16 @@ ig.module(
 	fireShot = function(playerName,cart_id) {
 		//Creates a shot entity from the specified player
 		//To the specified cart
+		console.log("IN FIRE");
 		var p = player_lookup[playerName];
 		var c = cart_lookup[cart_id];
+		console.log("P:"+p+"C:"+c);
 		if (p == undefined || c == undefined) {
-			//console.log("CANNOT FIRE: Undefined player name or cart id");
-		} else if(local_player == playerName) {
-			//console.log("INVALID SHOOTER: ONLY THE LOCAL PLAYER CAN FIRE");
-		}else {
+			console.log("CANNOT FIRE: Undefined player name or cart id");
+		} else {
 			var angle = p.angleTo(c);
 			var settings = {'angle':angle,'target':c.pos}
-			//console.log('SHOT FROM PLAYER:' + playerName + ' TO CART:' + cart_id + ' AT ANGLE:' + angle);
+			console.log('SHOT FROM PLAYER:' + playerName + ' TO CART:' + cart_id + ' AT ANGLE:' + angle);
 			ig.game.spawnEntity(EntityShot,
 			 p.pos.x + (p.size.x/2),
 			 p.pos.y + (p.size.y/2),
@@ -51,7 +51,7 @@ ig.module(
 			cart.kill();
 			delete cart_lookup[cart_id];
 		}
-		//console.log('killing cart entity with ' + cart_id);
+		console.log('killing cart entity with ' + cart_id);
 	};
 	addLocalPlayer = function(name) {
 		local_player = name;
@@ -69,6 +69,7 @@ ig.module(
 		var px = ox + ((existing_players.length) * player_spacing);
 		var py = oy;
 		var p = ig.game.spawnEntity(EntityPlayer, px, py, {'name':name});
+		player_lookup[p.name] = p;
 		console.log('just spawned a new player');
 		console.log(p);
 	};
@@ -96,6 +97,7 @@ ig.module(
 	displayMessage = function(msg) {
 		//console logs a passed in message
 		//We're doing something else with this later?
+		console.log(player_lookup);
 		console.log(msg);
 	};
 });

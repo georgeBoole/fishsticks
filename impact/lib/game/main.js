@@ -26,6 +26,7 @@ AngryMiner = ig.Game.extend({
 	update: function() {
 		this.parent();
 		if (ig.input.pressed('shoot')) {
+			displayMessage('333');
 			requestShot(this.local_player, ig.input.mouse.x, ig.input.mouse.y);
 		}
 	}

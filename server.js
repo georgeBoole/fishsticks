@@ -75,9 +75,10 @@ function spawnCarts() {
 io.sockets.on('connection', function(socket) {
 
 	socket.on('attemptShot', function(name, x, y) {
-		var hit = false;
+		var hit = true;
+		var ct;
 		for (var i in carts) {
-			var ct = carts[i];
+			ct = carts[i];
 			var age = (new Date().getTime() - ct.birth) / 1000;
 			log.log('age is ' + age);
 			log.log(ct);
@@ -89,8 +90,8 @@ io.sockets.on('connection', function(socket) {
 			}
 		}
 		if (hit) {
-			io.sockets.emit('hitCart', socket.clientname ,carts[i].uuid);
-			delete carts[i];
+			io.sockets.emit('hitCart', name ,ct.uuid);
+			delete ct;
 		}
 		else {
 			io.sockets.emit('message', name + ' missed his shot');
