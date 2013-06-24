@@ -87,9 +87,6 @@ io.sockets.on('connection', function(socket) {
 	});
 	socket.on('initializePlayer', function(name) {
 		socket.clientname = name;
-		if (playerlist && playerlist.length > 0) {
-			socket.emit('registered', name, playerlist);
-		}
 		socket.emit('registered', name, playerlist && playerlist.length > 0 ? playerlist : []);
 		playerlist.push(name);
 		socket.broadcast.emit('join', name);
