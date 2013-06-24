@@ -103,13 +103,9 @@ ig.module(
 		//removes them from the player_lookup.
 		var player = player_lookup[playerName];
 		if(player == undefined) {
-			//console.log("Can't find player with the name: " + playerName);
 		} else {
-			//console.log("Killing player: " + playerName);
 			player.kill();
-			//console.log("kill key length1:" + Object.size(player_lookup));
 			delete player_lookup[playerName];
-			//console.log("kill key length2:" + Object.size(player_lookup));
 		}
 		var players = ig.game.getEntitiesByType(EntityPlayer);
 		for (var i in players) {
@@ -122,7 +118,6 @@ ig.module(
 	displayMessage = function(msg) {
 		//console logs a passed in message
 		//We're doing something else with this later?
-		console.log(player_lookup);
 		console.log(msg);
 	};
 });
