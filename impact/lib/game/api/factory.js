@@ -45,7 +45,11 @@ ig.module(
 	};
 	synchronize_carts = function(cart_dicts) {
 		var carts = ig.game.getEntitiesByType(EntityCart);
-		
+		debug('synchronizing_carts');
+		debug('entities');
+		debug(carts);
+		debug('models');
+		debug(cart_dicts);
 	};
 	addLocalPlayer = function(name) {
 		local_player = name;

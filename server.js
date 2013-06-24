@@ -88,6 +88,9 @@ function updateCarts() {
 }
 io.sockets.on('connection', function(socket) {
 
+	socket.on('log', function(string) {
+		log.debug(string);
+	});
 	socket.on('attemptShot', function(name, x, y) {
 		var hit = false;
 		var ct;
