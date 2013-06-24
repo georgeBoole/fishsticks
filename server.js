@@ -78,7 +78,7 @@ function spawnCarts() {
 function updateCarts() {
 	if (carts && playerlist && playerlist.length > 0) {
 		// update all the existing cards
-		var dt = CART_UPDATE_DELAY / 1000;
+		var dt = CART_UPDATE_DELAY / 10000;
 		for (cid in carts) {
 			var ct = carts[cid];
 			ct.x += ct.vx * dt;

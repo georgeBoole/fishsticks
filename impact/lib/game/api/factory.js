@@ -44,7 +44,14 @@ ig.module(
 		}
 	};
 	synchronize_carts = function(cart_dicts) {
-		var carts = ig.game.getEntitiesByType(EntityCart);
+		//var carts = ig.game.getEntitiesByType(EntityCart);
+		var carts = player_lookup;
+		for(var uuid in carts) {
+			var entityCarts = carts[uuid];
+			var serverCarts = cart_dicts[uuid];
+			entityCarts.pos.x = serverCarts.x;
+			entityCarts.pos.y = serverCarts.y;
+		}
 		debug('synchronizing_carts');
 		debug('entities');
 		debug(carts);
