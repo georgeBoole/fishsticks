@@ -22,12 +22,12 @@ var CART_SIZE = {x: 48, y: 32};
 var ROW_Y_VALUES = [40, 100, 160, 220];
 var ROW_DIRECTIONS = ROW_Y_VALUES.map(function(r) { return Math.random() >= .5 ? 1 : -1; });
 var ROWS = [-40,700]
-var CART_SPEEDS = [40, 50, 60];
+var CART_SPEEDS = [50, 70, 90];
 var cart_id = 0;
 var playerlist = [];
 var carts = {};
 var CART_BATCH_SIZE = 3;
-var CART_SPAWN_DELAY = 1250; //ms
+var CART_SPAWN_DELAY = 1000; //ms
 var CART_UPDATE_DELAY = 17; //ms
 var MIN_CART_SPACING = 8;
 var MAX_NAME_LENGTH = 10;

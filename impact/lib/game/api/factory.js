@@ -25,6 +25,7 @@ ig.module(
 	fireShot = function(playerName,cart_id) {
 		var p = player_lookup[playerName];
 		var c = cart_lookup[cart_id];
+		p.score += c.value;
 		if (!p || !c) {
 			return;
 		}
@@ -132,15 +133,16 @@ ig.module(
 		//We're doing something else with this later?
 		console.log(msg);
 	};
-	renderText = function(x,y,message) {
-		font.draw(message, x, y, ig.Font.ALIGN.RIGHT);
+	renderText = function(x,y,message,font) {
+		var f = font == 'big' ? big_font : font;
+		f.draw(message, x, y, ig.Font.ALIGN.RIGHT);
 	};
 	makePlayerNames = function() {
 		for(var i = 0; i < player_lookup.length; i++) {
 			var p = player_lookup[i];
 			var px = p.pos.x;
 			var py = p.pos.y;
-			renderText(px,py,p.name);
+			renderText(px,py,p.name,'normal');
 		}
 	};
 });
