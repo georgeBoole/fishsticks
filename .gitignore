@@ -2,3 +2,4 @@
 cartshot.*
 node_modules
 *.log
+manager.py
