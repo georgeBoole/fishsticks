@@ -50,7 +50,7 @@ function create_cart() {
 	};
 	c['vx'] = c.direction == 'left' ? c.speed * -1 : c.speed;
 	c['vy'] = 0;
-	carts[c.id] = c;
+	carts[c.uuid] = c;
 	io.sockets.emit('spawnCart', c.x, c.y, c.direction, c.speed, c.value, c.uuid);
 }
 function handler(request, response) {
@@ -65,7 +65,8 @@ function handler(request, response) {
 		});
 }
 function isHit(sx, sy, cx, cy) {
-	return (sx >= cx && sx <= cx + CART_SIZE.x) && (sy >= cy && sy <= cy + CART_SIZE.y);
+	//return (sx >= cx && sx <= cx + CART_SIZE.x) && (sy >= cy && sy <= cy + CART_SIZE.y);
+	return(Math.abs(sx - cx) < CART_SIZE*5 && Math.abs(sy-cy) < CART_SIZE*5);
 }
 function spawnCarts() {
 	if (playerlist && playerlist.length >= 1) {
@@ -102,6 +103,7 @@ io.sockets.on('connection', function(socket) {
 			cx = ct.x + (ct.vx * age);
 			log.debug('calculating cart to be at (' + cx + ', ' + ct.y + ')');
 			if (isHit(x, y, cx, ct.y)) {
+				io.sockets.emit('message',name);
 				hit = true;
 				break;
 			}
