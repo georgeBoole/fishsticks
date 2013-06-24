@@ -1,10 +1,21 @@
 var app = require('http').createServer(handler);
 var io = require('socket.io').listen(app);
 var fs = require('fs');
-var log = require('winston');
+var bunyan = require('bunyan');
 
-log.add(log.transports.File, { filename: '/Users/michael/Documents/code/cartShot/server.log'});
-log.remove(log.transports.Console);
+var log = bunyan.createLogger({
+	name: 'angryMinerServer',
+	streams: [
+		{
+			level: 'info',
+			stream: process.stdout,
+		},
+		{
+			level: 'debug',
+			path: '/var/log/angry_miner.log'
+		}
+	]
+});
 
 var SERVER_PORT = 8080;
 var CART_SIZE = {x: 48, y: 32};
@@ -18,22 +29,14 @@ var CART_BATCH_SIZE = 3;
 var CART_SPAWN_DELAY = 8000; //ms
 var CART_UPDATE_DELAY = 1000; //ms
 var MIN_CART_SPACING = 8;
-/* 
-	cart = {
-		id,
-		px, py, vx, vy,
-		creation_timestamp,
-		value
-	}
-*/
-//var socket;
+
+log.info('Starting game server, listening on port ' + SERVER_PORT);
 app.listen(SERVER_PORT);
 
 
 function choose(list) {
 	return list[Math.round(Math.random() * (list.length-1))];
 }
-
 function create_cart() {
 
 	var c = {
@@ -50,7 +53,6 @@ function create_cart() {
 	carts[c.uuid] = c;
 	io.sockets.emit('spawnCart', c.x, c.y, c.direction, c.speed, c.value, c.uuid);
 }
-
 function handler(request, response) {
 	fs.readFile(__dirname + '/index.html',
 		function (err, data) {
@@ -62,12 +64,10 @@ function handler(request, response) {
 			res.end(data);
 		});
 }
-
 function isHit(sx, sy, cx, cy) {
 	//return (sx >= cx && sx <= cx + CART_SIZE.x) && (sy >= cy && sy <= cy + CART_SIZE.y);
 	return(Math.abs(sx - cx) < CART_SIZE*5 && Math.abs(sy-cy) < CART_SIZE*5);
 }
-
 function spawnCarts() {
 	if (playerlist && playerlist.length >= 1) {
 		for (var i = 0; i < CART_BATCH_SIZE; i++) {
@@ -75,7 +75,6 @@ function spawnCarts() {
 		}
 	}
 }
-
 function updateCarts() {
 	if (carts && playerlist && playerlist.length > 0) {
 		// update all the existing cards
@@ -86,11 +85,8 @@ function updateCarts() {
 			ct.y += ct.vy * dt;
 		}
 	}
-
-	// now need to send this all to the player
 	io.sockets.emit('updateCarts', carts);
 }
-
 io.sockets.on('connection', function(socket) {
 
 	socket.on('attemptShot', function(name, x, y) {
@@ -99,10 +95,10 @@ io.sockets.on('connection', function(socket) {
 		for (var i in carts) {
 			ct = carts[i];
 			var age = (new Date().getTime() - ct.birth) / 1000;
-			log.log('age is ' + age);
-			log.log(ct);
+			log.debug('age is ' + age);
+			log.debug(ct);
 			cx = ct.x + (ct.vx * age);
-			log.log('calculating cart to be at (' + cx + ', ' + ct.y + ')');
+			log.debug('calculating cart to be at (' + cx + ', ' + ct.y + ')');
 			if (isHit(x, y, cx, ct.y)) {
 				io.sockets.emit('message',name);
 				hit = true;
@@ -110,7 +106,7 @@ io.sockets.on('connection', function(socket) {
 			}
 		}
 		if (hit) {
-			io.sockets.emit('hitCart', name ,ct.uuid);
+			io.sockets.emit('hitCart', name, ct.uuid);
 			delete ct;
 		}
 		else {
