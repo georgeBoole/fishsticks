@@ -3,3 +3,4 @@ cartshot.*
 node_modules
 *.log
 manager.py
+fab_env
