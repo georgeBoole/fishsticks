@@ -29,12 +29,10 @@ ig.module(
 			return;
 		}
 		var angle = p.angleTo(c);
-		var settings = {'angle':angle,'target':c.pos}
-		console.log('SHOT FROM PLAYER:' + playerName + ' TO CART:' + cart_id + ' AT ANGLE:' + angle);
-		ig.game.spawnEntity(EntityShot,
-		 p.pos.x + (p.size.x/2),
-		 p.pos.y + (p.size.y/2),
-		 settings);
+		var settings = {'angle':angle,'target':c};
+		var shot = ig.game.spawnEntity(EntityShot, p.pos.x + (p.size.x/2), p.pos.y + (p.size.y/2), settings);
+		console.log('shot');
+		console.log(shot);
 	};
 	makeCart = function(x, y, direction, speed, value, id) {
 		var dmap = {'left':-1, 'right':1};
@@ -48,6 +46,9 @@ ig.module(
 			debug('lookup:'+cart_lookup+'cart_id:'+cart_id+'cart:'+cart);
 			cart.kill();
 			delete cart_lookup[cart_id];
+		}
+		else {
+			console.log('cannot find cart ' + cart_id + ' and cannot kill it');
 		}
 	};
 	synchronize_carts = function(cart_dicts) {
