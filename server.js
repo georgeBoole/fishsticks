@@ -106,7 +106,7 @@ io.sockets.on('connection', function(socket) {
 		for (var i in carts) {
 			ct = carts[i];
 			if (isHit(x, y, ct.x, ct.y)) {
-				io.sockets.emit('message',name);
+				io.sockets.emit('message',"Passed hit test");
 				hit = true;
 				break;
 			}

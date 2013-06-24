@@ -12,6 +12,7 @@ ig.module(
 )
 .defines(function() {
 	var PLAYER_MARGIN = 0.075;
+	var font = new ig.Font('media/font.png');
 	var cart_lookup = {};
 	var player_lookup = {};
 	var local_player = undefined;
@@ -44,7 +45,7 @@ ig.module(
 	killCart = function(cart_id) {
 		if (cart_id in cart_lookup) {
 			var cart = cart_lookup[cart_id];
-			console.log("CARTKILL:"+cart_id);
+			debug('lookup:'+cart_lookup+'cart_id:'+cart_id+'cart:'+cart);
 			cart.kill();
 			delete cart_lookup[cart_id];
 		}
@@ -125,5 +126,8 @@ ig.module(
 		//console logs a passed in message
 		//We're doing something else with this later?
 		console.log(msg);
+	};
+	renderText = function(x,y,message) {
+		font.draw(message, x, y, ig.Font.ALIGN.RIGHT);
 	};
 });
