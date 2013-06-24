@@ -22,16 +22,15 @@ ig.module(
 	Object.size = function(obj) { var size = 0, key; for (key in obj) { if (obj.hasOwnProperty(key)) size++; } return size; };
 	
 	fireShot = function(playerName,cart_id) {
-		//Creates a shot entity from the specified player
-		//To the specified cart
 		var p = player_lookup[playerName];
 		var c = cart_lookup[cart_id];
 		var angle = p.angleTo(c);
-			var settings = {'angle':angle,'target':c.pos}
-			ig.game.spawnEntity(EntityShot,
-			 p.pos.x + (p.size.x/2),
-			 p.pos.y + (p.size.y/2),
-			 settings);
+		var settings = {'angle':angle,'target':c.pos}
+		console.log('SHOT FROM PLAYER:' + playerName + ' TO CART:' + cart_id + ' AT ANGLE:' + angle);
+		ig.game.spawnEntity(EntityShot,
+		 p.pos.x + (p.size.x/2),
+		 p.pos.y + (p.size.y/2),
+		 settings);
 	};
 	makeCart = function(x, y, direction, speed, value, id) {
 		var dmap = {'left':-1, 'right':1};
@@ -64,6 +63,7 @@ ig.module(
 		var px = ox + ((existing_players.length) * player_spacing);
 		var py = oy;
 		var p = ig.game.spawnEntity(EntityPlayer, px, py, {'name':name});
+		player_lookup[p.name] = p;
 		console.log('just spawned a new player');
 		console.log(p);
 	};
@@ -91,6 +91,7 @@ ig.module(
 	displayMessage = function(msg) {
 		//console logs a passed in message
 		//We're doing something else with this later?
+		console.log(player_lookup);
 		console.log(msg);
 	};
 });
