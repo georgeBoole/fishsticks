@@ -102,21 +102,15 @@ io.sockets.on('connection', function(socket) {
 	});
 	socket.on('attemptShot', function(name, x, y) {
 		var hit = false;
+		var hit_index = -1;
 		var ct;
 		for (var i in carts) {
 			ct = carts[i];
 			if (isHit(x, y, ct.x, ct.y)) {
-				io.sockets.emit('message',name);
-				hit = true;
-				break;
+				io.sockets.emit('hitCart', name, i);
+				delete carts[i];
+				return;
 			}
-		}
-		if (hit) {
-			io.sockets.emit('hitCart', name, ct.uuid);
-			delete ct;
-		}
-		else {
-			io.sockets.emit('message', (name != undefined ? name.toString() : 'some player') + ' missed his shot');
 		}
 	});
 	socket.on('initializePlayer', function(name) {

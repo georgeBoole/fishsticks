@@ -12,16 +12,12 @@ ig.module(
 	var socket = io.connect(HOST);
 
 	socket.on('join', function(player_name) {
-		console.log(player_name + ' has joined!');
 		addPlayer(player_name);
 	});
 	socket.on('leave', function(player_name) {
-		console.log(player_name + ' has left...');
 		killPlayer(player_name);
 	});
 	socket.on('registered', function(name, existing_players) {
-		console.log('registered');
-		console.log(existing_players);
 		if (existing_players && existing_players.length > 0) {
 			existing_players.forEach(function(ep) {
 				addPlayer(ep);
@@ -41,13 +37,10 @@ ig.module(
 		}
 	});
 	socket.on('updateCarts', function(real_carts) {
-		synchronize_carts(real_carts);
+		//synchronize_carts(real_carts);
 	});
 	socket.on('hitCart', function(player_name, cart_id) {
 		fireShot(player_name,cart_id);
-		killCart(cart_id);
-	});
-	socket.on('deadCart', function(cart_id) {
 		killCart(cart_id);
 	});
 	requestShot = function(player_name, x, y) {
