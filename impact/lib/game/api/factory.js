@@ -25,6 +25,7 @@ ig.module(
 	fireShot = function(playerName,cart_id) {
 		var p = player_lookup[playerName];
 		var c = cart_lookup[cart_id];
+		p.score += c.value;
 		if (!p || !c) {
 			return;
 		}
@@ -143,4 +144,10 @@ ig.module(
 			renderText(px,py,p.name);
 		}
 	};
+	drawScores = function() {
+		for(var i = 0; i < player_lookup.length; i++){
+			var p = player_lookup[i];
+			renderText(p.pos.x,p.pos.y,p.score);
+		}
+	}
 });
