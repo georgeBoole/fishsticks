@@ -3,6 +3,9 @@ var io = require('socket.io').listen(app);
 var fs = require('fs');
 var log = require('winston');
 
+log.add(log.transports.File, { filename: '/Users/michael/Documents/code/cartShot/server.log'});
+log.remove(log.transports.Console);
+
 var SERVER_PORT = 8080;
 var CART_SIZE = {x: 48, y: 32};
 var ROW_Y_VALUES = [40, 120, 200];
@@ -37,8 +40,10 @@ function create_cart() {
 		direction: choose(['left','right']),
 		speed: choose(CART_SPEEDS),
 		birth: new Date().getTime(),
-		value: Math.round(Math.random() * 2 + 1)
+		value: Math.round(Math.random() * 2 + 1),
 	};
+	c['vx'] = c.direction == 'left' ? c.speed * -1 : c.speed;
+	c['vy'] = 0;
 	carts[c.id] = c;
 	io.sockets.emit('spawnCart', c.x, c.y, c.direction, c.speed, c.value, c.id)
 }
@@ -71,8 +76,14 @@ io.sockets.on('connection', function(socket) {
 
 	socket.on('attemptShot', function(name, x, y) {
 		var hit = false;
-		for (var i=0; i < carts.length; i++) {
-			if (isHit(x, y, carts[i].x, carts[i].y)) {
+		for (var i in carts) {
+			var ct = carts[i];
+			var age = (new Date().getTime() - ct.birth) / 1000;
+			log.log('age is ' + age);
+			log.log(ct);
+			cx = ct.x + (ct.vx * age);
+			log.log('calculating cart to be at (' + cx + ', ' + ct.y + ')');
+			if (isHit(x, y, cx, ct.y)) {
 				hit = true;
 				break;
 			}
