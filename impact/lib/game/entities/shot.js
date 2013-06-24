@@ -3,6 +3,9 @@ ig.module(
 ).requires(
 	'impact.entity'
 ).defines(function() {
+	var dst = function(x1, y1, x2, y2) {
+		return Math.sqrt(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2));
+	}
 	EntityShot = ig.Entity.extend({
 		animSheet: new ig.AnimationSheet('media/shot.png', 4, 8),
 		size: {x: 4,y: 8},
@@ -25,11 +28,8 @@ ig.module(
 		},
 		update: function() {
 			this.parent();
-			if(Math.abs(this.pos.x - this.target.x) < this.close_enough && Math.abs(this.pos.y - this.target.y) < this.close_enough) {
-				this.kill();
-				console.log("BULLET HIT TARGET");
-			} else if(this.pos.x < -this.OB || this.pos.x > ig.system.width + this.OB || this.pos.y < -this.OB || this.pos.y > ig.system.height + this.OB) {
-				console.log("BULLET WENT OUT OF BOUNDS");
+			if (dst(this.pos.x, this.pos.y, this.target.x, this.target.y) <= this.close_enough ||
+				(this.pos.x > ig.system.width || this.pos.x < -this.size.x || this.pos.y > ig.system.height || this.pos.y < -this.size.y)) {
 				this.kill();
 			}
 		}
