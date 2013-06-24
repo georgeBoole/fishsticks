@@ -28,7 +28,7 @@ var playerlist = [];
 var carts = {};
 var CART_BATCH_SIZE = 3;
 var CART_SPAWN_DELAY = 1000; //ms
-var CART_UPDATE_DELAY = 17; //ms
+var CART_UPDATE_DELAY = 300; //ms
 var MIN_CART_SPACING = 8;
 var MAX_NAME_LENGTH = 10;
 
@@ -84,18 +84,11 @@ function updateCarts() {
 		var dt = last_update ? now - last_update : 0;
 		for (var k in carts) {
 			var ct = carts[k];
-			// if (ct.x > 640 || ct.x < -48 || ct.y > 480 || ct.y < -32) {
-			// 	log.debug('cart out of bounds, killing it');
-			// 	io.sockets.emit('deadCart', ct.uuid);
-			// }
-			// else {
 			ct.x += ct.vx * dt;
 			ct.y += ct.vy * dt;
-			// }
 		}
 		last_update = now;
 	}
-	io.sockets.emit('updateCarts', carts);
 }
 io.sockets.on('connection', function(socket) {
 

@@ -56,41 +56,6 @@ ig.module(
 			console.log('cannot find cart ' + cart_id + ' and cannot kill it');
 		}
 	};
-	synchronize_carts = function(cart_dicts) {
-		if (!ig.game) { return; }
-		var carts = ig.game.getEntitiesByType(EntityCart) ? ig.game.getEntitiesByType(EntityCart) : [];
-		debug('synchronizing carts');
-		debug('cart entities');
-		for (var i=0; i<carts.length; i++) {
-			debug(carts[i]);
-		}
-		debug('cart models');
-		for(var k in cart_dicts) {
-			var srv_cart = cart_dicts[k];
-			if (!srv_cart) {
-				continue;
-			}
-			else {
-				var ent_cart = k in carts ? carts[k] : makeCart(srv_cart.x, srv_cart.y, srv_cart.direction, srv_cart.speed, srv_cart.value, srv_cart.uuid);
-				if (!ent_cart) {
-					continue;
-				}
-				var sc = srv_cart, ec = ent_cart;
-				// entityCarts.pos.x = serverCarts.x;
-				// entityCarts.pos.y = serverCarts.y;
-				debug('differences');
-				debug('server');
-				debug(sc);
-				debug('entity');
-				debug(ec);
-			}
-		}
-		debug('synchronizing_carts');
-		debug('entities');
-		debug(carts);
-		debug('models');
-		debug(cart_dicts);
-	};
 	addLocalPlayer = function(name) {
 		local_player = name;
 		addPlayer(name);
