@@ -30,6 +30,7 @@ var CART_BATCH_SIZE = 3;
 var CART_SPAWN_DELAY = 1000; //ms
 var CART_UPDATE_DELAY = 17; //ms
 var MIN_CART_SPACING = 8;
+var MAX_NAME_LENGTH = 10;
 
 log.info('Starting game server, listening on port ' + SERVER_PORT);
 app.listen(SERVER_PORT);
@@ -115,10 +116,11 @@ io.sockets.on('connection', function(socket) {
 		}
 	});
 	socket.on('initializePlayer', function(name) {
-		socket.clientname = name;
-		socket.emit('registered', name, playerlist && playerlist.length > 0 ? playerlist : []);
-		playerlist.push(name);
-		socket.broadcast.emit('join', name);
+		var valid_name = name.length > MAX_NAME_LENGTH ? name.slice(0, MAX_NAME_LENGTH) : name;
+		socket.clientname = valid_name;
+		socket.emit('registered', valid_name, playerlist && playerlist.length > 0 ? playerlist : []);
+		playerlist.push(valid_name);
+		socket.broadcast.emit('join', valid_name);
 	});
 	socket.on('disconnect', function() {
 		delete playerlist[socket.clientname];
