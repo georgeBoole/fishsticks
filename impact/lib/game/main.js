@@ -9,11 +9,12 @@ ig.module(
 .defines(function(){
 
 AngryMiner = ig.Game.extend({
-	font: new ig.Font( 'media/04b03.font.png' ),
+	font: new ig.Font( 'media/font.png' ),
 	players: [],
 	init: function() {
 		this.initPlayer();
 		this.initInput();
+		makePlayerNames();
 	},
 	initInput: function() {
 		ig.input.bind(ig.KEY.MOUSE1, 'shoot');
