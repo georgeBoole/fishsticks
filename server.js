@@ -1,48 +1,58 @@
 var app = require('http').createServer(handler);
 var io = require('socket.io').listen(app);
 var fs = require('fs');
-var log = require('winston');
+var bunyan = require('bunyan');
+
+var log = bunyan.createLogger({
+	name: 'angryMinerServer',
+	streams: [
+		{
+			level: 'info',
+			stream: process.stdout,
+		},
+		{
+			level: 'debug',
+			path: '/var/log/angry_miner.log'
+		}
+	]
+});
 
 var SERVER_PORT = 8080;
 var CART_SIZE = {x: 48, y: 32};
-var ROW_Y_VALUES = [60, 120, 180];
+var ROW_Y_VALUES = [40, 100, 160, 220];
+var ROW_DIRECTIONS = ROW_Y_VALUES.map(function(r) { return Math.random() >= .5 ? 1 : -1; });
 var CART_SPEEDS = [40, 50, 60];
 var cart_id = 0;
 var playerlist = [];
 var carts = {};
 var CART_BATCH_SIZE = 3;
-var CART_SPAWN_DELAY = 10000; //ms
+var CART_SPAWN_DELAY = 8000; //ms
+var CART_UPDATE_DELAY = 17; //ms
 var MIN_CART_SPACING = 8;
-/* 
-	cart = {
-		id,
-		px, py, vx, vy,
-		creation_timestamp,
-		value
-	}
-*/
-//var socket;
+
+log.info('Starting game server, listening on port ' + SERVER_PORT);
 app.listen(SERVER_PORT);
 
-function choose(list) {
-	return list[Math.round(Math.random() * list.length)];
-}
 
+function choose(list) {
+	return list[Math.round(Math.random() * (list.length-1))];
+}
 function create_cart() {
 
 	var c = {
-		id:cart_id++,
+		uuid:cart_id++,
 		x: Math.random() >= .5 ? 0 : 320 - CART_SIZE.x,
 		y: choose(ROW_Y_VALUES),
 		direction: choose(['left','right']),
 		speed: choose(CART_SPEEDS),
 		birth: new Date().getTime(),
-		value: Math.round(Math.random() * 2 + 1)
+		value: Math.round(Math.random() * 2 + 1),
 	};
-	carts[c.id] = c;
-	io.sockets.emit('spawnCart', c.x, c.y, c.direction, c.speed, c.value, c.id)
+	c['vx'] = c.direction == 'left' ? c.speed * -1 : c.speed;
+	c['vy'] = 0;
+	carts[c.uuid] = c;
+	io.sockets.emit('spawnCart', c.x, c.y, c.direction, c.speed, c.value, c.uuid);
 }
-
 function handler(request, response) {
 	fs.readFile(__dirname + '/index.html',
 		function (err, data) {
@@ -54,11 +64,10 @@ function handler(request, response) {
 			res.end(data);
 		});
 }
-
 function isHit(sx, sy, cx, cy) {
 	return (sx >= cx && sx <= cx + CART_SIZE.x) && (sy >= cy && sy <= cy + CART_SIZE.y);
+	//return(Math.abs(sx - cx) < CART_SIZE*5 && Math.abs(sy-cy) < CART_SIZE*5);
 }
-
 function spawnCarts() {
 	if (playerlist && playerlist.length >= 1) {
 		for (var i = 0; i < CART_BATCH_SIZE; i++) {
@@ -66,23 +75,42 @@ function spawnCarts() {
 		}
 	}
 }
-
+var last_update = null;
+function updateCarts() {
+	if (carts && playerlist && playerlist.length > 0) {
+		var now = Date.now() / 1000;
+		var dt = last_update ? now - last_update : 0;
+		for (var k in carts) {
+			var ct = carts[k];
+			// if (ct.x > 640 || ct.x < -48 || ct.y > 480 || ct.y < -32) {
+			// 	log.debug('cart out of bounds, killing it');
+			// 	io.sockets.emit('deadCart', ct.uuid);
+			// }
+			// else {
+			ct.x += ct.vx * dt;
+			ct.y += ct.vy * dt;
+			// }
+		}
+		last_update = now;
+	}
+	io.sockets.emit('updateCarts', carts);
+}
 io.sockets.on('connection', function(socket) {
 
+	socket.on('log', function(string) {
+		log.debug(string);
+	});
 	socket.on('attemptShot', function(name, x, y) {
 		var hit = false;
-		for (var i=0; i < carts.length; i++) {
-			if (isHit(x, y, carts[i].x, carts[i].y)) {
-				hit = true;
-				break;
+		var hit_index = -1;
+		var ct;
+		for (var i in carts) {
+			ct = carts[i];
+			if (isHit(x, y, ct.x, ct.y)) {
+				io.sockets.emit('hitCart', name, i);
+				delete carts[i];
+				return;
 			}
-		}
-		if (hit) {
-			socket.broadcast.emit('hitCart', carts[i].id);
-			delete carts[i];
-		}
-		else {
-			io.sockets.emit('message', name + ' missed his shot');
 		}
 	});
 	socket.on('initializePlayer', function(name) {
@@ -104,3 +132,4 @@ io.sockets.on('connection', function(socket) {
 });
 
 setInterval(spawnCarts, CART_SPAWN_DELAY);
+setInterval(updateCarts, CART_UPDATE_DELAY);

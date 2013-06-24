@@ -11,55 +11,80 @@ ig.module(
 	'game.entities.shot'
 )
 .defines(function() {
+	var PLAYER_MARGIN = 0.075;
+	var font = new ig.Font('media/font.png');
 	var cart_lookup = {};
 	var player_lookup = {};
 	var local_player = undefined;
-	var first_player_loc = {x:50,y:200};
+	var first_player_loc = {x:(640 * PLAYER_MARGIN),y:420};
 	var max_players = 4;
-	var player_spacing = 64;
-	var spawn_locs = [];
-	initializeSpawns = function() {
-		//creates the points where players sit
-		for(var i = 0; i < max_players; i++) {
-			console.log('i=' + i);
-			spawn_locs.push(first_player_loc.x + player_spacing * i);
-		}
-		console.log('spawnLocs:' + spawn_locs);
-	};
+	var player_spacing = (640 * (1 - (2 * PLAYER_MARGIN))) / max_players;
 	
 	Object.size = function(obj) { var size = 0, key; for (key in obj) { if (obj.hasOwnProperty(key)) size++; } return size; };
 	
 	fireShot = function(playerName,cart_id) {
-		//Creates a shot entity from the specified player
-		//To the specified cart
 		var p = player_lookup[playerName];
 		var c = cart_lookup[cart_id];
-		if (p == undefined || c == undefined) {
-			//console.log("CANNOT FIRE: Undefined player name or cart id");
-		} else if(local_player == playerName) {
-			//console.log("INVALID SHOOTER: ONLY THE LOCAL PLAYER CAN FIRE");
-		}else {
-			var angle = p.angleTo(c);
-			var settings = {'angle':angle,'target':c.pos}
-			//console.log('SHOT FROM PLAYER:' + playerName + ' TO CART:' + cart_id + ' AT ANGLE:' + angle);
-			ig.game.spawnEntity(EntityShot,
-			 p.pos.x + (p.size.x/2),
-			 p.pos.y + (p.size.y/2),
-			 settings);
+		if (!p || !c) {
+			return;
 		}
+		var angle = p.angleTo(c);
+		var settings = {'angle':angle,'target':c};
+		var shot = ig.game.spawnEntity(EntityShot, p.pos.x + (p.size.x/2), p.pos.y + (p.size.y/2), settings);
+		console.log('shot');
+		console.log(shot);
 	};
 	makeCart = function(x, y, direction, speed, value, id) {
 		var dmap = {'left':-1, 'right':1};
-		cart_lookup[id] = ig.game.spawnEntity(EntityCart, x, y, {'vel':{'x':dmap[direction] * speed, 'y':0}, 'id':id, 'uuid':id,'value':value});
-		//console.log('making a cart entity');
+		var c = ig.game.spawnEntity(EntityCart, x, y, {'vel':{'x':dmap[direction] * speed, 'y':0}, 'uuid':id,'value':value});
+		cart_lookup[id] = c;
+		return c;
 	};
 	killCart = function(cart_id) {
 		if (cart_id in cart_lookup) {
 			var cart = cart_lookup[cart_id];
+			debug('lookup:'+cart_lookup+'cart_id:'+cart_id+'cart:'+cart);
 			cart.kill();
 			delete cart_lookup[cart_id];
 		}
-		//console.log('killing cart entity with ' + cart_id);
+		else {
+			console.log('cannot find cart ' + cart_id + ' and cannot kill it');
+		}
+	};
+	synchronize_carts = function(cart_dicts) {
+		if (!ig.game) { return; }
+		var carts = ig.game.getEntitiesByType(EntityCart) ? ig.game.getEntitiesByType(EntityCart) : [];
+		debug('synchronizing carts');
+		debug('cart entities');
+		for (var i=0; i<carts.length; i++) {
+			debug(carts[i]);
+		}
+		debug('cart models');
+		for(var k in cart_dicts) {
+			var srv_cart = cart_dicts[k];
+			if (!srv_cart) {
+				continue;
+			}
+			else {
+				var ent_cart = k in carts ? carts[k] : makeCart(srv_cart.x, srv_cart.y, srv_cart.direction, srv_cart.speed, srv_cart.value, srv_cart.uuid);
+				if (!ent_cart) {
+					continue;
+				}
+				var sc = srv_cart, ec = ent_cart;
+				// entityCarts.pos.x = serverCarts.x;
+				// entityCarts.pos.y = serverCarts.y;
+				debug('differences');
+				debug('server');
+				debug(sc);
+				debug('entity');
+				debug(ec);
+			}
+		}
+		debug('synchronizing_carts');
+		debug('entities');
+		debug(carts);
+		debug('models');
+		debug(cart_dicts);
 	};
 	addLocalPlayer = function(name) {
 		local_player = name;
@@ -74,9 +99,10 @@ ig.module(
 			}
 		}
 		var ox = first_player_loc.x, oy = first_player_loc.y;
-		var px = ox + ((existing_players.length + 1) * player_spacing);
+		var px = ox + ((existing_players.length) * player_spacing);
 		var py = oy;
 		var p = ig.game.spawnEntity(EntityPlayer, px, py, {'name':name});
+		player_lookup[p.name] = p;
 		console.log('just spawned a new player');
 		console.log(p);
 	};
@@ -85,22 +111,16 @@ ig.module(
 		//removes them from the player_lookup.
 		var player = player_lookup[playerName];
 		if(player == undefined) {
-			//console.log("Can't find player with the name: " + playerName);
 		} else {
-			//console.log("Killing player: " + playerName);
-			spawn_locs.push(player.pos.x);
 			player.kill();
-			//console.log("kill key length1:" + Object.size(player_lookup));
 			delete player_lookup[playerName];
-			//console.log("kill key length2:" + Object.size(player_lookup));
-=======
+		}
 		var players = ig.game.getEntitiesByType(EntityPlayer);
 		for (var i in players) {
 			if (players[i] && players[i].name == playerName) {
 				console.log('killing ' + playerName);
 				players[i].kill();
 			}
->>>>>>> 0a0f1e422ae0f7dfa0f7600e0e02744eb6c633be
 		}
 	};
 	displayMessage = function(msg) {
@@ -108,4 +128,7 @@ ig.module(
 		//We're doing something else with this later?
 		console.log(msg);
 	};
-})
+	renderText = function(x,y,message) {
+		font.draw(message, x, y, ig.Font.ALIGN.RIGHT);
+	};
+});

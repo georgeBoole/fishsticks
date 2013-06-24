@@ -8,20 +8,16 @@ ig.module(
 )
 .defines(function() {
 	var messages = [];
-	var HOST = 'http://192.168.1.12:8080';
+	var HOST = 'http://192.168.1.9:8080';
 	var socket = io.connect(HOST);
 
 	socket.on('join', function(player_name) {
-		console.log(player_name + ' has joined!');
 		addPlayer(player_name);
 	});
 	socket.on('leave', function(player_name) {
-		console.log(player_name + ' has left...');
 		killPlayer(player_name);
 	});
 	socket.on('registered', function(name, existing_players) {
-		console.log('registered');
-		console.log(existing_players);
 		if (existing_players && existing_players.length > 0) {
 			existing_players.forEach(function(ep) {
 				addPlayer(ep);
@@ -40,8 +36,10 @@ ig.module(
 			console.log('cannot spawn cart until game object is initialized');
 		}
 	});
+	socket.on('updateCarts', function(real_carts) {
+		//synchronize_carts(real_carts);
+	});
 	socket.on('hitCart', function(player_name, cart_id) {
-		console.log(player_name + ' hit cart #' + cart_id);
 		fireShot(player_name,cart_id);
 		killCart(cart_id);
 	});
@@ -50,6 +48,9 @@ ig.module(
 	};
 	initializeLocalPlayer = function(player_name) {
 		socket.emit('initializePlayer',player_name);
+	};
+	debug = function(msg) {
+		//socket.emit('log', msg);
 	};
 
 });

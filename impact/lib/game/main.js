@@ -31,6 +31,6 @@ AngryMiner = ig.Game.extend({
 	}
 });
 
-ig.main( '#canvas', AngryMiner, 60, 320, 240, 2 );
+ig.main( '#canvas', AngryMiner, 60, 640, 480, 1 );
 
 });
