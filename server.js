@@ -41,7 +41,7 @@ function create_cart() {
 
 	var c = {
 		uuid:cart_id++,
-		x: Math.random() >= .5 ? 0 : 320 - CART_SIZE.x,
+		x: choose(ROW_DIRECTIONS),
 		y: choose(ROW_Y_VALUES),
 		direction: choose(['left','right']),
 		speed: choose(CART_SPEEDS),
