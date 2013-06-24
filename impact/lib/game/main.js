@@ -9,7 +9,7 @@ ig.module(
 .defines(function(){
 
 AngryMiner = ig.Game.extend({
-	font: new ig.Font( 'media/04b03.font.png' ),
+	font: new ig.Font( 'media/font.png' ),
 	big_font: new ig.Font( 'media/big_font.png' ),
 	players: [],
 	init: function() {

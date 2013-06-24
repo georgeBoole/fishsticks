@@ -21,6 +21,7 @@ var SERVER_PORT = 8080;
 var CART_SIZE = {x: 48, y: 32};
 var ROW_Y_VALUES = [40, 100, 160, 220];
 var ROW_DIRECTIONS = ROW_Y_VALUES.map(function(r) { return Math.random() >= .5 ? 1 : -1; });
+var ROWS = [-40,700]
 var CART_SPEEDS = [40, 50, 60];
 var cart_id = 0;
 var playerlist = [];
@@ -41,7 +42,7 @@ function create_cart() {
 
 	var c = {
 		uuid:cart_id++,
-		x: choose(ROW_DIRECTIONS),
+		x: choose(ROWS),
 		y: choose(ROW_Y_VALUES),
 		direction: choose(['left','right']),
 		speed: choose(CART_SPEEDS),

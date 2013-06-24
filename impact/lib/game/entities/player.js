@@ -10,7 +10,7 @@ ig.module(
 		name: 'John Doe',
 		slot: undefined,
 		kills: 0,
-		sc
+		score: 0,
 		init: function(x,y,settings){
 			this.parent(x,y,settings);
 			this.addAnim('idle',1,[0]);
