@@ -4,26 +4,6 @@ var fs = require('fs');
 
 
 
-var bunyan = require('bunyan');
-
-var log = bunyan.createLogger({
-	name: 'server_logger',
-	streams: [
-		
-		{
-			level: 'info', stream: '/var/log/fishsticks_server.log'
-			
-		},
-		
-		{
-			level: 'debug', stream: '/var/log/fishsticks_server.log'
-			
-		}
-		
-	]
-});
-
-
 
 
 var MAX_NAME_LENGTH=10;
@@ -127,7 +107,7 @@ function updateCarts() {
 io.sockets.on('connection', function(socket) {
 
 	socket.on('log', function(string) {
-		log.debug(string);
+		
 	});
 	socket.on('attemptShot', function(name, x, y) {
 		var hit = false;
