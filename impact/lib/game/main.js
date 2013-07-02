@@ -4,7 +4,8 @@ ig.module(
 .requires(
 	'impact.game',
 	'impact.font',
-	'game.api.factory'
+	'game.api.client'
+	//'game.api.factory'
 )
 .defines(function(){
 
@@ -15,7 +16,6 @@ AngryMiner = ig.Game.extend({
 	init: function() {
 		this.initPlayer();
 		this.initInput();
-		makePlayerNames();
 	},
 	initInput: function() {
 		ig.input.bind(ig.KEY.MOUSE1, 'shoot');
@@ -30,7 +30,8 @@ AngryMiner = ig.Game.extend({
 		if (ig.input.pressed('shoot')) {
 			requestShot(this.local_player, ig.input.mouse.x, ig.input.mouse.y);
 		}
-	}
+	},
+
 });
 
 ig.main( '#canvas', AngryMiner, 60, 640, 480, 1 );
