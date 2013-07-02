@@ -34,7 +34,7 @@ ig.module(
 			var x = this.pos.x;
 			var y = this.pos.y;
 			if(x > ig.system.width || x < 0 || y < 0 || y > ig.system.height){
-				//this.kill();
+				this.kill();
 			}
 			this.parent();
 		},
