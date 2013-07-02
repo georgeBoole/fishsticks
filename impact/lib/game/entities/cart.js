@@ -13,6 +13,7 @@ ig.module(
 		smoke_multiplier: 5,
 		smoke_speed: 400,
 		accel_magnitude: 100,
+		maxVel: {x:1024, y:1024},
 		init: function(x,y,settings) {
 			this.parent(x,y,settings);
 			var animID = Math.floor(Math.random()*5);

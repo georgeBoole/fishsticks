@@ -34,6 +34,8 @@ var {{ param|upper }}={{ server.config[param] }};
 var {{ param|upper }}="{{ game[param] }}";
 {% elif param=='cart_size' %}
 var {{ param|upper }}={ 'x':{{game.cart_size.x}}, 'y':{{game.cart_size.y}} };
+{% elif param=='gallery_offsets' %}
+var {{ param|upper }}={ 'top':{{game.gallery_offsets.top}}, 'bottom':{{game.gallery_offsets.bottom}} };
 {% else %}
 var {{ param|upper }}={{ game[param] }};
 {% endif %}
@@ -58,7 +60,7 @@ function create_cart() {
 		x: choose(ROWS),
 		y: choose(ROW_Y_VALUES),
 		direction: choose(['left','right']),
-		speed: choose(CART_SPEEDS),
+		speed: CART_SPEED,
 		birth: new Date().getTime(),
 		value: Math.round(Math.random() * 2 + 1),
 	};

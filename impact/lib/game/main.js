@@ -33,20 +33,22 @@ AngryMiner = ig.Game.extend({
 		var status = getConnectionStatus();
 		if (status == 'G') {
 			this.parent();
-			if (ig.input.pressed('shoot')) {
-				var mx = ig.input.mouse.x, my = ig.input.mouse.y;
-				var carts = ig.game.getEntitiesByType(EntityCart);
-				for (var i = 0; i < carts.length; i++) {
-					var cart = carts[i];
-					var cx = cart.pos.x, cy = cart.pos.y;
-					var cw = cart.size.x, ch = cart.size.y;
-					if ((mx >= cx && mx <= (cx + cw)) && (my >= cy && my <= (cy + ch))) {
-						requestShot(this.local_player, mx, my);
-						break;
-					}
-				}
+			// if (ig.input.pressed('shoot')) {
+			// 	var mx = ig.input.mouse.x, my = ig.input.mouse.y;
+			// 	var carts = ig.game.getEntitiesByType(EntityCart);
+			// 	for (var i = 0; i < carts.length; i++) {
+			// 		var cart = carts[i];
+			// 		var cx = cart.pos.x, cy = cart.pos.y;
+			// 		var cw = cart.size.x, ch = cart.size.y;
+			// 		if ((mx >= cx && mx <= (cx + cw)) && (my >= cy && my <= (cy + ch))) {
+			// 			requestShot(this.local_player, mx, my);
+			// 			break;
+			// 		}
+			// 	}
 				
-			}
+			// }
+			var mx = ig.input.mouse.x, my = ig.input.mouse.y;
+			requestShot(this.local_player, mx, my);
 		}
 		this.status = status;
 	},
