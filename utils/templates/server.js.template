@@ -48,7 +48,9 @@ var carts = {};
 var cart_id = 0;
 var traffic = [];
 var y_to_row = {};
-
+var target_size  = {'x':CART_SIZE.x * CART_TARGET_FACTOR, 'y':CART_SIZE.y * CART_TARGET_FACTOR};
+var x_offset = (target_size.x - CART_SIZE.x) / 2;
+var y_offset = (target_size.y - CART_SIZE.y) / 2;
 app.listen(SERVER_PORT);
 
 
@@ -71,6 +73,7 @@ function build_create_cart() {
 		var dxc = CART_SIZE.x + MIN_CART_SPACING;
 		var delta_x = d * dxc;
 		var new_carts = [];
+		var birth = Date.now() / 1000;
 		for (var i = 0; i < qty; i++) {
 			var c = {
 				uuid: cart_id++,
@@ -78,8 +81,11 @@ function build_create_cart() {
 				y: row_y[row],
 				'vx': vx,
 				vy: 0,
-				val: Math.floor(Math.random() * 2 + 1)
+				val: Math.floor(Math.random() * 2 + 1),
+				'birth':birth
 			};
+			c['ix'] = c['x'];
+			c['iy'] = c['y'];
 			new_carts.push(c);
 			carts[c.uuid] = c;
 		}
@@ -93,21 +99,6 @@ var create_cart = build_create_cart();
 function choose(list) {
 	return list[Math.round(Math.random() * (list.length-1))];
 }
-// function create_cart() {
-// 	var c = {
-// 		uuid:cart_id++,
-// 		x: choose(ROWS),
-// 		y: choose(ROW_Y_VALUES),
-// 		direction: choose(['left','right']),
-// 		speed: CART_SPEED,
-// 		birth: new Date().getTime(),
-// 		value: Math.round(Math.random() * 2 + 1),
-// 	};
-// 	c['vx'] = c.direction == 'left' ? c.speed * -1 : c.speed;
-// 	c['vy'] = 0;
-// 	carts[c.uuid] = c;
-// 	io.sockets.emit('spawnCart', c.x, c.y, c.direction, c.speed, c.value, c.uuid);
-// }
 function handler(request, response) {
 	fs.readFile(__dirname + '/index.html',
 		function (err, data) {
@@ -120,7 +111,12 @@ function handler(request, response) {
 		});
 }
 function isHit(sx, sy, cx, cy) {
-	return (sx >= cx && sx <= cx + CART_SIZE.x) && (sy >= cy && sy <= cy + CART_SIZE.y);
+	var tx = cx - x_offset;
+	var ty = cy - y_offset;
+	var tw = target_size.x, th = target_size.y;
+	return (sx >= tx && sx <= tx + tw) && (sy >= ty && sy <= ty + th);
+	// return (sx >= (cx - x_offset)) && (sx <= (cx - x_offset) + target_size.x) && (sy >= cy && sy <= cy + CART_SIZE.y);
+	// return (sx >= (cx - x_offset) && (sx <= (cx - x_offset) + target_size.x) && (sy >= cy && sy)
 }
 function spawnCarts() {
 	if (playerlist && playerlist.length >= 1) {
@@ -150,13 +146,14 @@ io.sockets.on('connection', function(socket) {
 	socket.on('log', function(string) {
 		{% if server.logging %}log.debug(string);{% endif %}
 	});
-	socket.on('attemptShot', function(name, x, y) {
+	socket.on('attemptShot', function(name, x, y, timestamp) {
 		var hit = false;
 		var hit_index = -1;
 		var ct;
 		for (var i in carts) {
 			ct = carts[i];
-			if (isHit(x, y, ct.x, ct.y)) {
+			var client_x = ct.ix + ((timestamp - ct.birth) * ct.vx);
+			if (isHit(x, y, client_x, ct.y)) {
 				io.sockets.emit('hitCart', name, i);
 				traffic[y_to_row[ct.y]] -= ct.vx > 0 ? 1: -1;
 				delete carts[i];
