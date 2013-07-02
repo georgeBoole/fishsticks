@@ -32,7 +32,6 @@ var CART_UPDATE_DELAY = 300; //ms
 var MIN_CART_SPACING = 8;
 var MAX_NAME_LENGTH = 10;
 
-log.info('Starting game server, listening on port ' + SERVER_PORT);
 app.listen(SERVER_PORT);
 
 
@@ -40,7 +39,6 @@ function choose(list) {
 	return list[Math.round(Math.random() * (list.length-1))];
 }
 function create_cart() {
-
 	var c = {
 		uuid:cart_id++,
 		x: choose(ROWS),
@@ -68,7 +66,6 @@ function handler(request, response) {
 }
 function isHit(sx, sy, cx, cy) {
 	return (sx >= cx && sx <= cx + CART_SIZE.x) && (sy >= cy && sy <= cy + CART_SIZE.y);
-	//return(Math.abs(sx - cx) < CART_SIZE*5 && Math.abs(sy-cy) < CART_SIZE*5);
 }
 function spawnCarts() {
 	if (playerlist && playerlist.length >= 1) {

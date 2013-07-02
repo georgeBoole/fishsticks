@@ -1,19 +1,23 @@
 ig.module(
-	'game.entities.player'
+	'game.entities.effect'
 ).requires(
 	'impact.entity',
-	'impact.font'
+	'impact.timer'
 ).defines(function() {
-	EntityPlayer = ig.Entity.extend({
-		animSheet: new ig.AnimationSheet('media/playerSprite.png',32,32),
+	var rng = function(n) {
+		var arr = [];
+		for (var i=0; i < n; i++) {
+			arr.push(i);
+		}
+		return arr;
+	};
+	EntityEffect = ig.Entity.extend({
+		animSheet: new ig.AnimationSheet('media/particles1.png',32,32),
 		size: {x:32,y:32},
-		name: 'John Doe',
-		slot: undefined,
-		kills: 0,
-		score: 0,
+		lifespan: 5, // seconds
 		init: function(x,y,settings){
 			this.parent(x,y,settings);
-			this.addAnim('idle',1,[0]);
+			this.addAnim('idle', 32.0 / lifespan,rng(32));
 		},
 		kill: function() {
 			this.parent();
@@ -22,6 +26,7 @@ ig.module(
 			this.parent();
 			ig.game.big_font.draw(this.name, this.pos.x + this.size.x / 2, this.pos.y - (this.size.y * 2.0), ig.Font.ALIGN.CENTER);
 			ig.game.big_font.draw(this.score, this.pos.x + this.size.x / 2, this.pos.y - (this.size.y * 2.0) - 20, ig.Font.ALIGN.CENTER);
+
 		},
 		update: function() {
 			this.parent();
