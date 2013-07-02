@@ -29,6 +29,9 @@ ig.module(
 				//console.log('Cart created without uuid specified');
 				this.uuid = null;
 			}
+			if (this.val == undefined) {
+				this.val = 1;
+			}
 		},
 		emitSmoke: function(player) {
 			console.log(player);

@@ -38,9 +38,8 @@ ig.module(
 		var shot = ig.game.spawnEntity(EntityShot, p.pos.x + (p.size.x/2), p.pos.y + (p.size.y/2), settings);
 
 	};
-	makeCart = function(x, y, direction, speed, value, id) {
-		var dmap = {'left':-1, 'right':1};
-		var c = ig.game.spawnEntity(EntityCart, x, y, {'vel':{'x':dmap[direction] * speed, 'y':0}, 'uuid':id,'value':value});
+	makeCart = function(x, y, vx, vy, val, id) {
+		var c = ig.game.spawnEntity(EntityCart, x, y, {'vel':{'x':vx, 'y':vy}, 'uuid':id,'val':val});
 		cart_lookup[id] = c;
 		return c;
 	};

@@ -40,10 +40,9 @@ var {{ param|upper }}={ 'top':{{game.gallery_offsets.top}}, 'bottom':{{game.gall
 var {{ param|upper }}={{ game[param] }};
 {% endif %}
 {% endfor %}
+var WIDTH={{ system.width }};
+var HEIGHT={{ system.height }};
 // Variable declarations hardcoded into template
-var ROW_Y_VALUES = [40, 100, 160, 220];
-var ROW_DIRECTIONS = ROW_Y_VALUES.map(function(r) { return Math.random() >= .5 ? 1 : -1; });
-var ROWS = [-40,700]
 var playerlist = [];
 var carts = {};
 var cart_id = 0;
@@ -51,24 +50,61 @@ var cart_id = 0;
 app.listen(SERVER_PORT);
 
 
+function build_create_cart() {
+	var base_y = GALLERY_OFFSETS['top'] * HEIGHT;
+	var gallery_height = (1.0 - (GALLERY_OFFSETS['top'] + GALLERY_OFFSETS['bottom'])) * HEIGHT;
+	var row_height = gallery_height / NUM_ROWS;
+	var row_y = [];
+	for (var r = 0; r < NUM_ROWS; r++) {
+		row_y[r] = base_y + (row_height * r);
+
+	}
+
+
+	var create = function(qty) {
+		var row = Math.floor(Math.random() * NUM_ROWS);
+		var d = Math.random() >= 0.5 ? 1 : -1;
+		var vx = d * CART_SPEED;
+		var cx = d > 0 ? -CART_SIZE.x : WIDTH;
+		var dxc = CART_SIZE.x + MIN_CART_SPACING;
+		var delta_x = d * dxc;
+		var new_carts = [];
+		for (var i = 0; i < qty; i++) {
+			var c = {
+				uuid: cart_id++,
+				x: cx + (delta_x * i),
+				y: row_y[row],
+				vx: vx,
+				vy: 0,
+				val: Math.floor(Math.random() * 2 + 1)
+			};
+			new_carts.push(c);
+			carts[c.uuid] = c;
+		}
+		io.sockets.emit('spawnCarts', new_carts);
+	};
+	return create;
+}
+var create_cart = build_create_cart();
+
 function choose(list) {
 	return list[Math.round(Math.random() * (list.length-1))];
 }
-function create_cart() {
-	var c = {
-		uuid:cart_id++,
-		x: choose(ROWS),
-		y: choose(ROW_Y_VALUES),
-		direction: choose(['left','right']),
-		speed: CART_SPEED,
-		birth: new Date().getTime(),
-		value: Math.round(Math.random() * 2 + 1),
-	};
-	c['vx'] = c.direction == 'left' ? c.speed * -1 : c.speed;
-	c['vy'] = 0;
-	carts[c.uuid] = c;
-	io.sockets.emit('spawnCart', c.x, c.y, c.direction, c.speed, c.value, c.uuid);
-}
+// function create_cart() {
+// 	var c = {
+// 		uuid:cart_id++,
+// 		x: choose(ROWS),
+// 		y: choose(ROW_Y_VALUES),
+// 		direction: choose(['left','right']),
+// 		speed: CART_SPEED,
+// 		birth: new Date().getTime(),
+// 		value: Math.round(Math.random() * 2 + 1),
+// 	};
+// 	c['vx'] = c.direction == 'left' ? c.speed * -1 : c.speed;
+// 	c['vy'] = 0;
+// 	carts[c.uuid] = c;
+// 	io.sockets.emit('spawnCart', c.x, c.y, c.direction, c.speed, c.value, c.uuid);
+// }
 function handler(request, response) {
 	fs.readFile(__dirname + '/index.html',
 		function (err, data) {
@@ -85,9 +121,7 @@ function isHit(sx, sy, cx, cy) {
 }
 function spawnCarts() {
 	if (playerlist && playerlist.length >= 1) {
-		for (var i = 0; i < CART_BATCH_SIZE; i++) {
-			create_cart();
-		}
+		create_cart(CART_BATCH_SIZE);
 	}
 }
 var last_update = null;
