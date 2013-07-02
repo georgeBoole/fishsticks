@@ -24,20 +24,21 @@ var log = bunyan.createLogger({
 // Server configuration
 {% endif %}
 {% for param in server.config %}
-var {{param|upper}}={{server.config[param]}};
+var {{ param|upper }}={{ server.config[param] }};
 {% endfor %}
 {% if game is defined %}
 // Game rules configuration
 {% endif %}
 {% for param in game %}
 {% if param=='name' %}
-var {{param|upper}}="{{game[param]}}";
+var {{ param|upper }}="{{ game[param] }}";
+{% elif param=='cart_size' %}
+var {{ param|upper }}={ 'x':{{game.cart_size.x}}, 'y':{{game.cart_size.y}} };
 {% else %}
-var {{param|upper}}={{game[param]}};
+var {{ param|upper }}={{ game[param] }};
 {% endif %}
 {% endfor %}
 // Variable declarations hardcoded into template
-var CART_SIZE = {x: 62, y: 52};
 var ROW_Y_VALUES = [40, 100, 160, 220];
 var ROW_DIRECTIONS = ROW_Y_VALUES.map(function(r) { return Math.random() >= .5 ? 1 : -1; });
 var ROWS = [-40,700]
