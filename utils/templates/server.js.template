@@ -113,7 +113,8 @@ function handler(request, response) {
 function isHit(sx, sy, cx, cy) {
 	var tx = cx - x_offset;
 	var ty = cy - y_offset;
-	var tw = target_size.x, th = target_size.y;
+	var tw = target_size.x;
+	var th = target_size.y;
 	return (sx >= tx && sx <= tx + tw) && (sy >= ty && sy <= ty + th);
 	// return (sx >= (cx - x_offset)) && (sx <= (cx - x_offset) + target_size.x) && (sy >= cy && sy <= cy + CART_SIZE.y);
 	// return (sx >= (cx - x_offset) && (sx <= (cx - x_offset) + target_size.x) && (sy >= cy && sy)
@@ -150,21 +151,29 @@ io.sockets.on('connection', function(socket) {
 		var hit = false;
 		var hit_index = -1;
 		var ct;
+		//socket.emit('message', 'attempting a shot server side');
 		for (var i in carts) {
 			ct = carts[i];
 			var client_x = ct.ix + ((timestamp - ct.birth) * ct.vx);
-			if (isHit(x, y, client_x, ct.y)) {
+			
+			var elapsedTime = (timestamp - last_update) / 1000.0;
+			var model_x = ct.x + (elapsedTime * ct.vx);
+			//socket.emit('message', 'model_x: ' + model_x + ', cart_x: ' + ct.x);
+			//socket.emit('message', 'timestamp: ' + timestamp);
+			//socket.emit('message', 'last_update: '+ last_update);
+			//socket.emit('message', client_x);
+			//socket.emit('message', timestamp);
+			//socket.emit('message', (timestamp - ct.birth));
+			if (isHit(x, y, model_x, ct.y)) {
 				io.sockets.emit('hitCart', name, i);
 				traffic[y_to_row[ct.y]] -= ct.vx > 0 ? 1: -1;
 				delete carts[i];
-				return;
+				//return;
 			}
+
 		}
 	});
 	socket.on('initializePlayer', function(name) {
-		if (playerlist.length >= MAX_PLAYERS) {
-			socket.emit('rejected', 'game is full');
-		}
 		var valid_name = name.length > MAX_NAME_LENGTH ? name.slice(0, MAX_NAME_LENGTH) : name;
 		socket.clientname = valid_name;
 		socket.emit('registered', valid_name, playerlist && playerlist.length > 0 ? playerlist : []);
