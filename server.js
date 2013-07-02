@@ -31,6 +31,7 @@ var CART_SPAWN_DELAY = 1000; //ms
 var CART_UPDATE_DELAY = 300; //ms
 var MIN_CART_SPACING = 8;
 var MAX_NAME_LENGTH = 10;
+var MAX_PLAYERS = 6;
 
 app.listen(SERVER_PORT);
 
@@ -106,6 +107,9 @@ io.sockets.on('connection', function(socket) {
 		}
 	});
 	socket.on('initializePlayer', function(name) {
+		if (playerlist.length >= MAX_PLAYERS) {
+			socket.emit('rejected', 'game is full');
+		}
 		var valid_name = name.length > MAX_NAME_LENGTH ? name.slice(0, MAX_NAME_LENGTH) : name;
 		socket.clientname = valid_name;
 		socket.emit('registered', valid_name, playerlist && playerlist.length > 0 ? playerlist : []);

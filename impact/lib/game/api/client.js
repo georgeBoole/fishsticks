@@ -8,8 +8,9 @@ ig.module(
 )
 .defines(function() {
 	var messages = [];
-	var HOST = 'http://192.168.1.12:8080';
+	//var HOST = 'http://192.168.1.12:8080';
 	var socket = io.connect(HOST);
+	var STATUS = 'Y'; // 'R', 'G' (yellow red and green for connecting, failed, connected)
 
 	socket.on('join', function(player_name) {
 		addPlayer(player_name);
@@ -24,6 +25,7 @@ ig.module(
 			});
 		}
 		addLocalPlayer(name);
+		STATUS = 'G';
 	});
 	socket.on('message', function(msg) {
 		console.log(msg);
@@ -40,6 +42,10 @@ ig.module(
 		fireShot(player_name,cart_id);
 		killCart(cart_id);
 	});
+	socket.on('rejected', function(msg) {
+		console.log('CONNECTION REJECTED: ' + msg);
+		STATUS = 'R';
+	});
 	requestShot = function(player_name, x, y) {
 		socket.emit('attemptShot', player_name, x, y);
 	};
@@ -49,5 +55,8 @@ ig.module(
 	debug = function(msg) {
 		//socket.emit('log', msg);
 		console.log(msg);
+	};
+	getConnectionStatus = function() {
+		return STATUS;
 	};
 });

@@ -3,6 +3,8 @@ cartshot.*
 node_modules
 *.log
 manager.py
-fab_env
+env
 *.pyc
 game.min.js
+config.json
+index.html
