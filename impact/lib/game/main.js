@@ -51,6 +51,6 @@ AngryMiner = ig.Game.extend({
 	}
 });
 
-ig.main( '#canvas', AngryMiner, 60, 640, 480, 1 );
+ig.main( '#canvas', AngryMiner, FPS, WIDTH, HEIGHT, SCALE);
 
 });

@@ -35,7 +35,7 @@ ig.module(
 		var angle = p.angleTo(c);
 		var settings = {'angle':angle,'target':c};
 		var shot = ig.game.spawnEntity(EntityShot, p.pos.x + (p.size.x/2), p.pos.y + (p.size.y/2), settings);
-		
+
 	};
 	makeCart = function(x, y, direction, speed, value, id) {
 		var dmap = {'left':-1, 'right':1};
@@ -59,6 +59,23 @@ ig.module(
 		local_player = name;
 		addPlayer(name);
 	};
+	repositionPlayers = function() {
+		if (!ig || !ig.system || !ig.game) {
+			return;
+		}
+		var width = ig.system.width, height = ig.system.height;
+		var x_offset = 0.1 * width;
+		var y_offset = height - 96;
+		var players = ig.game.getEntitiesByType(EntityPlayer);
+		if (!players || players.length == 0) {
+			return;
+		}
+		var num = players.length;
+		var space_per_player = (width - (2*x_offset)) / num;
+		for (var i = 0; i < num; i++) {
+			players[i].pos = {'x':x_offset + (i * space_per_player), 'y': y_offset};
+		}
+	};
 	addPlayer = function(name) {
 		var existing_players = ig.game.getEntitiesByType(EntityPlayer);
 		for (var i =0; i < existing_players.length; i++) {
@@ -72,8 +89,7 @@ ig.module(
 		var py = oy;
 		var p = ig.game.spawnEntity(EntityPlayer, px, py, {'name':name});
 		player_lookup[p.name] = p;
-		console.log('just spawned a new player');
-		console.log(p);
+		repositionPlayers();
 	};
 	killPlayer = function(playerName) {
 		//Kills a player with the specified name and
@@ -91,6 +107,7 @@ ig.module(
 				players[i].kill();
 			}
 		}
+		repositionPlayers();
 	};
 	displayMessage = function(msg) {
 		console.log(msg);

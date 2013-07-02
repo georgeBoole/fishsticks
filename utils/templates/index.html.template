@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Angry Miner</title>
+	<title>{{ game.name|title }}</title>
 	<style type="text/css">
 		html,body {
 			background-color: #333;
@@ -21,13 +21,18 @@
 			margin: auto;
 		}
 	</style>
+	{% if include_jquery %}
 	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-	<script src="{{ host }}/socket.io/socket.io.js"></script>
+	{% endif %}
+	<script src="{{ host.address }}/socket.io/socket.io.js"></script>
 	<script type="text/javascript">
-		var HOST="{{ host }}";
+		var HOST="{{ host.address }}";
+		{% for key in system %}
+		var {{ key|upper }}={{ system[key] }};
+		{% endfor %}
 	</script>
-	<script type="text/javascript" src="game.min.js"></script>
+	<script type="text/javascript" src="{{ code }}"></script>
 
 </head>
 <body>

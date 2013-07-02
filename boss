@@ -1,0 +1,199 @@
+#!/usr/bin/env python
+#-*- coding: utf-8 -*-
+
+import os
+import json
+import pprint
+from os import path as p
+from shutil import copyfile
+from plumbum import cli
+from jinja2 import Template
+
+import sys
+
+# temporary server stuff, line 15
+#path: '{{ "%s/%s"|format(server.logger.directory, "%s_%s.log"|format(server.logger.name, level)) }}'
+# 28: <script src="{{ '%s:%d'|format(host.address, host.port) }}/socket.io/socket.io.js"></script>
+# 30: var HOST="{{ '%s:%d'|format(host.address, host.port) }}";
+# 31:       {% for key in system %}
+        # var {{ key|upper }}={{ system[key] }};
+        # {% endfor %}
+#
+#
+#
+IMPACT_APP_DIR = p.join(os.getcwd(), 'impact')
+BUILD_TOOL_DIR = p.join(IMPACT_APP_DIR, 'tools')
+BUILD_TOOL_NAME = 'bake.sh'
+BUILD_TOOL_PATH = p.join(BUILD_TOOL_DIR, BUILD_TOOL_NAME)
+INDEX_PAGE_NAME = 'index.html'
+INDEX_PAGE_PATH = p.join(IMPACT_APP_DIR, INDEX_PAGE_NAME)
+TEMPLATE_DIR = os.getcwd()
+INDEX_TEMPLATE_NAME = '%s.template' % INDEX_PAGE_NAME
+INDEX_TEMPLATE_PATH = None#p.join(IMPACT_APP_DIR, INDEX_TEMPLATE_NAME)
+COMPILED_JS_NAME = 'game.min.js'
+COMPILED_JS_PATH = p.join(IMPACT_APP_DIR, COMPILED_JS_NAME)
+SERVER_PAGE_PATH = 'server.js'
+
+DEFAULT_CONFIG = {
+    'port':8080,
+    'address':'http://localhost',
+    'mode':'debug'
+}
+
+_loaded_configs = {}
+def load_configuration(config_filename):
+    if not (config_filename in _loaded_configs and _loaded_configs[config_filename]):
+        config = None
+        if config_filename and p.exists(config_filename):
+            with open(config_filename, 'r') as cfg:
+                config = json.load(cfg)
+        if not config:
+            config = DEFAULT_CONFIG
+        _loaded_configs[config_filename] = config
+    tmp = _loaded_configs[config_filename]
+    if "template_directory" in tmp:
+        TEMPLATE_DIR = tmp["template_directory"]
+        print('setting template directory as %s' % TEMPLATE_DIR)
+    return tmp
+
+_pp = pprint.PrettyPrinter(indent=4)
+
+def pretty_print(message):
+    _pp.pprint(message)
+
+def any(seq, test):
+    for x in seq:
+        if test(x):
+            return True
+    return False
+
+def fatal(msg):
+    print('ERROR: %s, exiting program' % msg)
+    return 1
+
+def template_path(template_dir, filename):
+    print('finding template for %s' % filename)
+    template_name = os.path.join(template_dir, '%s.template' % filename)
+    return template_name if template_name else ''
+
+class Boss(cli.Application):
+    """
+    configures and manages this game
+    """
+    PROGNAME = "boss"
+    VERSION = "0.1"
+
+    #verbose = cli.Flag(["-v", "--verbose"], help = "Enable verbose mode")
+
+    def main(self, *args):
+        if args:
+            print "Unknown command %r" % (args[0],)
+            return 1   # error exit code
+        if not self.nested_command:           # will be ``None`` if no sub-command follows
+            print "No command given"
+            return 1   # error exit code
+
+
+# @Boss.subcommand("build")
+# class BuildAll(cli.Application):
+#     """
+#     Builds the client and the server all at once
+#     """
+#     def main(self, *args):
+#         print(args)
+#         BuildClient.run(args[0])
+#         BuildServer.run(args[0])
+
+@Boss.subcommand("build-client")
+class BuildClient(cli.Application):
+    """
+    Consolidates and minifies impact js app and generates index.html page
+    """
+    def main(self, config_filename):
+        print('loading configuration from %s...' % config_filename)
+        cfg = load_configuration(config_filename)
+        if not cfg:
+            return fatal('unable to load configuration from %s. exiting script...' % config_filename)
+        print('configuration loaded')
+        print('building the impact client application...')
+        print('checking if build tool exists...')
+        if p.exists(BUILD_TOOL_PATH):
+            print('found build tool, running it...')
+            os.system('cd %s && ./%s' % (BUILD_TOOL_DIR, BUILD_TOOL_NAME))
+            if (os.path.exists(COMPILED_JS_PATH)):
+                print('successfully completed javascript build')
+            else:
+                return fatal('problem occurred while using the build tool, unable to complete build')
+        else:
+            return fatal('build tool not found at %s' % BUILD_TOOL_PATH)
+
+        print('preparing to build main page html file, checking for required files...')
+        index_template_path = template_path(cfg['template_directory'],'index.html')
+        print('using template at %s' % index_template_path)
+        print('building %s file from template %s....' % (INDEX_PAGE_NAME, INDEX_TEMPLATE_NAME))
+        template = None
+        try:
+            with open(index_template_path, 'r') as raw_template_file:
+                template = Template(raw_template_file.read())
+        except IOError:
+            return fatal('unable to open template file')
+        if not template:
+            return fatal('unable to open template file %s' % index_template_path)
+        final = None
+        if p.exists(INDEX_PAGE_PATH):
+            print('removing existing %s file' % INDEX_PAGE_NAME)
+            os.remove(INDEX_PAGE_PATH)
+        print('creating %s...' % INDEX_PAGE_NAME)
+        template_data = dict(cfg)
+        template_data['code'] = COMPILED_JS_NAME
+        print('rendering template...')
+        rendered_template = template.render(**template_data)
+        if not rendered_template:
+            return fatal('unable to render template')
+        print('writing rendered template to %s' % INDEX_PAGE_PATH)
+        try:
+            with open(INDEX_PAGE_PATH, 'w') as index_file:
+                index_file.write(rendered_template)
+        except IOError:
+            return fatal('unable to open %s file' % INDEX_PAGE_NAME)
+        if not p.exists(INDEX_PAGE_PATH):
+            return fatal('no file was created with rendered template data')
+        print('success! you should now have a index.html file that includes all the necessary code')
+        return 0
+
+@Boss.subcommand('build-server')
+class BuildServer(cli.Application):
+    """
+    Configures and builds the server program used for the backend
+    """
+    def main(self, config_filename):
+        print('loading configuration from %s...' % config_filename)
+        cfg = dict(load_configuration(config_filename))
+        if not cfg:
+            return fatal('unable to load configuration from %s. exiting script...' % config_filename)
+        print('configuration loaded')
+        server_template_path = template_path(cfg['template_directory'],'server.js')
+        template = None
+        try:
+            with open(server_template_path, 'r') as template_file:
+                template = Template(template_file.read())
+        except IOError:
+            return fatal('unable to load server template')
+        if not template:
+            return fatal('unable to load server template')
+        rendered_template = template.render(**cfg)
+        if not rendered_template:
+            return fatal('unable to render template')
+        try:
+            with open(SERVER_PAGE_PATH, 'w') as server_file:
+                server_file.write(rendered_template)
+        except IOError:
+            return fatal('unable to write server file to disk')
+        print('success building server script')
+        return 0
+
+
+
+if __name__ == '__main__':
+    Boss.run()
+
