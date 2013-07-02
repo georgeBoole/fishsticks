@@ -2,64 +2,39 @@ var app = require('http').createServer(handler);
 var io = require('socket.io').listen(app);
 var fs = require('fs');
 
-
+{% if server.logging %}
 
 var bunyan = require('bunyan');
 
 var log = bunyan.createLogger({
 	name: 'server_logger',
 	streams: [
-		
+		{% for level in server.logger.levels %}
 		{
-			level: 'info', stream: '/var/log/fishsticks_server.log'
+			level: '{{ level }}', stream: '{{ server.logger.logfile }}'
 			
-		},
-		
-		{
-			level: 'debug', stream: '/var/log/fishsticks_server.log'
-			
-		}
-		
+		}{% if loop.last == false %},{% endif %}
+		{% endfor %}
 	]
 });
+{% endif %}
 
-
-
-
-var MAX_NAME_LENGTH=10;
-
-var MAX_PLAYERS=6;
-
-var SERVER_PORT=8080;
-
-
+{% if config is defined %}
+// Server configuration
+{% endif %}
+{% for param in server.config %}
+var {{param|upper}}={{server.config[param]}};
+{% endfor %}
+{% if game is defined %}
 // Game rules configuration
-
-
-
-var NAME="fishsticks";
-
-
-
-var CART_BATCH_SIZE=3;
-
-
-
-var CART_SPAWN_DELAY=1000;
-
-
-
-var CART_UPDATE_DELAY=300;
-
-
-
-var CART_SPEEDS=[50, 70, 90];
-
-
-
-var MIN_CART_SPACING=8;
-
-
+{% endif %}
+{% for param in game %}
+{% if param=='name' %}
+var {{param|upper}}="{{game[param]}}";
+{% else %}
+var {{param|upper}}={{game[param]}};
+{% endif %}
+{% endfor %}
 // Variable declarations hardcoded into template
 var CART_SIZE = {x: 48, y: 32};
 var ROW_Y_VALUES = [40, 100, 160, 220];
@@ -127,7 +102,7 @@ function updateCarts() {
 io.sockets.on('connection', function(socket) {
 
 	socket.on('log', function(string) {
-		log.debug(string);
+		{% if server.logging %}log.debug(string);{% endif %}
 	});
 	socket.on('attemptShot', function(name, x, y) {
 		var hit = false;

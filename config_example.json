@@ -1,3 +1,36 @@
 {
-	"host":"http://192.168.1.12:8080"
+	"host": {
+		"address":"http://192.168.1.12:8080",
+		"port":8080
+	},
+	"server": {
+		"logging": true,
+		"logger": {
+			"name": "fishsticks_server",
+			"directory": "/var/log/",
+			"levels": ["info", "debug"],
+			"logfile": "/var/log/fishsticks_server.log"
+		},
+		"config": {
+			"server_port": 8080,
+			"max_players": 6,
+			"max_name_length": 10
+		}
+	},
+	"game": {
+		"name": "fishsticks",
+		"cart_speeds": [50, 70, 90],
+		"cart_batch_size":3,
+		"cart_spawn_delay":1000,
+		"cart_update_delay":300,
+		"min_cart_spacing":8
+	},
+	"system": {
+		"width":640,
+		"height":480,
+		"scale":1,
+		"fps":60
+	},
+	"include_jquery": true,
+	"template_directory": "utils/templates"
 }
