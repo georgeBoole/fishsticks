@@ -47,8 +47,10 @@ AngryMiner = ig.Game.extend({
 			// 	}
 				
 			// }
-			var mx = ig.input.mouse.x, my = ig.input.mouse.y;
-			requestShot(this.local_player, mx, my);
+			if (ig.input.pressed('shoot')) {
+				var mx = ig.input.mouse.x, my = ig.input.mouse.y;
+				requestShot(this.local_player, mx, my);
+			}
 		}
 		this.status = status;
 	},
