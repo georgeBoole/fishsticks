@@ -25,10 +25,10 @@ ig.module(
 	fireShot = function(playerName,cart_id) {
 		var p = player_lookup[playerName];
 		var c = cart_lookup[cart_id];
-		p.score += c.value;
 		if (!p || !c) {
 			return;
 		}
+		p.score += c.value;
 		if (p.kills) {
 			p.kills += 1;
 		}
