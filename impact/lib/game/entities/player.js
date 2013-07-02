@@ -5,15 +5,16 @@ ig.module(
 	'impact.font'
 ).defines(function() {
 	EntityPlayer = ig.Entity.extend({
-		animSheet: new ig.AnimationSheet('media/playerSprite.png',32,32),
+		animSheet: new ig.AnimationSheet('media/playerSpriteSheet.png',32,32),
 		size: {x:32,y:32},
 		name: 'John Doe',
 		slot: undefined,
 		kills: 0,
 		score: 0,
+		color: null,
 		init: function(x,y,settings){
 			this.parent(x,y,settings);
-			this.addAnim('idle',1,[0]);
+			this.addAnim('idle',1,[this.color]);
 		},
 		kill: function() {
 			this.parent();

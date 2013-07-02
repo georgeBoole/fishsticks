@@ -19,7 +19,8 @@ ig.module(
 	var first_player_loc = {x:(640 * PLAYER_MARGIN),y:420};
 	var max_players = 4;
 	var player_spacing = (640 * (1 - (2 * PLAYER_MARGIN))) / max_players;
-	
+	var open_player_colors = [0,1,2,3,4];
+	var occupied_player_colors = [];
 	Object.size = function(obj) { var size = 0, key; for (key in obj) { if (obj.hasOwnProperty(key)) size++; } return size; };
 	
 	fireShot = function(playerName,cart_id) {
@@ -88,7 +89,15 @@ ig.module(
 		var ox = first_player_loc.x, oy = first_player_loc.y;
 		var px = ox + ((existing_players.length) * player_spacing);
 		var py = oy;
-		var p = ig.game.spawnEntity(EntityPlayer, px, py, {'name':name});
+		//assigning player color here
+		var player_color;
+		if(open_player_colors.length > 0){
+			player_color = open_player_colors.shift();
+		} else {
+			console.log("There are no more open colors. Beginning to recycle");
+			player_color = 0;
+		}
+		var p = ig.game.spawnEntity(EntityPlayer, px, py, {'name':name, 'color':player_color});
 		player_lookup[p.name] = p;
 		repositionPlayers();
 	};
