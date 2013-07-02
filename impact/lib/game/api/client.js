@@ -48,9 +48,9 @@ ig.module(
 		console.log('CONNECTION REJECTED: ' + msg);
 		STATUS = 'R';
 	});
-	requestShot = function(player_name, x, y) {
+	requestShot = function(player_name, x, y, ts) {
 		console.log('requesting a shot');
-		socket.emit('attemptShot', player_name, x, y);
+		socket.emit('attemptShot', player_name, x, y, ts);
 	};
 	initializeLocalPlayer = function(player_name) {
 		socket.emit('initializePlayer',player_name);

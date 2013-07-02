@@ -73,6 +73,7 @@ function build_create_cart() {
 		var dxc = CART_SIZE.x + MIN_CART_SPACING;
 		var delta_x = d * dxc;
 		var new_carts = [];
+		var birth = Date.now() / 1000;
 		for (var i = 0; i < qty; i++) {
 			var c = {
 				uuid: cart_id++,
@@ -80,8 +81,11 @@ function build_create_cart() {
 				y: row_y[row],
 				'vx': vx,
 				vy: 0,
-				val: Math.floor(Math.random() * 2 + 1)
+				val: Math.floor(Math.random() * 2 + 1),
+				'birth':birth
 			};
+			c['ix'] = c['x'];
+			c['iy'] = c['y'];
 			new_carts.push(c);
 			carts[c.uuid] = c;
 		}
@@ -142,13 +146,14 @@ io.sockets.on('connection', function(socket) {
 	socket.on('log', function(string) {
 		{% if server.logging %}log.debug(string);{% endif %}
 	});
-	socket.on('attemptShot', function(name, x, y) {
+	socket.on('attemptShot', function(name, x, y, timestamp) {
 		var hit = false;
 		var hit_index = -1;
 		var ct;
 		for (var i in carts) {
 			ct = carts[i];
-			if (isHit(x, y, ct.x, ct.y)) {
+			var client_x = ct.ix + ((timestamp - ct.birth) * ct.vx);
+			if (isHit(x, y, client_x, ct.y)) {
 				io.sockets.emit('hitCart', name, i);
 				traffic[y_to_row[ct.y]] -= ct.vx > 0 ? 1: -1;
 				delete carts[i];
