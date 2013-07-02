@@ -4,7 +4,7 @@
 		"port":8080
 	},
 	"server": {
-		"logging": true,
+		"logging": false,
 		"logger": {
 			"name": "fishsticks_server",
 			"directory": "/var/log/",
@@ -19,11 +19,14 @@
 	},
 	"game": {
 		"name": "fishsticks",
-		"cart_speeds": [50, 70, 90],
+		"cart_speed": 200,
 		"cart_batch_size":3,
 		"cart_spawn_delay":1000,
 		"cart_update_delay":300,
-		"min_cart_spacing":8
+		"cart_size":{"x":62, "y":52},
+		"min_cart_spacing":8,
+		"num_rows":4,
+		"gallery_offsets":{"top":0.05, "bottom":0.15}
 	},
 	"system": {
 		"width":640,
