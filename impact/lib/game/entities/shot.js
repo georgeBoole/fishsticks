@@ -9,7 +9,7 @@ ig.module(
 		size: {x: 4,y: 8},
 		speed: 1000,
 		maxVel: {x:1000,y:1000},
-		close_enough: 20,
+		close_enough: 60,
 		OB: 50,
 		particle_emit_timer: new ig.Timer(0.04),
 		init: function(x,y,settings) {
