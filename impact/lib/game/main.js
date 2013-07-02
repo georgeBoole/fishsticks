@@ -4,7 +4,8 @@ ig.module(
 .requires(
 	'impact.game',
 	'impact.font',
-	'game.api.client'
+	'game.api.client',
+	'game.entities.cart'
 )
 .defines(function(){
 
@@ -33,7 +34,18 @@ AngryMiner = ig.Game.extend({
 		if (status == 'G') {
 			this.parent();
 			if (ig.input.pressed('shoot')) {
-				requestShot(this.local_player, ig.input.mouse.x, ig.input.mouse.y);
+				var mx = ig.input.mouse.x, my = ig.input.mouse.y;
+				var carts = ig.game.getEntitiesByType(EntityCart);
+				for (var i = 0; i < carts.length; i++) {
+					var cart = carts[i];
+					var cx = cart.pos.x, cy = cart.pos.y;
+					var cw = cart.size.x, ch = cart.size.y;
+					if ((mx >= cx && mx <= (cx + cw)) && (my >= cy && my <= (cy + ch))) {
+						requestShot(this.local_player, mx, my);
+						break;
+					}
+				}
+				
 			}
 		}
 		this.status = status;

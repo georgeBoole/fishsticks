@@ -31,7 +31,7 @@ ig.module(
 		console.log(msg);
 	});
 	socket.on('spawnCart', function(x, y, direction, speed, value, uuid) {
-		if (ig.game) {
+		if (ig.game != undefined) {
 			makeCart(x, y, direction, speed, value, uuid);
 		}
 		else {
@@ -54,7 +54,7 @@ ig.module(
 	};
 	debug = function(msg) {
 		//socket.emit('log', msg);
-		console.log(msg);
+		//console.log(msg);
 	};
 	getConnectionStatus = function() {
 		return STATUS;
