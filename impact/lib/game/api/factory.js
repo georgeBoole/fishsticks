@@ -28,7 +28,7 @@ ig.module(
 		if (!p || !c) {
 			return;
 		}
-		p.score += c.value;
+		p.score += c.points;
 		if (p.kills) {
 			p.kills += 1;
 		}
@@ -36,8 +36,6 @@ ig.module(
 		var settings = {'angle':angle,'target':c};
 		var shot = ig.game.spawnEntity(EntityShot, p.pos.x + (p.size.x/2), p.pos.y + (p.size.y/2), settings);
 		
-		console.log('shot');
-		console.log(shot);
 	};
 	makeCart = function(x, y, direction, speed, value, id) {
 		var dmap = {'left':-1, 'right':1};
@@ -45,11 +43,12 @@ ig.module(
 		cart_lookup[id] = c;
 		return c;
 	};
-	killCart = function(cart_id) {
+	killCart = function(cart_id,player_name) {
 		if (cart_id in cart_lookup) {
+			var p = player_lookup[player_name];
 			var cart = cart_lookup[cart_id];
 			debug('lookup:'+cart_lookup+'cart_id:'+cart_id+'cart:'+cart);
-			cart.kill();
+			cart.kill(p);
 			delete cart_lookup[cart_id];
 		}
 		else {

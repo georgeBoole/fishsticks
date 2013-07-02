@@ -40,7 +40,7 @@ ig.module(
 	});
 	socket.on('hitCart', function(player_name, cart_id) {
 		fireShot(player_name,cart_id);
-		killCart(cart_id);
+		killCart(cart_id,player_name);
 	});
 	socket.on('rejected', function(msg) {
 		console.log('CONNECTION REJECTED: ' + msg);

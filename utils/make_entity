@@ -10,6 +10,7 @@ template = """ig.module(
 	Entity%(proper_name)s = ig.Entity.extend({
 		animSheet: new ig.AnimationSheet('media/%(name)s.png', %(width)d, %(height)d),
 		size: {x: %(width)d,y: %(height)d},
+		maxVel: {x:1000,y:1000},
 		init: function(x,y,settings) {
 			this.parent(x,y,settings);
 		},
