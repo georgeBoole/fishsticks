@@ -151,16 +151,16 @@ io.sockets.on('connection', function(socket) {
 		var hit = false;
 		var hit_index = -1;
 		var ct;
-		socket.emit('message', 'attempting a shot server side');
+		//socket.emit('message', 'attempting a shot server side');
 		for (var i in carts) {
 			ct = carts[i];
 			var client_x = ct.ix + ((timestamp - ct.birth) * ct.vx);
 			
 			var elapsedTime = (timestamp - last_update) / 1000.0;
 			var model_x = ct.x + (elapsedTime * ct.vx);
-			socket.emit('message', 'model_x: ' + model_x + ', cart_x: ' + ct.x);
-			socket.emit('message', 'timestamp: ' + timestamp);
-			socket.emit('message', 'last_update: '+ last_update);
+			//socket.emit('message', 'model_x: ' + model_x + ', cart_x: ' + ct.x);
+			//socket.emit('message', 'timestamp: ' + timestamp);
+			//socket.emit('message', 'last_update: '+ last_update);
 			//socket.emit('message', client_x);
 			//socket.emit('message', timestamp);
 			//socket.emit('message', (timestamp - ct.birth));
