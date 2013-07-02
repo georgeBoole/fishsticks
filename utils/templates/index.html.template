@@ -31,6 +31,9 @@
 		{% for key in system %}
 		var {{ key|upper }}={{ system[key] }};
 		{% endfor %}
+		{% if 'cart_size' in game %}
+		var CART_SIZE={ 'x':{{game.cart_size.x}}, 'y':{{game.cart_size.y}} };
+		{% endif %}
 	</script>
 	<script type="text/javascript" src="{{ code }}"></script>
 

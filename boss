@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#-*- coding: utf-8 -*-
+
 
 import os
 import json
@@ -16,7 +16,7 @@ import sys
 # 28: <script src="{{ '%s:%d'|format(host.address, host.port) }}/socket.io/socket.io.js"></script>
 # 30: var HOST="{{ '%s:%d'|format(host.address, host.port) }}";
 # 31:       {% for key in system %}
-        # var {{ key|upper }}={{ system[key] }};
+        # var {{ key|upper }}={{ system[key] }}; #-*- coding: utf-8 -*-
         # {% endfor %}
 #
 #
