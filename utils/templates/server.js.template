@@ -76,7 +76,7 @@ function build_create_cart() {
 				uuid: cart_id++,
 				x: cx + (delta_x * i),
 				y: row_y[row],
-				vx: vx,
+				'vx': vx,
 				vy: 0,
 				val: Math.floor(Math.random() * 2 + 1)
 			};
