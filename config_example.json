@@ -1,6 +1,6 @@
 {
 	"host": {
-		"address":"http://192.168.1.2:8080",
+		"address":"http://192.168.1.12:8080",
 		"port":8080
 	},
 	"server": {
@@ -19,18 +19,18 @@
 	},
 	"game": {
 		"name": "fishsticks",
-		"cart_speed": 200,
+		"cart_speed": 300,
 		"cart_batch_size":3,
-		"cart_spawn_delay":1000,
+		"cart_spawn_delay":2500,
 		"cart_update_delay":300,
-		"cart_size":{"x":62, "y":52},
+		"cart_size":{"x":64, "y":64},
 		"min_cart_spacing":8,
-		"num_rows":4,
+		"num_rows":5,
 		"gallery_offsets":{"top":0.05, "bottom":0.15}
 	},
 	"system": {
-		"width":640,
-		"height":480,
+		"width":800,
+		"height":600,
 		"scale":1,
 		"fps":60
 	},

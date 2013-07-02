@@ -30,14 +30,6 @@ ig.module(
 	socket.on('message', function(msg) {
 		console.log(msg);
 	});
-	// socket.on('spawnCart', function(x, y, direction, speed, value, uuid) {
-	// 	if (ig.game != undefined) {
-	// 		makeCart(x, y, vx, vy, value, uuid);
-	// 	}
-	// 	else {
-	// 		console.log('cannot spawn cart until game object is initialized');
-	// 	}
-	// });
 	socket.on('spawnCarts', function(carts) {
 		if (ig.game != undefined) {
 			carts.forEach(function(c) {
