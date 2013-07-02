@@ -5,7 +5,6 @@ ig.module(
 	'impact.game',
 	'impact.font',
 	'game.api.client'
-	//'game.api.factory'
 )
 .defines(function(){
 
