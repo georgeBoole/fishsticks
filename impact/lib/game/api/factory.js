@@ -60,6 +60,7 @@ ig.module(
 		addPlayer(name);
 	};
 	repositionPlayers = function() {
+		console.log('REPOSITIONING PLAYERS');
 		if (!ig || !ig.system || !ig.game) {
 			return;
 		}
@@ -73,7 +74,10 @@ ig.module(
 		var num = players.length;
 		var space_per_player = (width - (2*x_offset)) / num;
 		for (var i = 0; i < num; i++) {
-			players[i].pos = {'x':x_offset + (i * space_per_player), 'y': y_offset};
+			var new_x = x_offset + (i * space_per_player);
+			console.log('old location: ' + players[i].pos.x.toString());
+			players[i].pos = {'x': new_x, 'y': y_offset};
+			console.log('new location: ' + new_x);
 		}
 	};
 	addPlayer = function(name) {

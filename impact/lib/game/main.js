@@ -22,7 +22,7 @@ AngryMiner = ig.Game.extend({
 		ig.input.initMouse();
 	},
 	initPlayer: function() {
-		this.local_player = "Michael";//prompt('Enter your name:');
+		this.local_player = prompt('Enter your name:');
 		initializeLocalPlayer(this.local_player);
 	},
 	switchStatus: function() {
