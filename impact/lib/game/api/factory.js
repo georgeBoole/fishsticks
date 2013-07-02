@@ -60,13 +60,12 @@ ig.module(
 		addPlayer(name);
 	};
 	repositionPlayers = function() {
-		console.log('REPOSITIONING PLAYERS');
 		if (!ig || !ig.system || !ig.game) {
 			return;
 		}
 		var width = ig.system.width, height = ig.system.height;
-		var x_offset = 0.1 * width;
-		var y_offset = height - 96;
+		var x_offset = 0.06 * width;
+		var y_offset = height - 64;
 		var players = ig.game.getEntitiesByType(EntityPlayer);
 		if (!players || players.length == 0) {
 			return;
@@ -74,10 +73,8 @@ ig.module(
 		var num = players.length;
 		var space_per_player = (width - (2*x_offset)) / num;
 		for (var i = 0; i < num; i++) {
-			var new_x = x_offset + (i * space_per_player);
-			console.log('old location: ' + players[i].pos.x.toString());
+			var new_x = 2*x_offset + (i * space_per_player);
 			players[i].pos = {'x': new_x, 'y': y_offset};
-			console.log('new location: ' + new_x);
 		}
 	};
 	addPlayer = function(name) {
