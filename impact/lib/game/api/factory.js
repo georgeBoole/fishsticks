@@ -47,12 +47,21 @@ ig.module(
 		if (cart_id in cart_lookup) {
 			var p = player_lookup[player_name];
 			var cart = cart_lookup[cart_id];
-			debug('lookup:'+cart_lookup+'cart_id:'+cart_id+'cart:'+cart);
-			cart.kill(p);
+			cart.getShot(p);
 			delete cart_lookup[cart_id];
 		}
 		else {
 			console.log('cannot find cart ' + cart_id + ' and cannot kill it');
+		}
+	};
+	destroyCart = function(cart_id) {
+		if (cart_id in cart_lookup) {
+			var cart = cart_lookup[cart_id];
+			cart.kill();
+			delete cart_lookup[cart_id];
+		}
+		else {
+			console.log('cannot find cart ' + cart_id + ' and cannot destroy it');
 		}
 	};
 	addLocalPlayer = function(name) {

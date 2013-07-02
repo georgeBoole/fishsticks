@@ -49,6 +49,9 @@ ig.module(
 		fireShot(player_name,cart_id);
 		killCart(cart_id,player_name);
 	});
+	socket.on('deleteCart', function(cart_id) {
+
+	});
 	socket.on('rejected', function(msg) {
 		console.log('CONNECTION REJECTED: ' + msg);
 		STATUS = 'R';

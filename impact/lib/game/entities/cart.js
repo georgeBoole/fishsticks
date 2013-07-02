@@ -50,12 +50,12 @@ ig.module(
 		explode: function() {
 			ig.game.spawnEntity(EntityExplosion,this.pos.x - 16,this.pos.y - 16,{});
 		},
-		kill: function(player) {
+		getShot: function(player) {
 			if(this.points > 20) {
 				this.explode();
 				this.emitSmoke(player);
 			}
-			this.parent();
+			this.kill();
 		},
 		draw: function() {
 			this.parent();
@@ -63,8 +63,12 @@ ig.module(
 		update: function() {
 			this.parent();
 			//kills cart if it goes off screen
-			if((this.vel.x < 0 && this.pos.x < -this.size.x) || (this.vel.x > 0 && this.pos.x > ig.system.width + this.size.x)) {
-				this.points = 0;
+			// if((this.vel.x < 0 && this.pos.x < -this.size.x) || (this.vel.x > 0 && this.pos.x > ig.system.width + this.size.x)) {
+			// 	this.points = 0;
+			// 	this.kill();
+			// }
+			if (this.pos.x < -3*WIDTH || this.pos.x > 3*WIDTH) {
+				console.log('got waaay out of bounds, killing it');
 				this.kill();
 			}
 		}

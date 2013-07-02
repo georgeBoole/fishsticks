@@ -46,6 +46,8 @@ var HEIGHT={{ system.height }};
 var playerlist = [];
 var carts = {};
 var cart_id = 0;
+var traffic = [];
+var y_to_row = {};
 
 app.listen(SERVER_PORT);
 
@@ -57,7 +59,7 @@ function build_create_cart() {
 	var row_y = [];
 	for (var r = 0; r < NUM_ROWS; r++) {
 		row_y[r] = base_y + (row_height * r);
-
+		y_to_row[row_y[r]] = r;
 	}
 
 
@@ -82,6 +84,7 @@ function build_create_cart() {
 			carts[c.uuid] = c;
 		}
 		io.sockets.emit('spawnCarts', new_carts);
+		traffic[row] += d * qty;
 	};
 	return create;
 }
@@ -121,7 +124,7 @@ function isHit(sx, sy, cx, cy) {
 }
 function spawnCarts() {
 	if (playerlist && playerlist.length >= 1) {
-		create_cart(CART_BATCH_SIZE);
+		create_cart(Math.floor(Math.random() * 3 + 1));
 	}
 }
 var last_update = null;
@@ -133,6 +136,11 @@ function updateCarts() {
 			var ct = carts[k];
 			ct.x += ct.vx * dt;
 			ct.y += ct.vy * dt;
+			if ((ct.vx > 0 && ct.x > WIDTH) || (ct.vx <= 0 && ct.x < -CART_SIZE.x)) {
+				traffic[y_to_row[ct.y]] -= ct.vx > 0 ? 1: -1;
+				io.sockets.emit('deleteCart', ct.uuid);
+				delete carts[k];
+			}
 		}
 		last_update = now;
 	}
@@ -150,6 +158,7 @@ io.sockets.on('connection', function(socket) {
 			ct = carts[i];
 			if (isHit(x, y, ct.x, ct.y)) {
 				io.sockets.emit('hitCart', name, i);
+				traffic[y_to_row[ct.y]] -= ct.vx > 0 ? 1: -1;
 				delete carts[i];
 				return;
 			}
