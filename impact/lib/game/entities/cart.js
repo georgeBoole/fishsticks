@@ -6,8 +6,8 @@ ig.module(
 	'game.entities.explosion'
 ).defines(function() {
 	EntityCart = ig.Entity.extend({
-		animSheet: new ig.AnimationSheet('media/cartSpriteSheetFlat.png',32,32),
-		size: {x:32,y:32},
+		animSheet: new ig.AnimationSheet('media/cartSpriteSheetLargeFlat.png',62,52),
+		size: {x:62,y:52},
 		dirs: {'left':-1,'right':1},
 		points: 5,
 		smoke_multiplier: 5,

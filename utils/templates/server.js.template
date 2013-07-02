@@ -36,7 +36,7 @@ var {{param|upper}}={{game[param]}};
 {% endif %}
 {% endfor %}
 // Variable declarations hardcoded into template
-var CART_SIZE = {x: 48, y: 32};
+var CART_SIZE = {x: 62, y: 51};
 var ROW_Y_VALUES = [40, 100, 160, 220];
 var ROW_DIRECTIONS = ROW_Y_VALUES.map(function(r) { return Math.random() >= .5 ? 1 : -1; });
 var ROWS = [-40,700]
