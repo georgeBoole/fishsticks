@@ -10,7 +10,7 @@ ig.module(
 		size: {x:CART_SIZE.x,y:CART_SIZE.y},
 		dirs: {'left':-1,'right':1},
 		points: 5,
-		smoke_multiplier: 5,
+		smoke_multiplier: 25,
 		smoke_speed: 400,
 		accel_magnitude: 100,
 		maxVel: {x:1024, y:1024},
@@ -45,7 +45,7 @@ ig.module(
 			ig.game.spawnEntity(EntityExplosion,this.pos.x - 16,this.pos.y - 16,{});
 		},
 		getShot: function(player) {
-			if(this.points > 20) {
+			if(this.points < 20) {
 				this.explode();
 				this.emitSmoke(player);
 			}

@@ -11,11 +11,11 @@ ig.module(
 		timer: new ig.Timer(0.25),
 		init: function(x,y,settings) {
 			
-			if(Math.random() > 0.1) {
+			if(Math.random() > 0.5) {
 				this.addAnim('idle',1,[0]);
 				
 			} else {
-				this.addAnim('fire',0.2,[0,1]);
+				this.addAnim('fire',0.1,[0,1]);
 			}
 			this.parent(x,y,settings);
 		},
