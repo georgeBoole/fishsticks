@@ -5,8 +5,9 @@ ig.module(
 	'game.entities.smoke'
 ).defines(function() {
 	EntityShot = ig.Entity.extend({
-		animSheet: new ig.AnimationSheet('media/shot.png', 4, 8),
-		size: {x: 4,y: 8},
+		//animSheet: new ig.AnimationSheet('media/shot.png', 4, 8),
+		animSheet: new ig.AnimationSheet('media/flare.png', 32, 32),
+		size: {x: 32,y: 32},
 		speed: 1000,
 		maxVel: {x:1000,y:1000},
 		close_enough: 60,
@@ -15,7 +16,7 @@ ig.module(
 		init: function(x,y,settings) {
 			this.parent(x,y,settings);
 			this.reorient(this.angle);
-			this.addAnim('idle',1,[0]);
+			this.addAnim('idle',1.5 / 32.0,[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]);
 			this.currentAnim.angle = this.angle + Math.PI/2;
 		},
 		kill: function() {
