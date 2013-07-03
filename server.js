@@ -26,7 +26,7 @@ var NAME="fishsticks";
 
 
 
-var CART_BATCH_SIZE=3;
+var CART_BATCH_SIZE=4;
 
 
 
@@ -34,11 +34,11 @@ var GALLERY_OFFSETS={ 'top':0.05, 'bottom':0.15 };
 
 
 
-var CART_SPAWN_DELAY=2500;
+var CART_SPAWN_DELAY=1800;
 
 
 
-var CART_SPEED=300;
+var CART_SPEED=400;
 
 
 
@@ -163,7 +163,7 @@ function updateCarts() {
 		}
 		last_update = now;
 	}
-	io.sockets.emit('message', 'traffic: ' + traffic.join(','));
+	//io.sockets.emit('message', 'traffic: ' + traffic.join(','));
 }
 io.sockets.on('connection', function(socket) {
 

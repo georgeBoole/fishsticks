@@ -49,7 +49,7 @@ ig.module(
 		STATUS = 'R';
 	});
 	requestShot = function(player_name, x, y, ts) {
-		console.log(player_name + ' requesting a shot');
+		//console.log(player_name + ' requesting a shot');
 		socket.emit('attemptShot', player_name, x, y, ts);
 	};
 	initializeLocalPlayer = function(player_name) {

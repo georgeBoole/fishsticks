@@ -151,7 +151,7 @@ function updateCarts() {
 		}
 		last_update = now;
 	}
-	io.sockets.emit('message', 'traffic: ' + traffic.join(','));
+	//io.sockets.emit('message', 'traffic: ' + traffic.join(','));
 }
 io.sockets.on('connection', function(socket) {
 
