@@ -2,6 +2,9 @@ var app = require('http').createServer(handler);
 var io = require('socket.io').listen(app);
 io.set('log level', 0);
 
+// var redis = require('redis'),
+// 	client = redis.createClient();
+
 var fs = require('fs');
 
 
@@ -58,7 +61,7 @@ var NUM_ROWS=5;
 var CART_SIZE={ 'x':64, 'y':64 };
 
 
-var WIDTH=1280;
+var WIDTH=1800;
 var HEIGHT=1024;
 // Variable declarations hardcoded into template
 var playerlist = [];
@@ -80,6 +83,7 @@ function build_create_cart() {
 	for (var r = 0; r < NUM_ROWS; r++) {
 		row_y[r] = base_y + (row_height * r);
 		y_to_row[row_y[r]] = r;
+		traffic[r] = 0;
 	}
 
 
@@ -159,6 +163,7 @@ function updateCarts() {
 		}
 		last_update = now;
 	}
+	io.sockets.emit('message', 'traffic: ' + traffic.join(','));
 }
 io.sockets.on('connection', function(socket) {
 

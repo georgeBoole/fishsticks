@@ -7,6 +7,9 @@ io.configure(function () {
   io.set("polling duration", 10); 
 });
 {% endif %}
+// var redis = require('redis'),
+// 	client = redis.createClient();
+
 var fs = require('fs');
 
 {% if server.logging %}
@@ -68,6 +71,7 @@ function build_create_cart() {
 	for (var r = 0; r < NUM_ROWS; r++) {
 		row_y[r] = base_y + (row_height * r);
 		y_to_row[row_y[r]] = r;
+		traffic[r] = 0;
 	}
 
 
@@ -147,6 +151,7 @@ function updateCarts() {
 		}
 		last_update = now;
 	}
+	io.sockets.emit('message', 'traffic: ' + traffic.join(','));
 }
 io.sockets.on('connection', function(socket) {
 
