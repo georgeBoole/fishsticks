@@ -1,10 +1,7 @@
 var app = require('http').createServer(handler);
 var io = require('socket.io').listen(app);
 io.set('log level', 0);
-io.configure(function () { 
-  io.set("transports", ["xhr-polling"]); 
-  io.set("polling duration", 10); 
-});
+
 var fs = require('fs');
 
 
@@ -61,8 +58,8 @@ var NUM_ROWS=5;
 var CART_SIZE={ 'x':64, 'y':64 };
 
 
-var WIDTH=800;
-var HEIGHT=600;
+var WIDTH=1280;
+var HEIGHT=1024;
 // Variable declarations hardcoded into template
 var playerlist = [];
 var carts = {};

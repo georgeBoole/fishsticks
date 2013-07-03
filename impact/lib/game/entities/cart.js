@@ -23,12 +23,6 @@ ig.module(
 			} else {
 				this.addAnim('idle',1,[animID]);
 			}
-			if (this.uuid == undefined) {
-				// something is really wrong, assign null
-				// should never get here
-				//console.log('Cart created without uuid specified');
-				this.uuid = null;
-			}
 			if (this.val == undefined) {
 				this.val = 1;
 			}
@@ -62,13 +56,7 @@ ig.module(
 		},
 		update: function() {
 			this.parent();
-			//kills cart if it goes off screen
-			// if((this.vel.x < 0 && this.pos.x < -this.size.x) || (this.vel.x > 0 && this.pos.x > ig.system.width + this.size.x)) {
-			// 	this.points = 0;
-			// 	this.kill();
-			// }
 			if (this.pos.x < -3*WIDTH || this.pos.x > 3*WIDTH) {
-				console.log('got waaay out of bounds, killing it');
 				this.kill();
 			}
 		}

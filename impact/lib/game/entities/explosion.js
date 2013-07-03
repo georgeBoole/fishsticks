@@ -20,7 +20,6 @@ ig.module(
 		update: function() {
 			this.parent();
 			if(this.currentAnim.loopCount > 1) {
-				console.log("EXPLO DEAD");
 				this.kill();
 			}
 		}
