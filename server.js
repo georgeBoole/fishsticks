@@ -197,7 +197,7 @@ io.sockets.on('connection', function(socket) {
 		}
 	});
 	socket.on('initializePlayer', function(name) {
-		var valid_name = name.length > MAX_NAME_LENGTH ? name.slice(0, MAX_NAME_LENGTH) : name;
+		var valid_name = (name != undefined) && (name.length > MAX_NAME_LENGTH) ? name.slice(0, MAX_NAME_LENGTH) : name;
 		socket.clientname = valid_name;
 		socket.emit('registered', valid_name, playerlist && playerlist.length > 0 ? playerlist : []);
 		playerlist.push(valid_name);
