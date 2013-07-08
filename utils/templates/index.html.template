@@ -38,7 +38,7 @@
 		var NUM_ROWS= {{ game.num_rows }};
 		{% endif %}
 		{% if 'gallery_offsets' in game %}
-		var GALLERY_OFFSETS= {{ game.gallery_offsets }};
+		var GALLERY_OFFSETS={ 'x':{{game.gallery_offsets.top}}, 'y':{{game.gallery_offsets.bottom}} };
 		{% endif %}
 	</script>
 	<script type="text/javascript" src="{{ code }}"></script>
