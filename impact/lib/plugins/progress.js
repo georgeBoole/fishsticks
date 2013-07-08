@@ -6,9 +6,9 @@ ig.module(
 ).defines(function(){ 
 
  EntityProgress = ig.Entity.extend({
-	color: [0,179,255],
-	borderColor: [255,204,0],
-	barColor: [51,255,0],
+	color: [255,179,0],
+	borderColor: [0,204,255],
+	barColor: [51,120,30],
 	size: {'x':40, 'y':10},
 	margin: 29,
 	opacity: .85,
