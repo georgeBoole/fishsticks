@@ -1,15 +1,15 @@
 ig.module(
-	'game.entities.explosion'
+	'game.entities.pipe'
 ).requires(
 	'impact.entity'
 ).defines(function() {
-	EntityExplosion = ig.Entity.extend({
-		animSheet: new ig.AnimationSheet('media/bigExplosion.png', 64, 64),
-		size: {x: 64,y: 64},
+	EntityPipe = ig.Entity.extend({
+		animSheet: new ig.AnimationSheet('media/pipe.png', 1000, 163),
+		size: {x: 1000,y: 163},
 		maxVel: {x:1000,y:1000},
 		init: function(x,y,settings) {
-			this.addAnim('boom',0.02,[0,1,2,3,4,5,6,7,8,9]);
 			this.parent(x,y,settings);
+			this.addAnim('idle',1,[0]);
 		},
 		kill: function() {
 			this.parent();
@@ -19,9 +19,6 @@ ig.module(
 		},
 		update: function() {
 			this.parent();
-			if(this.currentAnim.loopCount >= 1) {
-				this.kill();
-			}
 		}
 	});
 });
