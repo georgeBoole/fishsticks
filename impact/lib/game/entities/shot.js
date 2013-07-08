@@ -8,8 +8,8 @@ ig.module(
 		//animSheet: new ig.AnimationSheet('media/shot.png', 4, 8),
 		animSheet: new ig.AnimationSheet('media/flare.png', 32, 32),
 		size: {x: 32,y: 32},
-		speed: 1000,
-		maxVel: {x:1000,y:1000},
+		speed: 5000,
+		maxVel: {x:5000,y:5000},
 		close_enough: 60,
 		OB: 50,
 		particle_emit_timer: new ig.Timer(0.04),
@@ -20,6 +20,7 @@ ig.module(
 			this.currentAnim.angle = this.angle + Math.PI/2;
 		},
 		kill: function() {
+			console.log(this.vel);
 			this.parent();
 		},
 		draw: function() {
