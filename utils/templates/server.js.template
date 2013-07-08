@@ -138,7 +138,7 @@ function spawnCarts() {
 function updatePlayers() {
 	var state = {};
 	for (var name in playerState) {
-		playerState[name]['progress'] -= .02;
+		playerState[name]['progress'] -= .08;
 		state[name] = {'score':playerState[name]['score'],
 					   'progress':(playerState[name]['progress'] % 12) / 12.0
 					  };
