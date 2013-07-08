@@ -2,7 +2,8 @@ ig.module(
 	'game.entities.player'
 ).requires(
 	'impact.entity',
-	'impact.font'
+	'impact.font',
+	'plugins.progress'
 ).defines(function() {
 	EntityPlayer = ig.Entity.extend({
 		animSheet: new ig.AnimationSheet('media/playerSpriteSheet.png',32,32),
@@ -13,11 +14,19 @@ ig.module(
 		score: 0,
 		color: null,
 		zIndex: 100,
+		progressOffset:25,
+		testBool: true,
 		init: function(x,y,settings){
 			this.parent(x,y,settings);
 			this.addAnim('idle',1,[this.color]);
+			this.progress_bar = ig.game.spawnEntity(EntityProgress, x, y);
+			this.progress_bar.setProgress(0.5);
+		},
+		moveProgressBar: function() {
+			this.progress_bar.pos = {x:this.pos.x ,y:this.pos.y - this.progressOffset};
 		},
 		kill: function() {
+			this.progress_bar.kill();
 			this.parent();
 		},
 		draw: function() {

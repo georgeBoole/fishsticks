@@ -3,17 +3,18 @@ ig.module(
 )
 .requires(
 	'impact.entity'
-).defines(function(){ "use strict";
+).defines(function(){ 
 
-var EntityProgress = ig.Entity.extend({
+ EntityProgress = ig.Entity.extend({
 	color: [0,179,255],
 	borderColor: [255,204,0],
 	barColor: [51,255,0],
-	size: {'x':28, 'y':4},
+	size: {'x':40, 'y':10},
 	margin: 29,
 	opacity: .85,
 	borderWidth: 1,
 	progress: 0.0,
+	zIndex: 110,
 	init: function(x,y,settings) {
 		this.parent(x,y,settings);
 		this._context = ig.system.context;
@@ -31,6 +32,7 @@ var EntityProgress = ig.Entity.extend({
 			this._context.strokeStyle = 'rgba(' + this.borderColor[0] + ',' + this.borderColor[1] + ',' + this.borderColor[2] + ',' + this.opacity + ')';
 			this._context.lineWidth = this.borderWidth;
 		}
+		//console.log('POSX: ' + this.pos.x + 'posY: ' + this.pos.y);
 		var x = SCALE * (this.pos.x - ig.game.screen.x);
 		var y = SCALE * (this.pos.y - ig.game.screen.y);
 

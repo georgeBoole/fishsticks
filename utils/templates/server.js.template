@@ -130,9 +130,13 @@ function isHit(sx, sy, cx, cy) {
 	// return (sx >= (cx - x_offset) && (sx <= (cx - x_offset) + target_size.x) && (sy >= cy && sy)
 }
 function spawnCarts() {
+	io.sockets.emit('decrementCombo',COMBO_DELTA);
 	if (playerlist && playerlist.length >= 1) {
 		create_cart(Math.floor(Math.random() * 3 + 1));
 	}
+}
+function updateCombos() {
+	io.sockets.emit('decrementCombo',COMBO_DELTA);
 }
 var last_update = null;
 function updateCarts() {
@@ -151,6 +155,7 @@ function updateCarts() {
 		}
 		last_update = now;
 	}
+
 	//io.sockets.emit('message', 'traffic: ' + traffic.join(','));
 }
 io.sockets.on('connection', function(socket) {
@@ -202,6 +207,6 @@ io.sockets.on('connection', function(socket) {
 		socket.broadcast.emit('leave', socket.clientname);
 	});
 });
-
+setInterval(updateCombos, 1000);
 setInterval(spawnCarts, CART_SPAWN_DELAY);
 setInterval(updateCarts, CART_UPDATE_DELAY);

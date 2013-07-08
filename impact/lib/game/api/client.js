@@ -35,8 +35,8 @@ ig.module(
 			carts.forEach(function(c) {
 				makeCart(c.x, c.y, c.vx, c.vy, c.val, c.uuid);
 			});
+			ig.game.sortEntitiesDeferred();
 		}
-		ig.game.sortEntitiesDeferred();
 	});
 	socket.on('hitCart', function(player_name, cart_id) {
 		fireShot(player_name,cart_id);
@@ -48,6 +48,10 @@ ig.module(
 	socket.on('rejected', function(msg) {
 		console.log('CONNECTION REJECTED: ' + msg);
 		STATUS = 'R';
+	});
+	socket.on('decrementCombo', function(ammount) {
+		console.log("DECREENT");
+		decrementPlayerCombos(ammount);
 	});
 	requestShot = function(player_name, x, y, ts) {
 		//console.log(player_name + ' requesting a shot');

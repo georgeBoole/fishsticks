@@ -42,6 +42,7 @@
 		{% endif %}
 	</script>
 	<script type="text/javascript" src="{{ code }}"></script>
+	
 
 </head>
 <body>

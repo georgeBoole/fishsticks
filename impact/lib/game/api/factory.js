@@ -83,7 +83,9 @@ ig.module(
 		var space_per_player = (width - (2*x_offset)) / num;
 		for (var i = 0; i < num; i++) {
 			var new_x = 2*x_offset + (i * space_per_player);
-			players[i].pos = {'x': new_x, 'y': y_offset};
+			var p = players[i];
+			p.pos = {'x': new_x, 'y': y_offset};
+			p.moveProgressBar();
 		}
 	};
 	addPlayer = function(name) {
@@ -126,6 +128,14 @@ ig.module(
 			}
 		}
 		repositionPlayers();
+	};
+	decrementPlayerCombos = function(ammount) {
+		var players = ig.game.getEntitiesByType(EntityPlayer);
+		for(var p in players){
+			if(players[p]){
+				players[p].progress_bar.updateProgress(-ammount);
+			}
+		}
 	};
 	displayMessage = function(msg) {
 		console.log(msg);
