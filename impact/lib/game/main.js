@@ -6,7 +6,8 @@ ig.module(
 	'impact.font',
 	'game.api.client',
 	'game.entities.cart',
-	'game.entities.bg'
+	'game.entities.bg',
+	'game.entities.track'
 )
 .defines(function(){
 
@@ -30,6 +31,7 @@ AngryMiner = ig.Game.extend({
 	},
 	initBackground: function() {
 		this.spawnEntity(EntityBg,0,0);
+		this.spawnEntity(EntityTrack,0,0);
 	},
 	switchStatus: function() {
 		var ents = ig.game.entities;

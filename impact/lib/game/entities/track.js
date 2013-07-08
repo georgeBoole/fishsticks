@@ -3,7 +3,7 @@ ig.module(
 ).requires(
 	'impact.entity'
 ).defines(function() {
-	EntityPipe = ig.Entity.extend({
+	EntityTrack = ig.Entity.extend({
 		animSheet: new ig.AnimationSheet('media/track.png', 1000, 163),
 		size: {x: 1000,y: 163},
 		maxVel: {x:1000,y:1000},
