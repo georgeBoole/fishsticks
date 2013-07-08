@@ -20,7 +20,6 @@ ig.module(
 		maxVel: {x:1024, y:1024},
 		init: function(x,y,settings) {
 			this.parent(x,y,settings);
-			console.log(FPS);
 			var animID = Math.floor(Math.random()*5) * 3;
 			this.points *= (animID/3) + 1;
 			// if(animID === 4) {
