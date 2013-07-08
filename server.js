@@ -1,56 +1,68 @@
 var app = require('http').createServer(handler);
 var io = require('socket.io').listen(app);
 io.set('log level', 0);
-{% if server.heroku %}
-io.configure(function () { 
-  io.set("transports", ["xhr-polling"]); 
-  io.set("polling duration", 10); 
-});
-{% endif %}
+
 // var redis = require('redis'),
 // 	client = redis.createClient();
 
 var fs = require('fs');
 
-{% if server.logging %}
 
-var bunyan = require('bunyan');
 
-var log = bunyan.createLogger({
-	name: 'server_logger',
-	streams: [
-		{% for level in server.logger.levels %}
-		{
-			level: '{{ level }}', stream: '{{ server.logger.logfile }}'
-			
-		}{% if loop.last == false %},{% endif %}
-		{% endfor %}
-	]
-});
-{% endif %}
 
-{% if config is defined %}
-// Server configuration
-{% endif %}
-{% for param in server.config %}
-var {{ param|upper }}={{ server.config[param] }};
-{% endfor %}
-{% if game is defined %}
+
+var MAX_NAME_LENGTH=10;
+
+var MAX_PLAYERS=6;
+
+var SERVER_PORT=8080;
+
+
 // Game rules configuration
-{% endif %}
-{% for param in game %}
-{% if param=='name' %}
-var {{ param|upper }}="{{ game[param] }}";
-{% elif param=='cart_size' %}
-var {{ param|upper }}={ 'x':{{game.cart_size.x}}, 'y':{{game.cart_size.y}} };
-{% elif param=='gallery_offsets' %}
-var {{ param|upper }}={ 'top':{{game.gallery_offsets.top}}, 'bottom':{{game.gallery_offsets.bottom}} };
-{% else %}
-var {{ param|upper }}={{ game[param] }};
-{% endif %}
-{% endfor %}
-var WIDTH={{ system.width }};
-var HEIGHT={{ system.height }};
+
+
+
+var NAME="fishsticks";
+
+
+
+var CART_BATCH_SIZE=4;
+
+
+
+var GALLERY_OFFSETS={ 'top':0.05, 'bottom':0.15 };
+
+
+
+var CART_SPAWN_DELAY=1800;
+
+
+
+var CART_SPEED=400;
+
+
+
+var CART_UPDATE_DELAY=250;
+
+
+
+var CART_TARGET_FACTOR=1.2;
+
+
+
+var MIN_CART_SPACING=8;
+
+
+
+var NUM_ROWS=5;
+
+
+
+var CART_SIZE={ 'x':64, 'y':64 };
+
+
+var WIDTH=1800;
+var HEIGHT=1024;
 // Variable declarations hardcoded into template
 var playerlist = [];
 var carts = {};
@@ -156,7 +168,7 @@ function updateCarts() {
 io.sockets.on('connection', function(socket) {
 
 	socket.on('log', function(string) {
-		{% if server.logging %}log.debug(string);{% endif %}
+		
 	});
 	socket.on('attemptShot', function(name, x, y, timestamp) {
 		var hit = false;

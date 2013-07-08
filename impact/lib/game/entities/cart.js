@@ -5,6 +5,10 @@ ig.module(
 	'game.entities.smoke',
 	'game.entities.explosion'
 ).defines(function() {
+	var SMOKE_COLORS = ['red', 'purple', 'blue', 'green', 'yellow', 'pink', 'pink2', 'brown'];
+	var rand_col = function() {
+		return SMOKE_COLORS[Math.floor(Math.random() * SMOKE_COLORS.length)];
+	};
 	EntityCart = ig.Entity.extend({
 		animSheet: new ig.AnimationSheet('media/cartSpriteDetailed.png',CART_SIZE.x,CART_SIZE.y),
 		size: {x:CART_SIZE.x,y:CART_SIZE.y},
@@ -30,16 +34,17 @@ ig.module(
 			console.log(this.currentAnim);
 		},
 		emitSmoke: function(player) {
-			console.log(player);
-			for(var i = 0; i < this.points*this.smoke_multiplier*3*Math.random(); i++) {
+			//console.log(player);
+			var color = rand_col();
+			for(var i = 0; i < Math.pow(this.points, 2)*this.smoke_multiplier*5*Math.random(); i++) {
 				var nx = Math.random() <= 0.5 ? 1 : -1;
 				var ny = Math.random() > 0.2 ? -1 : 1;
 				var vx = nx*this.smoke_speed*Math.cos(Math.random()*Math.PI);
 				var vy = ny*this.smoke_speed*Math.sin(Math.random()*Math.PI);
-				var angle = this.angleTo(player);
+				var angle = this.angleTo(player) + ((Math.random() - 0.5) * Math.PI/2);
 				var ax = this.accel_magnitude*Math.cos(angle);
 				var ay = this.accel_magnitude*Math.sin(angle);
-				var settings = {vel: {x:vx, y: vy}, accel: {x:ax, y:ay}};
+				var settings = {vel: {x:vx, y: vy}, accel: {x:ax, y:ay}, 'color':color};
 				ig.game.spawnEntity(EntitySmoke,this.pos.x,this.pos.y,settings);
 			}
 		},
