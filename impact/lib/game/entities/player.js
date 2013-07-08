@@ -12,6 +12,7 @@ ig.module(
 		kills: 0,
 		score: 0,
 		color: null,
+		zIndex: 100,
 		init: function(x,y,settings){
 			this.parent(x,y,settings);
 			this.addAnim('idle',1,[this.color]);

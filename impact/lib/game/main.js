@@ -29,9 +29,18 @@ AngryMiner = ig.Game.extend({
 		this.local_player = prompt('Enter your name:');
 		initializeLocalPlayer(this.local_player);
 	},
+	initTracks: function() {
+		var base_y = (GALLERY_OFFSETS['x'] * HEIGHT) - 8;
+		var gallery_height = (1.0 - (GALLERY_OFFSETS['x'] + GALLERY_OFFSETS['x'])) * HEIGHT;
+		var row_height = (gallery_height / NUM_ROWS) - 18;
+		for(var i = 0; i < NUM_ROWS; i++) {
+			var track_y = base_y + (row_height * i) + i;
+			ig.game.spawnEntity(EntityTrack,0,track_y);
+		}
+	},
 	initBackground: function() {
 		this.spawnEntity(EntityBg,0,0);
-		this.spawnEntity(EntityTrack,0,32);
+		this.initTracks();
 	},
 	switchStatus: function() {
 		var ents = ig.game.entities;
