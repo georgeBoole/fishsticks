@@ -31,7 +31,7 @@ AngryMiner = ig.Game.extend({
 	},
 	initBackground: function() {
 		this.spawnEntity(EntityBg,0,0);
-		this.spawnEntity(EntityTrack,0,0);
+		this.spawnEntity(EntityTrack,0,32);
 	},
 	switchStatus: function() {
 		var ents = ig.game.entities;

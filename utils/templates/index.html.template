@@ -34,6 +34,12 @@
 		{% if 'cart_size' in game %}
 		var CART_SIZE={ 'x':{{game.cart_size.x}}, 'y':{{game.cart_size.y}} };
 		{% endif %}
+		{% if 'num_rows' in game %}
+		var NUM_ROWS= {{ game.num_rows }};
+		{% endif %}
+		{% if 'gallery_offsets' in game %}
+		var GALLERY_OFFSETS= {{ game.gallery_offsets }};
+		{% endif %}
 	</script>
 	<script type="text/javascript" src="{{ code }}"></script>
 
