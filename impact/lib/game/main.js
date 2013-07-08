@@ -5,7 +5,8 @@ ig.module(
 	'impact.game',
 	'impact.font',
 	'game.api.client',
-	'game.entities.cart'
+	'game.entities.cart',
+	'game.entities.bg'
 )
 .defines(function(){
 
@@ -17,6 +18,7 @@ AngryMiner = ig.Game.extend({
 	init: function() {
 		this.initPlayer();
 		this.initInput();
+		this.initBackground();
 	},
 	initInput: function() {
 		ig.input.bind(ig.KEY.MOUSE1, 'shoot');
@@ -25,6 +27,9 @@ AngryMiner = ig.Game.extend({
 	initPlayer: function() {
 		this.local_player = prompt('Enter your name:');
 		initializeLocalPlayer(this.local_player);
+	},
+	initBackground: function() {
+		this.spawnEntity(EntityBg,0,0);
 	},
 	switchStatus: function() {
 		var ents = ig.game.entities;

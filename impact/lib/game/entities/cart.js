@@ -6,7 +6,7 @@ ig.module(
 	'game.entities.explosion'
 ).defines(function() {
 	EntityCart = ig.Entity.extend({
-		animSheet: new ig.AnimationSheet('media/cartSpriteSheetLargeFlat.png',CART_SIZE.x,CART_SIZE.y),
+		animSheet: new ig.AnimationSheet('media/cartSpriteDetailed.png',CART_SIZE.x,CART_SIZE.y),
 		size: {x:CART_SIZE.x,y:CART_SIZE.y},
 		dirs: {'left':-1,'right':1},
 		points: 5,
@@ -16,16 +16,18 @@ ig.module(
 		maxVel: {x:1024, y:1024},
 		init: function(x,y,settings) {
 			this.parent(x,y,settings);
-			var animID = Math.floor(Math.random()*5);
+			var animID = Math.floor(Math.random()*5) * 3;
 			this.points *= animID + 1;
-			if(animID === 4) {
-				this.addAnim('ticker',0.25,[4,5,6,7,6,5,4]);
-			} else {
-				this.addAnim('idle',1,[animID]);
-			}
-			if (this.val == undefined) {
-				this.val = 1;
-			}
+			// if(animID === 4) {
+			// 	this.addAnim('ticker',0.25,[4,5,6,7,6,5,4]);
+			// } else {
+			// 	this.addAnim('idle',1,[animID]);
+			// }
+			// if (this.val == undefined) {
+			// 	this.val = 1;
+			// }
+			this.addAnim('idle', 0.25, [animID, animID + 1, animID + 2]);
+			console.log(this.currentAnim);
 		},
 		emitSmoke: function(player) {
 			console.log(player);
