@@ -49,9 +49,11 @@ ig.module(
 		console.log('CONNECTION REJECTED: ' + msg);
 		STATUS = 'R';
 	});
-	socket.on('decrementCombo', function(ammount) {
-		console.log("DECREENT");
-		decrementPlayerCombos(ammount);
+	socket.on('updatePlayers', function(players) {
+		for (var name in players) {
+			var ps = players[name];
+			updatePlayerState(name, ps['score'], ps['progress']);
+		}
 	});
 	requestShot = function(player_name, x, y, ts) {
 		//console.log(player_name + ' requesting a shot');

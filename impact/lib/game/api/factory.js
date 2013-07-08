@@ -23,13 +23,18 @@ ig.module(
 	var occupied_player_colors = [];
 	Object.size = function(obj) { var size = 0, key; for (key in obj) { if (obj.hasOwnProperty(key)) size++; } return size; };
 	
+	updatePlayerState = function(name, score, progress) {
+		var player = player_lookup[name];
+		player.score = score;
+		player.setProgress(progress);
+	};
 	fireShot = function(playerName,cart_id) {
 		var p = player_lookup[playerName];
 		var c = cart_lookup[cart_id];
 		if (!p || !c) {
 			return;
 		}
-		p.score += c.points;
+		//p.score += c.points;
 		if (p.kills) {
 			p.kills += 1;
 		}
@@ -129,14 +134,19 @@ ig.module(
 		}
 		repositionPlayers();
 	};
-	decrementPlayerCombos = function(ammount) {
-		var players = ig.game.getEntitiesByType(EntityPlayer);
-		for(var p in players){
-			if(players[p]){
-				players[p].progress_bar.updateProgress(-ammount);
-			}
-		}
-	};
+	// decrementPlayerCombos = function(ammount) {
+	// 	var players = ig.game.getEntitiesByType(EntityPlayer);
+	// 	for(var p in players){
+	// 		if(players[p] != undefined){
+	// 			if (players[p].progress_bar == undefined && players[p].pos != undefined) {
+	// 				players[p].progress_bar = ig.game.spawnEntity(EntityProgress, players[p].pos.x, players[p].pos.y - 25, {});
+	// 			}
+	// 			if (players[p].progress_bar != undefined) {
+	// 				players[p].progress_bar.updateProgress(-ammount);
+	// 			}
+	// 		}
+	// 	}
+	// };
 	displayMessage = function(msg) {
 		console.log(msg);
 	};

@@ -41,7 +41,7 @@ ig.module(
 			this._context.strokeRect(x,y,this.size.x, this.size.y);
 		}
 		this._context.fillStyle = 'rgba(' + this.barColor[0] + ','+ this.barColor[1] + ','+ this.barColor[2] + ',' + this.opacity + ')';
-		this._context.fillRect(x,y,this.size.x * this.progress, this.size.y);
+		this._context.fillRect(x,y,this.size.x * Math.min(1.0, Math.max(0.0, this.progress)), this.size.y);
 		this._context.restore();
 	}
 });

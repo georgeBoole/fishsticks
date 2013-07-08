@@ -22,6 +22,9 @@ ig.module(
 			this.progress_bar = ig.game.spawnEntity(EntityProgress, x, y);
 			this.progress_bar.setProgress(0.5);
 		},
+		setProgress: function(prog) {
+			this.progress_bar.setProgress(prog);
+		},
 		moveProgressBar: function() {
 			this.progress_bar.pos = {x:this.pos.x ,y:this.pos.y - this.progressOffset};
 		},

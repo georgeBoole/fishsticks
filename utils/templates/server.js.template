@@ -53,6 +53,7 @@ var WIDTH={{ system.width }};
 var HEIGHT={{ system.height }};
 // Variable declarations hardcoded into template
 var playerlist = [];
+var playerState = {};
 var carts = {};
 var cart_id = 0;
 var traffic = [];
@@ -81,7 +82,7 @@ function build_create_cart() {
 		var vx = d * CART_SPEED;
 		var cx = d > 0 ? -CART_SIZE.x : WIDTH;
 		var dxc = CART_SIZE.x + MIN_CART_SPACING;
-		var delta_x = d * dxc;
+		var delta_x = -d * dxc;
 		var new_carts = [];
 		var birth = Date.now() / 1000;
 		for (var i = 0; i < qty; i++) {
@@ -130,13 +131,19 @@ function isHit(sx, sy, cx, cy) {
 	// return (sx >= (cx - x_offset) && (sx <= (cx - x_offset) + target_size.x) && (sy >= cy && sy)
 }
 function spawnCarts() {
-	io.sockets.emit('decrementCombo',COMBO_DELTA);
 	if (playerlist && playerlist.length >= 1) {
 		create_cart(Math.floor(Math.random() * 3 + 1));
 	}
 }
-function updateCombos() {
-	io.sockets.emit('decrementCombo',COMBO_DELTA);
+function updatePlayers() {
+	var state = {};
+	for (var name in playerState) {
+		playerState[name]['progress'] -= .02;
+		state[name] = {'score':playerState[name]['score'],
+					   'progress':(playerState[name]['progress'] % 12) / 12.0
+					  };
+	}
+	io.sockets.emit('updatePlayers', state);
 }
 var last_update = null;
 function updateCarts() {
@@ -167,24 +174,17 @@ io.sockets.on('connection', function(socket) {
 		var hit = false;
 		var hit_index = -1;
 		var ct;
-		//socket.emit('message', 'attempting a shot server side');
 		for (var i in carts) {
 			ct = carts[i];
 			var client_x = ct.ix + ((timestamp - ct.birth) * ct.vx);
-			
 			var elapsedTime = (timestamp - last_update) / 1000.0;
 			var model_x = ct.x + (elapsedTime * ct.vx);
-			//socket.emit('message', 'model_x: ' + model_x + ', cart_x: ' + ct.x);
-			//socket.emit('message', 'timestamp: ' + timestamp);
-			//socket.emit('message', 'last_update: '+ last_update);
-			//socket.emit('message', client_x);
-			//socket.emit('message', timestamp);
-			//socket.emit('message', (timestamp - ct.birth));
 			if (isHit(x, y, model_x, ct.y)) {
 				io.sockets.emit('hitCart', name, i);
+				playerState[name]['score'] += (ct.val * 1);
+				playerState[name]['progress'] += (ct.val * 1);
 				traffic[y_to_row[ct.y]] -= ct.vx > 0 ? 1: -1;
 				delete carts[i];
-				//return;
 			}
 
 		}
@@ -194,10 +194,12 @@ io.sockets.on('connection', function(socket) {
 		socket.clientname = valid_name;
 		socket.emit('registered', valid_name, playerlist && playerlist.length > 0 ? playerlist : []);
 		playerlist.push(valid_name);
+		playerState[valid_name] = {'score':0, 'progress':0};
 		socket.broadcast.emit('join', valid_name);
 	});
 	socket.on('disconnect', function() {
 		delete playerlist[socket.clientname];
+		delete playerState[socket.clientname];
 		for (var i in playerlist) {
 			if (playerlist[i] == socket.clientname) {
 				playerlist.splice(i, 1);
@@ -207,6 +209,6 @@ io.sockets.on('connection', function(socket) {
 		socket.broadcast.emit('leave', socket.clientname);
 	});
 });
-setInterval(updateCombos, 1000);
+setInterval(updatePlayers, PLAYER_UPDATE_DELAY);
 setInterval(spawnCarts, CART_SPAWN_DELAY);
 setInterval(updateCarts, CART_UPDATE_DELAY);
