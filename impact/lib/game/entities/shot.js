@@ -20,7 +20,6 @@ ig.module(
 			this.currentAnim.angle = this.angle + Math.PI/2;
 		},
 		kill: function() {
-			console.log(this.vel);
 			this.parent();
 		},
 		draw: function() {

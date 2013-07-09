@@ -8,7 +8,8 @@ ig.module(
 	'game.entities.cart',
 	'game.entities.shot',
 	'game.entities.player',
-	'game.entities.shot'
+	'game.entities.shot',
+	'game.entities.reward'
 )
 .defines(function() {
 	var PLAYER_MARGIN = 0.075;
@@ -16,6 +17,8 @@ ig.module(
 	var cart_lookup = {};
 	var player_lookup = {};
 	var local_player = undefined;
+	var high_score = 0;
+	var high_score_player = undefined
 	var first_player_loc = {x:(640 * PLAYER_MARGIN),y:420};
 	var max_players = 4;
 	var player_spacing = (640 * (1 - (2 * PLAYER_MARGIN))) / max_players;
@@ -27,6 +30,14 @@ ig.module(
 		var player = player_lookup[name];
 		player.score = score;
 		player.setProgress(progress);
+		if(player.score > high_score && player != high_score_player) {
+			high_score = player.score;
+			var reward = ig.game.getEntitiesByType(EntityReward);
+			if(reward.length === 0) {
+				ig.game.spawnEntity(EntityReward,player.pos.x,player.pos.y,{});
+			}
+			reward[0].relocate(player.pos);
+		}
 	};
 	fireShot = function(playerName,cart_id) {
 		var p = player_lookup[playerName];

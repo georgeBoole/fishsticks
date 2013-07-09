@@ -15,6 +15,7 @@ ig.module(
 		color: null,
 		zIndex: 100,
 		progressOffset:25,
+		hasPrize: false,
 		testBool: true,
 		init: function(x,y,settings){
 			this.parent(x,y,settings);
