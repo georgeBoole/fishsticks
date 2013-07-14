@@ -11,7 +11,7 @@ ig.module(
 			this.parent(x,y,settings);
 			this.addAnim('idle',1,[0]);
 			this.zIndex = 300;
-			
+
 		},
 		kill: function() {
 			this.parent();
@@ -22,8 +22,8 @@ ig.module(
 		update: function() {
 			this.parent();
 			var mx = ig.input.mouse.x, my = ig.input.mouse.y;
-			this.pos.x = mx - this.size.x/2;
-			this.pos.y = my - this.size.y/2;
+			this.pos.x = mx - this.size.x/3;
+			this.pos.y = my - this.size.y/4;
 		}
 	});
 });

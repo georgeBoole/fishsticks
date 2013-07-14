@@ -43,6 +43,16 @@ ig.module(
 	makeCursor = function() {
 		ig.game.spawnEntity(EntityCursor,0,0,{});
 	};
+	initializeMusic = function() {
+		console.log("INMUSIC");
+		ig.music.add('media/music1.mp3');
+		ig.music.add('media/music2.mp3');
+		ig.music.add('media/music3.mp3');
+		ig.music.add('media/music4.mp3');
+		ig.music.add('media/music5.mp3');
+		ig.music.volume = 0.5;
+		ig.music.play();
+	};
 	fireShot = function(playerName,cart_id) {
 		var p = player_lookup[playerName];
 		//var elapsed_time = (timestamp - last_updated)/1000;
@@ -91,6 +101,7 @@ ig.module(
 		local_player = name;
 		addPlayer(name);
 		makeCursor();
+		initializeMusic();
 	};
 	repositionPlayers = function() {
 		if (!ig || !ig.system || !ig.game) {

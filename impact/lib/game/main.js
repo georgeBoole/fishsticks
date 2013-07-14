@@ -16,6 +16,11 @@ AngryMiner = ig.Game.extend({
 	big_font: new ig.Font( 'media/big_font.png' ),
 	players: [],
 	status: null,
+	music1: new ig.Sound('media/music1.mp3',false),
+	music2: new ig.Sound('media/music2.mp3',false),
+	music3: new ig.Sound('media/music3.mp3',false),
+	music4: new ig.Sound('media/music4.mp3',false),
+	music5: new ig.Sound('media/music5.mp3',false),
 	init: function() {
 		this.initPlayer();
 		this.initInput();
@@ -40,7 +45,7 @@ AngryMiner = ig.Game.extend({
 	},
 	initBackground: function() {
 		this.spawnEntity(EntityBg,0,0);
-		this.initTracks();
+		//this.initTracks();
 	},
 	switchStatus: function() {
 		var ents = ig.game.entities;
