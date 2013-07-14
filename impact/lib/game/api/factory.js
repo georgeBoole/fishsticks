@@ -25,7 +25,7 @@ ig.module(
 	var open_player_colors = [0,1,2,3,4];
 	var occupied_player_colors = [];
 	Object.size = function(obj) { var size = 0, key; for (key in obj) { if (obj.hasOwnProperty(key)) size++; } return size; };
-	
+	last_updated = null;
 	updatePlayerState = function(name, score, progress) {
 		var player = player_lookup[name];
 		player.score = score;
@@ -57,6 +57,7 @@ ig.module(
 	makeCart = function(x, y, vx, vy, val, id) {
 		var c = ig.game.spawnEntity(EntityCart, x, y, {'vel':{'x':vx, 'y':vy}, 'uuid':id,'val':val});
 		cart_lookup[id] = c;
+		last_updated = Date.now()/1000;
 		return c;
 	};
 	killCart = function(cart_id,player_name) {
