@@ -17,6 +17,7 @@ ig.module(
 		progressOffset:25,
 		hasPrize: false,
 		testBool: true,
+		level_up_sound: new ig.Sound('media/Pickup_Coin.mp3',false),
 		init: function(x,y,settings){
 			this.parent(x,y,settings);
 			this.addAnim('idle',1,[this.color]);
@@ -24,6 +25,10 @@ ig.module(
 			this.progress_bar.setProgress(0.5);
 		},
 		setProgress: function(prog) {
+			// if(Math.abs(prog - this.progress_bar.progress) > 0.3) {
+			// 	//SCORE A COIN LEVEL
+			// 	this.level_up_sound.play();
+			// }
 			this.progress_bar.setProgress(prog);
 		},
 		moveProgressBar: function() {

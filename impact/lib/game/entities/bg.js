@@ -9,7 +9,7 @@ ig.module(
 		maxVel: {x:1000,y:1000},
 		init: function(x,y,settings) {
 			this.parent(x,y,settings);
-			this.addAnim('idle',1,[0,1,2,3,4,5,6,7,8,9,9,10,10,11,11,11,9,6,3]);
+			this.addAnim('idle',20,[0,1,2,3,4,5,6,7,8,9,9,10,10,11,11,11,9,6,3]);
 		},
 		kill: function() {
 			this.parent();

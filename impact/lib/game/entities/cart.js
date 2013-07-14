@@ -10,7 +10,7 @@ ig.module(
 		return SMOKE_COLORS[Math.floor(Math.random() * SMOKE_COLORS.length)];
 	};
 	EntityCart = ig.Entity.extend({
-		animSheet: new ig.AnimationSheet('media/cartSpriteDetailed.png',CART_SIZE.x,CART_SIZE.y),
+		animSheet: new ig.AnimationSheet('media/balloonCarts.png',CART_SIZE.x,CART_SIZE.y),
 		size: {x:CART_SIZE.x,y:CART_SIZE.y},
 		dirs: {'left':-1,'right':1},
 		points: 5,
@@ -18,20 +18,16 @@ ig.module(
 		smoke_speed: 400,
 		accel_magnitude: 100,
 		maxVel: {x:1024, y:1024},
+		floatAmplitude: 20,
+		death_sound: new ig.Sound('media/fireworks.mp3',false),
 		init: function(x,y,settings) {
 			this.parent(x,y,settings);
 			var animID = Math.floor(Math.random()*5) * 3;
 			this.points *= (animID/3) + 1;
-			// if(animID === 4) {
-			// 	this.addAnim('ticker',0.25,[4,5,6,7,6,5,4]);
-			// } else {
-			// 	this.addAnim('idle',1,[animID]);
-			// }
-			// if (this.val == undefined) {
-			// 	this.val = 1;
-			// }
+			this.death_sound.volume = 0.1;
 			this.addAnim('idle', 0.1, [animID, animID + 1, animID + 2]);
 			this.zIndex = 200;
+			this.floatCoefficient = Math.random();
 			ig.game.sortEntitiesDeferred();
 		},
 		emitSmoke: function(player) {
@@ -57,6 +53,7 @@ ig.module(
 			// 	this.explode();
 			// 	this.emitSmoke(player);
 			// }
+			this.death_sound.play();
 			this.explode();
 			this.emitSmoke(player);
 			this.kill();
@@ -66,6 +63,7 @@ ig.module(
 		},
 		update: function() {
 			this.parent();
+			this.vel.y += (this.floatCoefficient * this.floatAmplitude) * Math.cos(this.pos.x);
 			if (this.pos.x < -3*WIDTH || this.pos.x > 3*WIDTH) {
 				this.kill();
 			}

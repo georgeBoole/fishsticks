@@ -136,6 +136,7 @@ function spawnCarts() {
 	}
 }
 function updatePlayers() {
+	//THIS NEEDS FIXED!
 	var state = {};
 	for (var name in playerState) {
 		playerState[name]['progress'] -= .15;
