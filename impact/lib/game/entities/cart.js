@@ -31,6 +31,8 @@ ig.module(
 			// 	this.val = 1;
 			// }
 			this.addAnim('idle', 0.1, [animID, animID + 1, animID + 2]);
+			this.zIndex = 200;
+			ig.game.sortEntitiesDeferred();
 		},
 		emitSmoke: function(player) {
 			//console.log(player);

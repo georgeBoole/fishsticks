@@ -126,7 +126,7 @@ function isHit(sx, sy, cx, cy) {
 	var ty = cy - y_offset;
 	var tw = target_size.x;
 	var th = target_size.y;
-	return (sx >= tx && sx <= tx + tw) && (sy >= ty && sy <= ty + th);
+	return (sx >= tx - 10 && sx <= tx + tw + 10) && (sy >= ty - 20 && sy <= ty + th + 20);
 	// return (sx >= (cx - x_offset)) && (sx <= (cx - x_offset) + target_size.x) && (sy >= cy && sy <= cy + CART_SIZE.y);
 	// return (sx >= (cx - x_offset) && (sx <= (cx - x_offset) + target_size.x) && (sy >= cy && sy)
 }
@@ -179,7 +179,7 @@ io.sockets.on('connection', function(socket) {
 			var client_x = ct.ix + ((timestamp - ct.birth) * ct.vx);
 			var elapsedTime = (timestamp - last_update) / 1000.0;
 			var model_x = ct.x + (elapsedTime * ct.vx);
-			if (isHit(x, y, client_x, ct.y)) {
+			if (isHit(x, y, model_x, ct.y)) {
 				io.sockets.emit('hitCart', name, i);
 				playerState[name]['score'] += (ct.val * 1);
 				playerState[name]['progress'] += (ct.val * 1);

@@ -9,7 +9,8 @@ ig.module(
 	'game.entities.shot',
 	'game.entities.player',
 	'game.entities.shot',
-	'game.entities.reward'
+	'game.entities.reward',
+	'game.entities.cursor'
 )
 .defines(function() {
 	var PLAYER_MARGIN = 0.075;
@@ -39,9 +40,14 @@ ig.module(
 			reward[0].relocate(player.pos);
 		}
 	};
+	makeCursor = function() {
+		ig.game.spawnEntity(EntityCursor,0,0,{});
+	};
 	fireShot = function(playerName,cart_id) {
 		var p = player_lookup[playerName];
+		//var elapsed_time = (timestamp - last_updated)/1000;
 		var c = cart_lookup[cart_id];
+		//c.pos.x = c.pos.x + (elapsed_time * -c.vel.x);
 		if (!p || !c) {
 			return;
 		}
@@ -84,6 +90,7 @@ ig.module(
 	addLocalPlayer = function(name) {
 		local_player = name;
 		addPlayer(name);
+		makeCursor();
 	};
 	repositionPlayers = function() {
 		if (!ig || !ig.system || !ig.game) {

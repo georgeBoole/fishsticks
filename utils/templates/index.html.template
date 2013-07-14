@@ -19,6 +19,8 @@
 			top: 0;
 			bottom: 0;
 			margin: auto;
+			cursor: url('data:image/gif;base64,R0lGODlhAQABAPAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='), auto;
+}
 		}
 	</style>
 	{% if include_jquery %}
