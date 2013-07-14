@@ -58,6 +58,7 @@ var carts = {};
 var cart_id = 0;
 var traffic = [];
 var y_to_row = {};
+var progress_halter = 6;
 var target_size  = {'x':CART_SIZE.x * CART_TARGET_FACTOR, 'y':CART_SIZE.y * CART_TARGET_FACTOR};
 var x_offset = (target_size.x - CART_SIZE.x) / 2;
 var y_offset = (target_size.y - CART_SIZE.y) / 2;
@@ -139,9 +140,18 @@ function updatePlayers() {
 	//THIS NEEDS FIXED!
 	var state = {};
 	for (var name in playerState) {
-		playerState[name]['progress'] -= .15;
+		var prog = playerState[name]['progress'];
+		
+		if(prog < 0) {
+			playerState[name]['progress'] = 0;
+		} else if(prog >= -15){
+			playerState[name]['progress'] -= .15;
+		} 
+		// else if( prog > 1) {
+		// 	playerState[name]['progress'] = 1;
+		// }
 		state[name] = {'score':playerState[name]['score'],
-					   'progress':(playerState[name]['progress'] % 12) / 12.0
+					   'progress':playerState[name]['progress']
 					  };
 	}
 	io.sockets.emit('updatePlayers', state);
@@ -183,7 +193,10 @@ io.sockets.on('connection', function(socket) {
 			if (isHit(x, y, model_x, ct.y)) {
 				io.sockets.emit('hitCart', name, i);
 				playerState[name]['score'] += (ct.val * 1);
-				playerState[name]['progress'] += (ct.val * 1);
+				playerState[name]['progress'] += (ct.val * 1)/progress_halter;
+				if(playerState[name]['progress'] >= 0.85){
+					playerState[name]['progress'] = 1;
+				}
 				traffic[y_to_row[ct.y]] -= ct.vx > 0 ? 1: -1;
 				delete carts[i];
 			}

@@ -44,7 +44,6 @@ ig.module(
 		ig.game.spawnEntity(EntityCursor,0,0,{});
 	};
 	initializeMusic = function() {
-		console.log("INMUSIC");
 		ig.music.add('media/music1.mp3');
 		ig.music.add('media/music2.mp3');
 		ig.music.add('media/music3.mp3');

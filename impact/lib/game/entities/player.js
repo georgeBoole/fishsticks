@@ -20,16 +20,21 @@ ig.module(
 		level_up_sound: new ig.Sound('media/Pickup_Coin.mp3',false),
 		init: function(x,y,settings){
 			this.parent(x,y,settings);
+			this.level_up_sound.volume = 0.1;
 			this.addAnim('idle',1,[this.color]);
 			this.progress_bar = ig.game.spawnEntity(EntityProgress, x, y);
 			this.progress_bar.setProgress(0.5);
 		},
 		setProgress: function(prog) {
-			// if(Math.abs(prog - this.progress_bar.progress) > 0.3) {
-			// 	//SCORE A COIN LEVEL
-			// 	this.level_up_sound.play();
-			// }
-			this.progress_bar.setProgress(prog);
+			if(this.progress_bar.progress >= 0.85) {
+				//SCORE A COIN LEVEL
+				this.level_up_sound.play();
+				this.progress_bar.setProgress(0.0);
+			} else {
+				this.progress_bar.setProgress(prog);
+			}
+			//this.progress_bar.setProgress(prog); 
+			
 		},
 		moveProgressBar: function() {
 			this.progress_bar.pos = {x:this.pos.x ,y:this.pos.y - this.progressOffset};

@@ -3,7 +3,8 @@ ig.module(
 ).requires(
 	'impact.entity',
 	'game.entities.smoke',
-	'game.entities.explosion'
+	'game.entities.explosion',
+	'game.entities.cartpieces'
 ).defines(function() {
 	var SMOKE_COLORS = ['red', 'purple', 'blue', 'green', 'yellow', 'pink', 'pink2', 'brown'];
 	var rand_col = function() {
@@ -11,6 +12,7 @@ ig.module(
 	};
 	EntityCart = ig.Entity.extend({
 		animSheet: new ig.AnimationSheet('media/balloonCarts.png',CART_SIZE.x,CART_SIZE.y),
+		type: ig.Entity.TYPE.A,
 		size: {x:CART_SIZE.x,y:CART_SIZE.y},
 		dirs: {'left':-1,'right':1},
 		points: 5,
@@ -23,6 +25,7 @@ ig.module(
 		init: function(x,y,settings) {
 			this.parent(x,y,settings);
 			var animID = Math.floor(Math.random()*5) * 3;
+			this.debrisAnim = (4*animID)/3;
 			this.points *= (animID/3) + 1;
 			this.death_sound.volume = 0.1;
 			this.addAnim('idle', 0.1, [animID, animID + 1, animID + 2]);
@@ -43,6 +46,9 @@ ig.module(
 				var ay = this.accel_magnitude*Math.sin(angle);
 				var settings = {vel: {x:vx, y: vy}, accel: {x:ax, y:ay}, 'color':color};
 				ig.game.spawnEntity(EntitySmoke,this.pos.x,this.pos.y,settings);
+			}
+			if(Math.random() < 0.3) {
+				ig.game.spawnEntity(EntityCartpieces,this.pos.x,this.pos.y,{'animID':this.debrisAnim});
 			}
 		},
 		explode: function() {
