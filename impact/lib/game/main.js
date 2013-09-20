@@ -10,7 +10,35 @@ ig.module(
 	'game.entities.track'
 )
 .defines(function(){
-
+saveData = function(key,value){
+    var c_value = key + "=" + value;
+    document.cookie = escape(c_value);
+};
+loadData = function(key){
+    var c_value = document.cookie;
+    // Checks for the key at all key value pairs except the first
+    var c_start = c_value.indexOf(" " + key + "=");
+    if(c_start == -1){
+	// If key can't be found in the cookie array, check the first one.
+	c_start = c_value.indexOf(key + "=");
+    }
+    if(c_start == -1){
+	// If it is not the first element or any of the other ones, it is not present
+	c_start = null;
+    }
+    else {
+	// Get index of the first character of the value associated with the passed in key.
+	c_start = c_value.indexOf("=",c_start) + 1;
+	// Get the index of the next ';' after the first character of the value
+	var c_end = c_value.indexOf(";",c_start);
+	if(c_end == -1){
+	    // If it doesn't have a ';' after it, it is the last entry in the cookie array.
+	    c_end = c_value.length;
+	}
+	c_value = unescape(c_value.substring(c_start,c_end));
+    }
+    return c_value;
+};
 AngryMiner = ig.Game.extend({
 	font: new ig.Font( 'media/gilSans.png'),
 	big_font: new ig.Font( 'media/big_font.png' ),
@@ -31,8 +59,13 @@ AngryMiner = ig.Game.extend({
 		ig.input.initMouse();
 	},
 	initPlayer: function() {
-		this.local_player = prompt('Enter your name:');
-		initializeLocalPlayer(this.local_player);
+	    var name = loadData("playerName");
+	    if(name == null){
+		name = prompt('Enter your name:');
+		saveData("playerName",name);
+	    }
+	    this.local_player = name;
+	    initializeLocalPlayer(this.local_player);
 	},
 	initTracks: function() {
 		var base_y = (GALLERY_OFFSETS['x'] * HEIGHT) - 8;
