@@ -11,33 +11,29 @@ ig.module(
 )
 .defines(function(){
 saveData = function(key,value){
-    var c_value = key + "=" + value;
-    document.cookie = escape(c_value);
+    var c_value = key + "=" + escape(value);
+    document.cookie = c_value;
 };
 loadData = function(key){
     var c_value = document.cookie;
     // Checks for the key at all key value pairs except the first
-    var c_start = c_value.indexOf(" " + key + "=");
-    if(c_start == -1){
+    var c_start = c_value.indexOf(key + "=");
+    console.log(c_start);
+    if(c_start < 0){
 	// If key can't be found in the cookie array, check the first one.
-	c_start = c_value.indexOf(key + "=");
-    }
-    if(c_start == -1){
-	// If it is not the first element or any of the other ones, it is not present
-	c_start = null;
+	return null;
     }
     else {
 	// Get index of the first character of the value associated with the passed in key.
-	c_start = c_value.indexOf("=",c_start) + 1;
+	var v_index = c_start + key.length + 1;
 	// Get the index of the next ';' after the first character of the value
-	var c_end = c_value.indexOf(";",c_start);
+	var c_end = c_value.indexOf(";",v_index);
 	if(c_end == -1){
 	    // If it doesn't have a ';' after it, it is the last entry in the cookie array.
 	    c_end = c_value.length;
 	}
-	c_value = unescape(c_value.substring(c_start,c_end));
+	return unescape( c_value.substring(v_index,c_end));
     }
-    return c_value;
 };
 AngryMiner = ig.Game.extend({
 	font: new ig.Font( 'media/gilSans.png'),
